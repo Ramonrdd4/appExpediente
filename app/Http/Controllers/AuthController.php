@@ -34,6 +34,7 @@ class AuthController extends Controller
                 'name' => 'required',
                 'email' => 'required|email',
                 'password' => 'required|min:6'
+                
             ]);
         } catch (\Illuminate\Validation\ValidationException $e ) {
             return \response($e->errors(),422);
