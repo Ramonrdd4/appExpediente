@@ -12,17 +12,17 @@ class RoleTableSeeder extends Seeder
     public function run()
     {
         $administrador = \App\Role::create([
-            'name'        => 'administrador',
-            'description' => 'administrador',
+            'nombre'        => 'administrador',
+            'descripcion' => 'administrador',
         ]);
 
         $publicador= \App\Role::create([
-            'name'        => 'Medico',
-            'description' => 'Doctor',
+            'nombre'        => 'Medico',
+            'descripcion' => 'Doctor',
         ]);
         $cliente = \App\Role::create([
-           'name'        => 'Paciente',
-           'description' => 'Cliente',
+           'nombre'        => 'Paciente',
+           'descripcion' => 'Cliente',
        ]);
     }
 }
