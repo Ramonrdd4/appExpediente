@@ -8,7 +8,7 @@ class Expediente extends Model
 {
     public function profile()
     {
-        return $this->hasOne('App\Profile', 'id', 'id');
+        return $this->belongsTo('App\Profile', 'id', 'id');
     }
 
     public function fumado()

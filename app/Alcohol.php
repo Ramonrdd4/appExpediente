@@ -8,6 +8,6 @@ class Alcohol extends Model
 {
     public function expediente()
     {
-        return $this->hasOne('App\Expediente', 'id', 'id');
+        return $this->belongsTo('App\Expediente', 'id', 'id');
     }
 }
