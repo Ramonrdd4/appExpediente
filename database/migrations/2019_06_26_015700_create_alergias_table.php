@@ -6,6 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateAlergiasTable extends Migration
 {
+
     /**
      * Run the migrations.
      *
@@ -16,7 +17,7 @@ class CreateAlergiasTable extends Migration
         Schema::create('alergias', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre');
-            $table->string('categoria');
+            $table->string('categoria'); //alimentos, medicamentos y ambiente
             $table->string('reaccion');
             $table->string('observaciones');
             $table->timestamps();
