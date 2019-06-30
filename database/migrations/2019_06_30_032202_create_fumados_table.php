@@ -15,9 +15,10 @@ class CreateFumadosTable extends Migration
     {
         Schema::create('fumados', function (Blueprint $table) {
             $table->unsignedInteger('id');
-            $table->unsignedInteger('estadoFumado');
-            $table->string('tiempoInicio');
-            $table->unsignedInteger('frecuencia');
+            $table->unsignedInteger('estadoFumado'); // 1 = Fuma, 2 = Fumaba, 3=No fuma
+            $table->string('tiempoInicio');// Valores como: Menos de un mes, mas de un mes, mas de 3 meses, mas de 6 meses, Mas de 1 año, Mas de 3 años, Mas de 5 años y N/A.
+            $table->unsignedInteger('frecuencia'); //Cantidad de cigarros por semana, promedio.
+            $table->string('observaciones');
             //Llave foranea
             $table->foreign('id')->references('id')->on('expedientes');
             $table->timestamps();
