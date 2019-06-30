@@ -16,8 +16,6 @@ class CreateExpedientesTable extends Migration
         Schema::create('expedientes', function (Blueprint $table) {
             $table->unsignedInteger('id');
             $table->timestamps();
-            //Llave foranea
-            $table->foreing('id')->references('id')->on('profiles');
         });
     }
 
@@ -28,9 +26,6 @@ class CreateExpedientesTable extends Migration
      */
     public function down()
     {
-        Schema::table('expedientes', function (Blueprint $table) {
-            $table->dropForeign('users_id_foreign');
-        });
         Schema::dropIfExists('expedientes');
     }
 }

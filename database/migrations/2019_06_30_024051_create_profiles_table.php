@@ -41,7 +41,7 @@ class CreateProfilesTable extends Migration
     public function down()
     {
         Schema::table('profiles', function (Blueprint $table) {
-            $table->dropForeign('users_idUsuario_foreign');
+            $table->dropForeign('profiles_idUsuario_foreign');
             $table->dropColumn('idUsuario');
         });
         Schema::dropIfExists('profiles');

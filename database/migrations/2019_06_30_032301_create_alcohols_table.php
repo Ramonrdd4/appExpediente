@@ -21,8 +21,6 @@ class CreateAlcoholsTable extends Migration
             $table->string('tipoLicor');
             $table->unsignedInteger('cantidad');// medido en militros.
             $table->string('Observaciones');
-            //Llave foranea
-            $table->foreign('id')->references('id')->on('expedientes');
             $table->timestamps();
         });
     }
@@ -34,9 +32,6 @@ class CreateAlcoholsTable extends Migration
      */
     public function down()
     {
-        Schema::table('alcohols', function (Blueprint $table) {
-            $table->dropForeign('expedientes_id_foreign');
-        });
         Schema::dropIfExists('alcohols');
     }
 }

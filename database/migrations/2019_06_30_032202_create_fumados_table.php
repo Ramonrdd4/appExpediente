@@ -19,8 +19,6 @@ class CreateFumadosTable extends Migration
             $table->string('tiempoInicio');// Valores como: Menos de un mes, mas de un mes, mas de 3 meses, mas de 6 meses, Mas de 1 año, Mas de 3 años, Mas de 5 años y N/A.
             $table->unsignedInteger('frecuencia'); //Cantidad de cigarros por semana, promedio.
             $table->string('observaciones');
-            //Llave foranea
-            $table->foreign('id')->references('id')->on('expedientes');
             $table->timestamps();
         });
     }
@@ -32,9 +30,6 @@ class CreateFumadosTable extends Migration
      */
     public function down()
     {
-        Schema::table('fumados', function (Blueprint $table) {
-            $table->dropForeign('expedientes_id_foreign');
-        });
         Schema::dropIfExists('fumados');
     }
 }
