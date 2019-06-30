@@ -38,6 +38,15 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
+    public function rol(){
+        return $this->belongsTo('App\Role', 'rol_id', 'id');
+    }
+
+    public function profiles()
+    {
+        return $this->hasMany('App\Profile');
+    }
+
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
@@ -58,4 +67,6 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+
 }
