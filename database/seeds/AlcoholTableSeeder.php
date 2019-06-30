@@ -20,5 +20,6 @@ class AlcoholTableSeeder extends Seeder
             'cantidad'=> 350,
             'Observaciones' => 'Solo casillero del diablo y frontera chile, cosecha de 1980 para atrás.'
         ]);
+        $alcohol->save();
     }
 }

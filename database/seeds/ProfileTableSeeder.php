@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class ProfileTableSeeder extends Seeder
 {
@@ -15,9 +16,9 @@ class ProfileTableSeeder extends Seeder
             'id'=>116850044,
             'nombre'=>'Jose',
             'primerApellido'=>'Rodriguez',
-            'primerApellido'=>'Rodriguez',
+            'segundoApellido'=>'Rodriguez',
             'sexo'=>'masculino',
-            'fechaNacimiento'=>'08/28/1997',
+            'fechaNacimiento'=> Carbon::create('1997', '08', '28'),
             'tipoSangre'=>'B+',
             'direccion'=>'Atenas, Los angeles, los espabeles.',
             'numTelefonico'=>71999106,
@@ -25,5 +26,6 @@ class ProfileTableSeeder extends Seeder
             'idUsuario'=>'jose@gmail.com',
             'esDuenho'=>true,
         ]);
+        $perfil->save();
     }
 }

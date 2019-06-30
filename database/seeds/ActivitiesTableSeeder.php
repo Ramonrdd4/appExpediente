@@ -15,39 +15,39 @@ class ActivitiesTableSeeder extends Seeder
     {
         //1.
         $activity= new App\Activity;
-        $activity->nombre('Correr');
+        $activity->nombre='Correr';
         $activity->save();
         //2.
         $activity= new App\Activity;
-        $activity->nombre('Natación');
+        $activity->nombre='Natación';
         $activity->save();
         //3.
         $activity= new App\Activity;
-        $activity->nombre('Basketball');
+        $activity->nombre='Basketball';
         $activity->save();
         //4.
         $activity= new App\Activity;
-        $activity->nombre('Soccer');
+        $activity->nombre='Soccer';
         $activity->save();
         //5.
         $activity= new App\Activity;
-        $activity->nombre('Ciclismo');
+        $activity->nombre='Ciclismo';
         $activity->save();
         //6.
         $activity= new App\Activity;
-        $activity->nombre('Triatlon');
+        $activity->nombre='Triatlon';
         $activity->save();
         //7.
         $activity= new App\Activity;
-        $activity->nombre('yoga');
+        $activity->nombre='yoga';
         $activity->save();
         //8.
         $activity= new App\Activity;
-        $activity->nombre('boxeo');
+        $activity->nombre='boxeo';
         $activity->save();
         //9.
         $activity= new App\Activity;
-        $activity->nombre('kenpo');
+        $activity->nombre='kenpo';
         $activity->save();
     }
 }

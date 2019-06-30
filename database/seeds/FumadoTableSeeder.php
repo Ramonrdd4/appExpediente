@@ -18,5 +18,6 @@ class FumadoTableSeeder extends Seeder
             'frecuencia'=>0,
             'observaciones'=>'Utiliza vaporizador'
         ]);
+        $fumado->save();
     }
 }

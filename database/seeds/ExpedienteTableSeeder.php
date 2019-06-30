@@ -14,5 +14,6 @@ class ExpedienteTableSeeder extends Seeder
         $expediente= App\Expediente::create([
             'id'=> 116850044
         ]);
+        $expediente->save();
     }
 }

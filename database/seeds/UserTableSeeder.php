@@ -15,22 +15,23 @@ class UserTableSeeder extends Seeder
        $objetoUsuario= \App\User::create([
             'correo'=>'fabiola@gmail.com',
             'contrasenna'=>bcrypt('usuario123'),
-            'nobre'=>'Fabiola',
+            'nombre'=>'Fabiola',
             'primerApellido'=>'Alfaro',
             'segundoApellido'=>'Lopez',
             'sexo'=>'femenino',
-            'role_id'=>1
+            'rol_id'=>1
         ]);
         $objetoUsuario->save();
 
         $objetoUsuario= \App\User::create([
             'correo'=>'jose@gmail.com',
             'contrasenna'=>bcrypt('usuario123'),
-            'nobre'=>'Jose',
+            'nombre'=>'Jose',
             'primerApellido'=>'Rodriguez',
             'segundoApellido'=>'Rodriguez',
             'sexo'=>'masculino',
-            'role_id'=>3
+            'rol_id'=>3
         ]);
+        $objetoUsuario->save();
     }
 }
