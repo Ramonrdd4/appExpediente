@@ -20,4 +20,9 @@ class Expediente extends Model
     {
         return $this->hasOne('App\Alcohol', 'id', 'id');
     }
+
+    public function cirugias()
+    {
+        return $this->hasMany('App\Cirugia');
+    }
 }
