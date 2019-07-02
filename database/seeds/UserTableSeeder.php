@@ -13,8 +13,8 @@ class UserTableSeeder extends Seeder
     {
        //se crea un objeto de tipo usuario, pueden ser varios, cuando hay un :: es un facade
        $objetoUsuario= \App\User::create([
-            'correo'=>'fabiola@gmail.com',
-            'contrasenna'=>bcrypt('usuario123'),
+            'email'=>'fabiola@gmail.com',
+            'password'=>bcrypt('usuario123'),
             'nombre'=>'Fabiola',
             'primerApellido'=>'Alfaro',
             'segundoApellido'=>'Vargas',
@@ -24,8 +24,8 @@ class UserTableSeeder extends Seeder
         $objetoUsuario->save();
 
         $objetoUsuario= \App\User::create([
-            'correo'=>'jose@gmail.com',
-            'contrasenna'=>bcrypt('usuario123'),
+            'email'=>'jose@gmail.com',
+            'password'=>bcrypt('usuario123'),
             'nombre'=>'Jose',
             'primerApellido'=>'Rodriguez',
             'segundoApellido'=>'Rodriguez',

@@ -19,8 +19,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('registrar', 'AuthController@register');
         Route::post('login', 'AuthController@login');
         Route::post('logout', 'AuthController@logout');
-        Route::post('registrarmedico', 'AuthController@registerAdm');
-        Route::post('registrarAsociado', 'AuthController@registerAsociado');
+        Route::post('registrarSegun','AuthController@registerAsociado');
 
     });
 

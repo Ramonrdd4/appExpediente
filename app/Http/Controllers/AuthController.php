@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use JWTAuth;
 
 
 class AuthController extends Controller
@@ -32,10 +33,11 @@ class AuthController extends Controller
      */
     public function login()
     {
-        $credentials = request(['correo', 'contrasenna']);
+        $credentials = request(['email', 'password']);
 
         //attempt autentifica con las credenciales si realmente existe este usuario
-        if (! $token = $this->guard()->attempt($credentials)) {
+
+        if (!$token = $this->guard()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -110,78 +112,42 @@ class AuthController extends Controller
     $user->save();
     return response()->json(['user' => $user]);
 }
-    //Este es el registar un medico el admi
-     public function registerAdm(Request $request)
-     {
-         try {
-             $this->validate($request, [
-                 'correo' => 'required|email',
-                 'nombre' => 'required|min:5',
-                 'primerApellido' => 'required|min:6',
-                 'segundoApellido' => 'required|min:6',
-                 'sexo' => 'required|min:1',
-                 'contrasenna' => 'required|min:6'
 
-             ]);
-         } catch (\Illuminate\Validation\ValidationException $e ) {
-             return \response($e->errors(),422);
-         }
-         if (!$user = JWTAuth::parseToken()->authenticate()&& !$user.rol_id==1) {
-            return response()->json(['msg'=>'Usuario no encontrado'], 404);
-         }
+    //Este es el registar un Paciente Asociado o Medico depende
 
-         $user = new User();
-
-         $user->correo = $request->correo;
-         $user->nombre = $request->nombre;
-         $user->primerApellido = $request->primerApellido;
-         $user->segundoApellido = $request->segundoApellido;
-         $user->sexo = $request->sexo;
-         $user->contrasenna = bcrypt($request->contrasenna);
-
-         //Asociar con roll
-         $user->rol()->associate(2);
-
-         $user->save();
-         return response()->json(['user' => $user]);
-
-
-     }
-
-    //Este es el registar un Paciente Asociado
     public function registerAsociado(Request $request)
     {
         try {
             $this->validate($request, [
-                'correo' => 'required|email',
+                'email' => 'required|email',
                 'nombre' => 'required|min:5',
                 'primerApellido' => 'required|min:6',
                 'segundoApellido' => 'required|min:6',
                 'sexo' => 'required|min:1',
-                'contrasenna' => 'required|min:6'
+                'password' => 'required|min:6'
 
             ]);
         } catch (\Illuminate\Validation\ValidationException $e ) {
             return \response($e->errors(),422);
         }
-        if (!$user = JWTAuth::parseToken()->authenticate()&& !$user.rol_id==1) {
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
            return response()->json(['msg'=>'Usuario no encontrado'], 404);
         }
 
-        $user = new User();
+        $user1 = new User();
 
-        $user->correo = $request->correo;
-        $user->nombre = $request->nombre;
-        $user->primerApellido = $request->primerApellido;
-        $user->segundoApellido = $request->segundoApellido;
-        $user->sexo = $request->sexo;
-        $user->contrasenna = bcrypt($request->contrasenna);
+        $user1->email = $request->email;
+        $user1->nombre = $request->nombre;
+        $user1->primerApellido = $request->primerApellido;
+        $user1->segundoApellido = $request->segundoApellido;
+        $user1->sexo = $request->sexo;
+        $user1->password = bcrypt($request->password);
 
-        //Asociar con roll
-        $user->rol()->associate(4);
 
-        $user->save();
-        return response()->json(['user' => $user]);
+        $user1->rol()->associate(2);
+       
+        $user1->save();
+        return response()->json(['user' => $user1]);
 
 
     }
