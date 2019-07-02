@@ -32,7 +32,7 @@ class AuthController extends Controller
      */
     public function login()
     {
-        $credentials = request(['email', 'password']);
+        $credentials = request(['correo', 'contrasenna']);
 
         //attempt autentifica con las credenciales si realmente existe este usuario
         if (! $token = $this->guard()->attempt($credentials)) {
@@ -110,7 +110,6 @@ class AuthController extends Controller
     $user->save();
     return response()->json(['user' => $user]);
 }
-
     //Este es el registar un medico el admi
      public function registerAdm(Request $request)
      {
