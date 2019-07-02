@@ -17,7 +17,7 @@ class UserTableSeeder extends Seeder
             'contrasenna'=>bcrypt('usuario123'),
             'nombre'=>'Fabiola',
             'primerApellido'=>'Alfaro',
-            'segundoApellido'=>'Lopez',
+            'segundoApellido'=>'Vargas',
             'sexo'=>'femenino',
             'rol_id'=>1
         ]);
