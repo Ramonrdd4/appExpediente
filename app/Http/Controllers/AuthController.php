@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
+use JWTAuth;
+
 
 
 use Illuminate\Support\Facades\Auth;
@@ -165,6 +167,44 @@ protected function respondWithToken($token)
 
 
      }
+
+    //Este es el registar un Paciente Asociado
+    public function registerAsociado(Request $request)
+    {
+        try {
+            $this->validate($request, [
+                'correo' => 'required|email',
+                'nombre' => 'required|min:5',
+                'primerApellido' => 'required|min:6',
+                'segundoApellido' => 'required|min:6',
+                'sexo' => 'required|min:1',
+                'contrasenna' => 'required|min:6'
+
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e ) {
+            return \response($e->errors(),422);
+        }
+        if (!$user = JWTAuth::parseToken()->authenticate()&& !$user.rol_id==1) {
+           return response()->json(['msg'=>'Usuario no encontrado'], 404);
+        }
+
+        $user = new User();
+
+        $user->correo = $request->correo;
+        $user->nombre = $request->nombre;
+        $user->primerApellido = $request->primerApellido;
+        $user->segundoApellido = $request->segundoApellido;
+        $user->sexo = $request->sexo;
+        $user->contrasenna = bcrypt($request->contrasenna);
+
+        //Asociar con roll
+        $user->rol()->associate(4);
+
+        $user->save();
+        return response()->json(['user' => $user]);
+
+
+    }
 
 
 }
