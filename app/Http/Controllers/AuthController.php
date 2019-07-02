@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use JWTAuth;
 
 class AuthController extends Controller
 {
@@ -15,34 +17,42 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register']]);
-    }
+        $this->middleware('jwt.auth',['except' => ['login','register']]);
 
-    /**
-     * Get the guard to be used during authentication.
-     *
-     * @return \Illuminate\Contracts\Auth\Guard
-     */
+    }
     protected function guard(){
         return Auth::guard('api');
     }
 
+    //Este es el registar normal de la pagina principal
     public function register(Request $request)
     {
         try {
             $this->validate($request, [
-                'name' => 'required',
-                'email' => 'required|email',
-                'password' => 'required|min:6'
-                
+                'correo' => 'required|email',
+                'nombre' => 'required|min:5',
+                'primerApellido' => 'required|min:6',
+                'segundoApellido' => 'required|min:6',
+                'sexo' => 'required|min:1',
+                'contrasenna' => 'required|min:6'
+
             ]);
         } catch (\Illuminate\Validation\ValidationException $e ) {
             return \response($e->errors(),422);
         }
+
         $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
+
+        $user->correo = $request->correo;
+        $user->nombre = $request->nombre;
+        $user->primerApellido = $request->primerApellido;
+        $user->segundoApellido = $request->segundoApellido;
+        $user->sexo = $request->sexo;
+        $user->contrasenna = bcrypt($request->contrasenna);
+
+        //Asociar con roll
+        $user->rol()->associate(3);
+
         $user->save();
         return response()->json(['user' => $user]);
     }
@@ -56,10 +66,10 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('correo', 'contrasenna');
 
         if (! $token = $this->guard()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'No Autorizado'], 401);
         }
 
         return $this->respondWithToken($token);
@@ -113,6 +123,45 @@ class AuthController extends Controller
             'expires_in' => $this->guard()->factory()->getTTL() * 60
         ]);
     }
+
+
+     //Este es el registar un medico el admi
+     public function registerAdm(Request $request)
+     {
+         try {
+             $this->validate($request, [
+                 'correo' => 'required|email',
+                 'nombre' => 'required|min:5',
+                 'primerApellido' => 'required|min:6',
+                 'segundoApellido' => 'required|min:6',
+                 'sexo' => 'required|min:1',
+                 'contrasenna' => 'required|min:6'
+
+             ]);
+         } catch (\Illuminate\Validation\ValidationException $e ) {
+             return \response($e->errors(),422);
+         }
+         if (!$user = JWTAuth::parseToken()->authenticate()&& !$user.rol_id==1) {
+            return response()->json(['msg'=>'Usuario no encontrado'], 404);
+         }
+
+         $user = new User();
+
+         $user->correo = $request->correo;
+         $user->nombre = $request->nombre;
+         $user->primerApellido = $request->primerApellido;
+         $user->segundoApellido = $request->segundoApellido;
+         $user->sexo = $request->sexo;
+         $user->contrasenna = bcrypt($request->contrasenna);
+
+         //Asociar con roll
+         $user->rol()->associate(2);
+
+         $user->save();
+         return response()->json(['user' => $user]);
+
+
+     }
 
 
 }

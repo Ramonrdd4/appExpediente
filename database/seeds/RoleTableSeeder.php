@@ -24,5 +24,9 @@ class RoleTableSeeder extends Seeder
            'nombre'        => 'Paciente',
            'descripcion' => 'Cliente',
        ]);
+       $cliente = \App\Role::create([
+        'nombre'        => 'PacienteAsociado',
+        'descripcion' => 'Cliente',
+    ]);
     }
 }

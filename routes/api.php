@@ -19,7 +19,8 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('registrar', 'AuthController@register');
         Route::post('login', 'AuthController@login');
         Route::post('logout', 'AuthController@logout');
-        Route::get('{id}/{cantidad}', 'VotoController@store');
+        Route::post('registrarmedico', 'AuthController@registerAdm');
+
     });
 
 });
