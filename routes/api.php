@@ -16,10 +16,10 @@ use Illuminate\Http\Request;
 Route::group(['prefix' => 'v1'], function () {
 
     Route::group(['prefix' => 'expediente'], function ($router) {
-        Route::post('registrar', 'AuthController@register');
+        Route::post('registrar', 'AuthController@registrarmedoaso');
         Route::post('login', 'AuthController@login');
         Route::post('logout', 'AuthController@logout');
-    
+
 
     });
 

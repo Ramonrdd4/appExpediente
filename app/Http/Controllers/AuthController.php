@@ -19,7 +19,7 @@ class AuthController extends Controller
     public function __construct()
     {
         // ahi donde dice login se agregan todas las acciones en las que no ocupan las credenciales y agregamos register
-        $this->middleware('jwt.auth', ['except' => ['login','register']]);
+        $this->middleware('jwt.auth', ['except' => ['register','login']]);
     }
 
     protected function guard(){
@@ -38,7 +38,7 @@ class AuthController extends Controller
         //attempt autentifica con las credenciales si realmente existe este usuario
 
         if (!$token = $this->guard()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'No Autorizado'], 401);
         }
 
         return $this->respondWithToken($token);
@@ -92,7 +92,7 @@ class AuthController extends Controller
             'expires_in' => $this->guard()->factory()->getTTL() * 60
         ]);
     }
-
+//registar normal
     public function register(Request $request)
 {
     try {
@@ -107,6 +107,7 @@ class AuthController extends Controller
     } catch (\Illuminate\Validation\ValidationException $e ) {
         return \response($e->errors(),422);
     }
+
     $user1 = new User();
     $user1->email = $request->email;
     $user1->nombre = $request->nombre;
@@ -115,7 +116,47 @@ class AuthController extends Controller
     $user1->sexo = $request->sexo;
     $user1->password = bcrypt($request->password);
 
-    $user1->rol()->associate(2);
+
+        $user1->rol()->associate(3);
+
+    $user1->save();
+    return response()->json(['user' => $user1]);
+}
+
+public function registrarmedoaso(Request $request)
+{
+    try {
+        $this->validate($request, [
+            'email' => 'required|email',
+                'nombre' => 'required|min:5',
+                'primerApellido' => 'required|min:6',
+                'segundoApellido' => 'required|min:6',
+                'sexo' => 'required|min:1',
+                'password' => 'required|min:6'
+        ]);
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(['msg'=>'Usuario no encontrado'], 404);
+        }
+    } catch (\Illuminate\Validation\ValidationException $e ) {
+        return \response($e->errors(),422);
+    }
+
+    $user1 = new User();
+    $user1->email = $request->email;
+    $user1->nombre = $request->nombre;
+    $user1->primerApellido = $request->primerApellido;
+    $user1->segundoApellido = $request->segundoApellido;
+    $user1->sexo = $request->sexo;
+    $user1->password = bcrypt($request->password);
+
+
+    if($user->rol_id==1){
+        $user1->rol()->associate(2);
+    }else{
+        if($user->rol_id==3){
+        $user1->rol()->associate(4);
+        }
+    }
 
     $user1->save();
     return response()->json(['user' => $user1]);

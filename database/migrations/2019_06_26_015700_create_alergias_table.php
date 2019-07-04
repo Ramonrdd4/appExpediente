@@ -15,7 +15,7 @@ class CreateAlergiasTable extends Migration
     public function up()
     {
         Schema::create('alergias', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')-primary();
             $table->string('nombre');
             $table->string('categoria'); //alimentos, medicamentos y ambiente
             $table->string('reaccion');
