@@ -13,10 +13,10 @@ class ExpedientesAlergias extends Migration
      */
     public function up()
     {
-        Schema::create('expediente_alergia', function (Blueprin $table){
+        Schema::create('expediente_alergia', function (Blueprint $table){
             $table->increments('id');
-            $table->integer('expediente_id')->unsigned();
-            $table->integer('alergia_id')->unsigned();
+            $table->unsignedInteger('expediente_id');
+            $table->unsignedInteger('alergia_id');
             $table->timestamps();
             //Llaves foraneas
             $table->foreign('expediente_id')->references('id')->on('expedientes');
