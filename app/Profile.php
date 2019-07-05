@@ -8,7 +8,7 @@ class Profile extends Model
 {
     public function user()
     {
-        return $this->belongsTo('App\User', 'idUsuario', 'correo');
+        return $this->belongsTo('App\User', 'idUsuario', 'email');
     }
 
     public function expediente()
