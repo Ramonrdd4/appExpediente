@@ -123,7 +123,7 @@ class AuthController extends Controller
     return response()->json(['user' => $user1]);
 }
 
-public function registrarmedoaso(Request $request)
+public function bano(Request $request)
 {
     try {
         $this->validate($request, [
@@ -134,9 +134,11 @@ public function registrarmedoaso(Request $request)
                 'sexo' => 'required|min:1',
                 'password' => 'required|min:6'
         ]);
+
         if (!$user = JWTAuth::parseToken()->authenticate()) {
             return response()->json(['msg'=>'Usuario no encontrado'], 404);
         }
+
     } catch (\Illuminate\Validation\ValidationException $e ) {
         return \response($e->errors(),422);
     }

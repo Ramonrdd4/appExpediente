@@ -13,7 +13,7 @@ class MedicamentosExpedientes extends Migration
      */
     public function up()
     {
-        Schema::create('medicamento_expediente', function (Blueprin $table){
+        Schema::create('medicamento_expediente', function (Blueprint $table){
             $table->increments('id');
             $table->integer('medicamento_id')->unsigned();
             $table->integer('expediente_id')->unsigned();

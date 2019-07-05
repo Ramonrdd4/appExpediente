@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Role;
 use Illuminate\Http\Request;
+use JWTAuth;
+
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('jwt.auth', ['only'=>['store']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -35,7 +41,8 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+     
+
     }
 
     /**
@@ -82,4 +89,11 @@ class RoleController extends Controller
     {
         //
     }
+   /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
 }

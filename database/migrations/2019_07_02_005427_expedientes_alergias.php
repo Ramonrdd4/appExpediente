@@ -13,7 +13,7 @@ class ExpedientesAlergias extends Migration
      */
     public function up()
     {
-        Schema::create('expediente_alergia', function (Blueprin $table){
+        Schema::create('expediente_alergia', function (Blueprint $table){
             $table->increments('id');
             $table->integer('expediente_id')->unsigned();
             $table->integer('alergia_id')->unsigned();
@@ -31,11 +31,12 @@ class ExpedientesAlergias extends Migration
      */
     public function down()
     {
-        Schema::table('expediente_alergia', function(Blueprint $table){
-            $table->dropForeign('expediente_alergia_expediente_id_foreign');
-            $table->dropColumn('expediente_id');
+        Schema::table('expediente_alergia', function (Blueprint $table) {
             $table->dropForeign('expediente_alergia_alergia_id_foreign');
             $table->dropColumn('alergia_id');
+            $table->dropForeign('expediente_alergia_expediente_id_foreign');
+            $table->dropColumn('expediente_id');
+
         });
         Schema::dropIfExists('expediente_alergia');
     }

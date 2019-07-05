@@ -11,12 +11,13 @@ class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
 
+    public $primaryKey='email';
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['correo', 'nombre', 'primerApellido','segundoApellido','sexo','contrasenna'];
+    protected $fillable = ['email', 'nombre', 'primerApellido','segundoApellido','sexo','password'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -24,7 +25,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $hidden = [
-        'contrasenna', 'remember_token',
+        'password', 'remember_token',
     ];
 
     /**

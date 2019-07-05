@@ -13,7 +13,7 @@ class ExpedientesActivities extends Migration
      */
     public function up()
     {
-        Schema::create('expediente_activity', function (Blueprin $table){
+        Schema::create('expediente_activity', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('expediente_id')->unsigned();
             $table->integer('activity_id')->unsigned();
