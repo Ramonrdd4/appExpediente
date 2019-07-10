@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use JWTAuth;
+use Illuminate\Support\Facades\Gate;
 
 
 class AuthController extends Controller
@@ -142,6 +143,7 @@ public function bano(Request $request)
     } catch (\Illuminate\Validation\ValidationException $e ) {
         return \response($e->errors(),422);
     }
+    //aqui empieza el if donde veo el usuario y todo esto va adentro
 
     $user1 = new User();
     $user1->email = $request->email;
@@ -151,12 +153,15 @@ public function bano(Request $request)
     $user1->sexo = $request->sexo;
     $user1->password = bcrypt($request->password);
 
-
-    if($user->rol_id==1){
-        $user1->rol()->associate(2);
+// hasta aqui
+    if (Gate::allows('solo_adm',$user )) {
+     $user1->rol()->associate(2);
     }else{
-        if($user->rol_id==3){
-        $user1->rol()->associate(4);
+        if (Gate::allows('solo_pacientedueno',$user )) {
+            $user1->rol()->associate(4);
+        }else{
+            $response = ['Msg'=>'No Autorizado'];
+            return response()->json($response,404);
         }
     }
 
