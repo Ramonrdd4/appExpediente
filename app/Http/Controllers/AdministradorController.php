@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\MedicoController;
+use App\Administrador;
 use Illuminate\Http\Request;
 
-class MedicoControllerController extends Controller
+class AdministradorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class MedicoControllerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\MedicoController  $medicoController
+     * @param  \App\Administrador  $administrador
      * @return \Illuminate\Http\Response
      */
-    public function show(MedicoController $medicoController)
+    public function show(Administrador $administrador)
     {
         //
     }
@@ -52,10 +52,10 @@ class MedicoControllerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\MedicoController  $medicoController
+     * @param  \App\Administrador  $administrador
      * @return \Illuminate\Http\Response
      */
-    public function edit(MedicoController $medicoController)
+    public function edit(Administrador $administrador)
     {
         //
     }
@@ -64,10 +64,10 @@ class MedicoControllerController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\MedicoController  $medicoController
+     * @param  \App\Administrador  $administrador
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MedicoController $medicoController)
+    public function update(Request $request, Administrador $administrador)
     {
         //
     }
@@ -75,10 +75,10 @@ class MedicoControllerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\MedicoController  $medicoController
+     * @param  \App\Administrador  $administrador
      * @return \Illuminate\Http\Response
      */
-    public function destroy(MedicoController $medicoController)
+    public function destroy(Administrador $administrador)
     {
         //
     }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\AdministradorController;
+use App\Paciente;
 use Illuminate\Http\Request;
 
-class AdministradorControllerController extends Controller
+class PacienteController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class AdministradorControllerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\AdministradorController  $administradorController
+     * @param  \App\Paciente  $paciente
      * @return \Illuminate\Http\Response
      */
-    public function show(AdministradorController $administradorController)
+    public function show(Paciente $paciente)
     {
         //
     }
@@ -52,10 +52,10 @@ class AdministradorControllerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\AdministradorController  $administradorController
+     * @param  \App\Paciente  $paciente
      * @return \Illuminate\Http\Response
      */
-    public function edit(AdministradorController $administradorController)
+    public function edit(Paciente $paciente)
     {
         //
     }
@@ -64,10 +64,10 @@ class AdministradorControllerController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\AdministradorController  $administradorController
+     * @param  \App\Paciente  $paciente
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AdministradorController $administradorController)
+    public function update(Request $request, Paciente $paciente)
     {
         //
     }
@@ -75,10 +75,10 @@ class AdministradorControllerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\AdministradorController  $administradorController
+     * @param  \App\Paciente  $paciente
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AdministradorController $administradorController)
+    public function destroy(Paciente $paciente)
     {
         //
     }

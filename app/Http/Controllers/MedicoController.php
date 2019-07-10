@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\PacienteController;
+use App\Medico;
 use Illuminate\Http\Request;
 
-class PacienteControllerController extends Controller
+class MedicoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class PacienteControllerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\PacienteController  $pacienteController
+     * @param  \App\Medico  $medico
      * @return \Illuminate\Http\Response
      */
-    public function show(PacienteController $pacienteController)
+    public function show(Medico $medico)
     {
         //
     }
@@ -52,10 +52,10 @@ class PacienteControllerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\PacienteController  $pacienteController
+     * @param  \App\Medico  $medico
      * @return \Illuminate\Http\Response
      */
-    public function edit(PacienteController $pacienteController)
+    public function edit(Medico $medico)
     {
         //
     }
@@ -64,10 +64,10 @@ class PacienteControllerController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PacienteController  $pacienteController
+     * @param  \App\Medico  $medico
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PacienteController $pacienteController)
+    public function update(Request $request, Medico $medico)
     {
         //
     }
@@ -75,10 +75,10 @@ class PacienteControllerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\PacienteController  $pacienteController
+     * @param  \App\Medico  $medico
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PacienteController $pacienteController)
+    public function destroy(Medico $medico)
     {
         //
     }
