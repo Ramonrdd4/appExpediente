@@ -127,6 +127,10 @@ class AuthController extends Controller
 public function bano(Request $request)
 {
     try {
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(['msg'=>'Usuario no encontrado'], 404);
+
+            
         $this->validate($request, [
             'email' => 'required|email',
                 'nombre' => 'required|min:5',
@@ -136,8 +140,7 @@ public function bano(Request $request)
                 'password' => 'required|min:6'
         ]);
 
-        if (!$user = JWTAuth::parseToken()->authenticate()) {
-            return response()->json(['msg'=>'Usuario no encontrado'], 404);
+
         }
 
     } catch (\Illuminate\Validation\ValidationException $e ) {
