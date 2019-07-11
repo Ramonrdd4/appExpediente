@@ -17,7 +17,18 @@ class AlergiaController extends Controller
      */
     public function index()
     {
+//Muestra todas las Alergias menos las eliminadas
+try {
+    $alergia = Activity::all();
+    $response=[
 
+        'msg' => 'Lista de Alergias',
+        'Alergia' => $alergia,
+    ];
+    return response()->json($response, 200);
+} catch (\Throwable $th) {
+    return \response($th->getMessage(), 422);
+}
     }
 
     /**
@@ -44,7 +55,6 @@ class AlergiaController extends Controller
                 'categoria'=>'required',
                 'reaccion'=>'required',
                 'observaciones'=>'required',
-                'expediente'=>'required|numeric:9'
             ]);
             //Obtener el usuario autentificado actual
             if(!$user = JWTAuth::parseToken()->authenticate()){
@@ -55,7 +65,7 @@ class AlergiaController extends Controller
         catch (\Illuminate\Validation\ValidationException $e) {
             return \response($e->errors(),422);
         }
-
+        if (Gate::allows('solo_adm',$user )) {
         $alergia = new Alergia([
             'nombre'=>$request->input('nombre'),
             'categoria'=>$request->input('categoria'),
@@ -64,9 +74,7 @@ class AlergiaController extends Controller
         ]);
 
         if($alergia->save()){
-            //Asociar con expediente
-            $alergia->expedientes()->attach($request->input('expediente')=== null ? [] : $request->input('expediente'));
-
+           
             $response=[
                 'msg'=> 'Alergia registrada',
                 'alergia'=> $alergia
@@ -77,6 +85,10 @@ class AlergiaController extends Controller
             'msg'=>'Error durante el registro'
         ];
         return response()->json($response, 404);
+          }else{
+        $response = ['Msg'=>'No Autorizado'];
+        return response()->json($response,404);
+         }
     }
 
     /**
@@ -138,5 +150,49 @@ class AlergiaController extends Controller
         $response = ['Msg'=>'No Autorizado'];
         return response()->json($response,404);
     }
+    }
+
+    //Metodo del usuario (Ramon)
+    public function storeAlergiaxUsuario(Request $request)
+    {
+        try{
+            $this -> validate($request, [
+                'nombre'=>'required|min:5',
+                'categoria'=>'required',
+                'reaccion'=>'required',
+                'observaciones'=>'required',
+                'expediente'=>'required|numeric:9'
+            ]);
+            //Obtener el usuario autentificado actual
+            if(!$user = JWTAuth::parseToken()->authenticate()){
+                return response()->json(['msg'=>'Usuario no encontrado'],404);
+            }
+
+        }
+        catch (\Illuminate\Validation\ValidationException $e) {
+            return \response($e->errors(),422);
+        }
+
+        $alergia = new Alergia([
+            'nombre'=>$request->input('nombre'),
+            'categoria'=>$request->input('categoria'),
+            'reaccion'=>$request->input('reaccion'),
+            'observaciones'=>$request->input('observaciones')
+        ]);
+
+        if($alergia->save()){
+            //Asociar con expediente
+            $alergia->expedientes()->attach($request->input('expediente')=== null ? [] : $request->input('expediente'));
+
+            $response=[
+                'msg'=> 'Alergia registrada',
+                'alergia'=> $alergia
+            ];
+            return response()->json($response, 201);
+        }
+        $response=[
+            'msg'=>'Error durante el registro'
+        ];
+        return response()->json($response, 404);
     }
 }

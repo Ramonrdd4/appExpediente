@@ -17,7 +17,18 @@ class DeseaseController extends Controller
      */
     public function index()
     {
-        //
+        //Muestra todas las Alergias menos las eliminadas
+        try {
+        $desease = Desease::all();
+        $response=[
+
+        'msg' => 'Lista de Enfermedades',
+        'Enfermedad' => $desease,
+    ];
+        return response()->json($response, 200);
+    } catch (\Throwable $th) {
+        return \response($th->getMessage(), 422);
+            }
     }
 
     /**
@@ -42,7 +53,6 @@ class DeseaseController extends Controller
             $this -> validate($request, [
                 'nombre'=>'required|min:5',
                 'observaciones'=>'required',
-                'expediente'=>'required|numeric:9'
             ]);
             //Obtener el usuario autentificado actual
             if(!$user = JWTAuth::parseToken()->authenticate()){
@@ -53,15 +63,13 @@ class DeseaseController extends Controller
         catch (\Illuminate\Validation\ValidationException $e) {
             return \response($e->errors(),422);
         }
-
+        if (Gate::allows('solo_adm',$user )) {
         $desease = new Desease([
             'nombre'=>$request->input('nombre'),
             'observaciones'=>$request->input('observaciones')
         ]);
 
         if($desease->save()){
-            //Asociar con expediente
-            $desease->expedientes()->attach($request->input('expediente')=== null ? [] : $request->input('expediente'));
 
             $response=[
                 'msg'=> 'Enfermedad registrada',
@@ -73,6 +81,10 @@ class DeseaseController extends Controller
             'msg'=>'Error durante el registro'
         ];
         return response()->json($response, 404);
+          }else{
+        $response = ['Msg'=>'No Autorizado'];
+        return response()->json($response,404);
+         }
     }
 
     /**
@@ -133,4 +145,44 @@ class DeseaseController extends Controller
         return response()->json($response,404);
     }
     }
+//Metodo del usuario (Ramon)
+    public function storeDeseaseUsuario(Request $request)
+    {
+        try{
+            $this -> validate($request, [
+                'nombre'=>'required|min:5',
+                'observaciones'=>'required',
+                'expediente'=>'required|numeric:9'
+            ]);
+            //Obtener el usuario autentificado actual
+            if(!$user = JWTAuth::parseToken()->authenticate()){
+                return response()->json(['msg'=>'Usuario no encontrado'],404);
+            }
+
+        }
+        catch (\Illuminate\Validation\ValidationException $e) {
+            return \response($e->errors(),422);
+        }
+
+        $desease = new Desease([
+            'nombre'=>$request->input('nombre'),
+            'observaciones'=>$request->input('observaciones')
+        ]);
+
+        if($desease->save()){
+            //Asociar con expediente
+            $desease->expedientes()->attach($request->input('expediente')=== null ? [] : $request->input('expediente'));
+
+            $response=[
+                'msg'=> 'Enfermedad registrada',
+                'desease'=> $desease
+            ];
+            return response()->json($response, 201);
+        }
+        $response=[
+            'msg'=>'Error durante el registro'
+        ];
+        return response()->json($response, 404);
+    }
+
 }
