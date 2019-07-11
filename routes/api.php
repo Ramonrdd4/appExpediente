@@ -19,7 +19,12 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::post('login', 'AuthController@login');
         Route::post('logout', 'AuthController@logout');
+        Route::post('registar', 'AuthController@register');
         Route::post('registarMedico', 'AdministradorController@store');
+        Route::patch('actualizaadm', 'AdministradorController@update');
+        Route::post('registarAsociado', 'PacienteController@store');
+        Route::patch('actualizamedico', 'MedicoController@update');
+        Route::patch('actualizapaciente', 'PacienteController@update');
 
     });
 
