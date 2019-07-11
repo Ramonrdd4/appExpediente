@@ -57,7 +57,7 @@ class AdministradorController extends Controller
         } catch (\Illuminate\Validation\ValidationException $e ) {
             return \response($e->errors(),422);
         }
-        if (Gate::allows('solo_pacientedueno',$user )) {
+        if (Gate::allows('solo_adm',$user )) {
         $user1 = new User();
         $user1->email = $request->email;
         $user1->nombre = $request->nombre;

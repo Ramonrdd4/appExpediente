@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Desease;
+use Illuminate\Support\Facades\Gate;
+use App\User;
+use JWTAuth;
 
 class DeseaseController extends Controller
 {
@@ -114,6 +117,20 @@ class DeseaseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(['msg'=>'Usuario no encontrado'], 404);
+        }
+        if (Gate::allows('solo_adm',$user )) {
+            if($desease = Desease::find($id)){
+              $desease->delete();
+              $response = ['Msg'=>'Alergia eliminada con exito!'];
+            }else{
+                $response = ['Msg'=>'Alergia no existe!'];
+            }
+        return response()->json($response,200);
+      }else {
+        $response = ['Msg'=>'No Autorizado'];
+        return response()->json($response,404);
+    }
     }
 }

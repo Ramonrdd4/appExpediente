@@ -25,6 +25,9 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('registarAsociado', 'PacienteController@store');
         Route::patch('actualizamedico', 'MedicoController@update');
         Route::patch('actualizapaciente', 'PacienteController@update');
+        Route::delete('actividad/{id}', 'ActivityController@destroy');
+        Route::delete('alergia/{id}', 'AlergiaController@destroy');
+        Route::delete('enfermedad/{id}', 'DeseaseController@destroy');
 
     });
 

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Activity;
+use Illuminate\Support\Facades\Gate;
+use App\User;
+use JWTAuth;
 
 class ActivityController extends Controller
 {
@@ -115,6 +118,21 @@ class ActivityController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(['msg'=>'Usuario no encontrado'], 404);
+        }
+        if (Gate::allows('solo_adm',$user )) {
+            if($actividad = Activity::find($id)){
+        $actividad->delete();
+        $response = ['Msg'=>'Actividad eliminada con exito!'];
+            }else{
+                $response = ['Msg'=>'Actividad no existe!'];
+            }
+        return response()->json($response,200);
+      }else {
+        $response = ['Msg'=>'No Autorizado'];
+        return response()->json($response,404);
     }
+    }
+
 }
