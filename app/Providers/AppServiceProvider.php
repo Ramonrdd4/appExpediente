@@ -27,13 +27,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Gate::define('solo_adm', function ($user) {
-            return $user->rol_id = 1? true:false;
+            return $user->rol_id == 1? true:false;
           });
           Gate::define('solo_pacientedueno', function ($user) {
-            return $user->rol_id = 3? true:false;
+            return $user->rol_id == 3? true:false;
           });
           Gate::define('solo_medico', function ($user) {
-            return $user->rol_id = 2? true:false;
+            return $user->rol_id == 2? true:false;
           });
 
         Schema::defaultStringLength(191);

@@ -35,7 +35,7 @@ class MedicoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+    
     }
 
     /**
