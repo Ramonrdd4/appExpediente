@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Alergia extends Model
 {
+    protected $fillable = ['nombre', 'categoria','reaccion','observaciones'];
     use SoftDeletes;
     public function expedientes()
     {

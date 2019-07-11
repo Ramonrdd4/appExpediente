@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Desease extends Model
 {
+    protected $fillable = ['nombre', 'observaciones'];
     use SoftDeletes;
 
     public function expedientes()

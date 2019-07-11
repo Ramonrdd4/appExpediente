@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Activity extends Model
 {
+    protected $fillable = ['nombre'];
     use SoftDeletes;
 
 
@@ -14,6 +15,6 @@ class Activity extends Model
     {
         return $this->hasMany('App\Expedientes');
     }
-    
+
     protected $dates = ['deleted_at'];
 }
