@@ -25,4 +25,24 @@ class Expediente extends Model
     {
         return $this->hasMany('App\Cirugia');
     }
+
+    public function alergias()
+    {
+        return $this->hasMany('App\Alergias');
+    }
+
+    public function medicamentos()
+    {
+        return $this->hasMany('App\Medicamento');
+    }
+
+    public function activities()
+    {
+        return $this->hasMany('App\Activity');
+    }
+
+    public function deseases()
+    {
+        return $this->hasMany('App\Desease');
+    }
 }
