@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Profile extends Model
 {
+    protected $fillable = ['id','nombre', 'primerApellido','segundoApellido','sexo','fechaNacimiento','tipoSangre','direccion','numTelefonico','contactoEmergencia'];
+
     public function user()
     {
-        return $this->belongsTo('App\User', 'idUsuario', 'email');
+        return $this->belongsTo('App\User', 'idUsuario', 'id');
     }
 
     public function expediente()

@@ -23,7 +23,7 @@ class ProfileTableSeeder extends Seeder
             'direccion'=>'Atenas, Los angeles, los espabeles.',
             'numTelefonico'=>71999106,
             'contactoEmergencia'=>83794686,
-            'idUsuario'=>'jose@gmail.com',
+            'idUsuario'=>2,
             'esDuenho'=>true,
         ]);
         $perfil->save();
