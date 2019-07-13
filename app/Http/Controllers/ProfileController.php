@@ -64,7 +64,14 @@ class ProfileController extends Controller
     $perfil->direccion = $request->direccion;
     $perfil->numTelefonico = $request->numTelefonico;
     $perfil->contactoEmergencia = $request->contactoEmergencia;
-    $perfil->esDuenho = false;
+    //trae el perfil que sea dueño
+    $perfil1 = Profile::where('idUsuario', $user->id)->where('esDuenho',true)->get();
+    //valida el perfil si existe el due;o lo pone false y si no lo pone true
+     if ($perfil1!=null) {
+        $perfil->esDuenho = false;
+        }else{
+            $perfil->esDuenho = true;
+        }
     $perfil->user()->associate($user->id);
     if( $perfil->save()){
         return response()->json(['user' => $perfil]);

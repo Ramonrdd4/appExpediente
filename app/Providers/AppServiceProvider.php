@@ -35,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
           Gate::define('solo_medico', function ($user) {
             return $user->rol_id == 2? true:false;
           });
+     
 
         Schema::defaultStringLength(191);
     }
