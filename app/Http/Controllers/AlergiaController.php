@@ -104,7 +104,46 @@ try {
      */
     public function update(Request $request, $id)
     {
-        //
+        //Actualizar Alergia
+        try{
+            $this -> validate($request, [
+                'nombre'=>'required|min:5',
+                'categoria'=>'required',
+                'reaccion'=>'required',
+                'observaciones'=>'required',
+            ]);
+            //Obtener el usuario autentificado actual
+            if(!$user = JWTAuth::parseToken()->authenticate()){
+                return response()->json(['msg'=>'Usuario no encontrado'],404);
+            }
+
+        }
+        catch (\Illuminate\Validation\ValidationException $e) {
+            return \response($e->errors(),422);
+        }
+        if (Gate::allows('solo_adm',$user )) {
+        $alergia = Alergia::find($id);
+            $alergia->nombre = $request->nombre;
+            $alergia->categoria = $request->categoria;
+            $alergia->reaccion = $request->reaccion;
+            $alergia->observaciones = $request->observaciones;
+
+        if($alergia->save()){
+
+            $response=[
+                'msg'=> 'Alergia actualizada con exito!',
+                'alergia'=> $alergia
+            ];
+            return response()->json($response, 201);
+        }
+        $response=[
+            'msg'=>'Error durante la actualización'
+        ];
+        return response()->json($response, 404);
+          }else{
+        $response = ['Msg'=>'No Autorizado'];
+        return response()->json($response,404);
+         }
     }
 
     /**

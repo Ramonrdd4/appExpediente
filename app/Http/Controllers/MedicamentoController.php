@@ -103,7 +103,41 @@ class MedicamentoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //actualiza medicamento
+        try{
+            $this -> validate($request, [
+                'nombre'=>'required|min:5',
+                'descripcion'=>'required',
+                'expediente'=>'required|numeric:9'
+            ]);
+            //Obtener el usuario autentificado actual
+            if(!$user = JWTAuth::parseToken()->authenticate()){
+                return response()->json(['msg'=>'Usuario no encontrado'],404);
+            }
+
+        }
+        catch (\Illuminate\Validation\ValidationException $e) {
+            return \response($e->errors(),422);
+        }
+
+        $medicamento = Medicamento::find($id);
+        $medicamento->nombre=$request->nombre;
+        $medicamento->descripcion=$request->descripcion;
+
+        if($medicamento->save()){
+            //Asociar con expediente
+            $medicamento->expedientes()->attach($request->input('expediente')=== null ? [] : $request->input('expediente'));
+
+            $response=[
+                'msg'=> 'Medicamento actualizado',
+                'medicamento'=> $medicamento
+            ];
+            return response()->json($response, 201);
+        }
+        $response=[
+            'msg'=>'Error durante la actualización'
+        ];
+        return response()->json($response, 404);
     }
 
     /**

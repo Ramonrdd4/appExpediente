@@ -99,7 +99,43 @@ class DeseaseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //Actualización de Enfermedad
+        try{
+            $this -> validate($request, [
+                'nombre'=>'required|min:5',
+                'observaciones'=>'required',
+            ]);
+            //Obtener el usuario autentificado actual
+            if(!$user = JWTAuth::parseToken()->authenticate()){
+                return response()->json(['msg'=>'Usuario no encontrado'],404);
+            }
+
+        }
+        catch (\Illuminate\Validation\ValidationException $e) {
+            return \response($e->errors(),422);
+        }
+        if (Gate::allows('solo_adm',$user )) {
+        $desease = Desease::find($id);
+        $desease->nombre=$request->nombre;
+        $desease->observaciones =$request->observaciones;
+
+
+        if($desease->save()){
+
+            $response=[
+                'msg'=> 'Enfermedad actualizada con exito',
+                'desease'=> $desease
+            ];
+            return response()->json($response, 201);
+        }
+        $response=[
+            'msg'=>'Error durante la actualización'
+        ];
+        return response()->json($response, 404);
+          }else{
+        $response = ['Msg'=>'No Autorizado'];
+        return response()->json($response,404);
+         }
     }
 
     /**
