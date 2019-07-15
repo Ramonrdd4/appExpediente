@@ -30,9 +30,8 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-        //El usuario Paciente cra los perfiles
-        //Crear un Medico
-      try {
+        //El usuario Paciente cra los perfiles duennos
+            try {
         if (!$user = JWTAuth::parseToken()->authenticate()) {
             return response()->json(['msg'=>'Usuario no encontrado'], 404);
         }
@@ -64,14 +63,7 @@ class ProfileController extends Controller
     $perfil->direccion = $request->direccion;
     $perfil->numTelefonico = $request->numTelefonico;
     $perfil->contactoEmergencia = $request->contactoEmergencia;
-    //trae el perfil que sea dueño
-    $perfil1 = Profile::where('idUsuario', $user->id)->where('esDuenho',true)->get();
-    //valida el perfil si existe el due;o lo pone false y si no lo pone true
-     if ($perfil1!=null) {
-        $perfil->esDuenho = false;
-        }else{
-            $perfil->esDuenho = true;
-        }
+    $perfil->esDuenho = true;
     $perfil->user()->associate($user->id);
     if( $perfil->save()){
         return response()->json(['user' => $perfil]);
@@ -148,5 +140,55 @@ class ProfileController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function storeasociado(Request $request)
+    {
+        //Crea el perfil asociado
+      try {
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(['msg'=>'Usuario no encontrado'], 404);
+        }
+        $this->validate($request, [
+                'id'=>'required|min:9',
+                'nombre' => 'required|min:5',
+                'primerApellido' => 'required|min:6',
+                'segundoApellido' => 'required|min:6',
+                'sexo' => 'required|min:1',
+                'fechaNacimiento'=> 'required|date',
+                'tipoSangre'=> 'required|min:2',
+                'direccion'=> 'required|min:5',
+                'numTelefonico'=>'required|numeric|min:0',
+                'contactoEmergencia'=>'required|numeric|min:0',
+
+        ]);
+    } catch (\Illuminate\Validation\ValidationException $e ) {
+        return \response($e->errors(),422);
+    }
+    if (Gate::allows('solo_pacientedueno',$user )) {
+    $perfil = new Profile();
+    $perfil->id = $request->id;
+    $perfil->nombre = $request->nombre;
+    $perfil->primerApellido = $request->primerApellido;
+    $perfil->segundoApellido = $request->segundoApellido;
+    $perfil->sexo = $request->sexo;
+    $perfil->fechaNacimiento = $request->fechaNacimiento;
+    $perfil->tipoSangre = $request->tipoSangre;
+    $perfil->direccion = $request->direccion;
+    $perfil->numTelefonico = $request->numTelefonico;
+    $perfil->contactoEmergencia = $request->contactoEmergencia;
+    $perfil->esDuenho = false;
+    $perfil->user()->associate($user->id);
+    if( $perfil->save()){
+        return response()->json(['user' => $perfil]);
+    }else{
+        $response = ['Msg'=>'Error al registrar el perfil, por favor intentelo más tarde!'];
+        return response()->json($response,404);
+    }
+
+}else {
+    $response = ['Msg'=>'No Autorizado'];
+    return response()->json($response,404);
+}
     }
 }
