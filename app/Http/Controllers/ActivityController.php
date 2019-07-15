@@ -84,7 +84,25 @@ class ActivityController extends Controller
      */
     public function show($id)
     {
+         //Muestra la actividad especifica
+    try {
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(['msg'=>'Usuario no encontrado'], 404);
+        }
+        if (Gate::allows('solo_adm',$user )) {
+    $actividad = Activity::where('id', $id)->get();
+    $response=[
 
+          'Actividad' => $actividad,
+    ];
+    return response()->json($response, 200);
+    }else{
+    $response = ['Msg'=>'No Autorizado'];
+    return response()->json($response,404);
+    }
+        } catch (\Throwable $th) {
+    return \response($th->getMessage(), 422);
+    }
 
 
 

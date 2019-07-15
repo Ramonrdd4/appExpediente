@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Medicamento;
+use Illuminate\Support\Facades\Gate;
+use App\User;
+use JWTAuth;
 
 class MedicamentoController extends Controller
 {
@@ -80,7 +83,25 @@ class MedicamentoController extends Controller
      */
     public function show($id)
     {
-        //
+           //Muestra de el medicamento especifico
+    try {
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(['msg'=>'Usuario no encontrado'], 404);
+        }
+        if (Gate::allows('solo_adm',$user )) {
+    $medicamento = Medicamento::where('id', $id)->get();
+    $response=[
+
+          'Medicamento' => $medicamento,
+    ];
+    return response()->json($response, 200);
+    }else{
+    $response = ['Msg'=>'No Autorizado'];
+    return response()->json($response,404);
+    }
+        } catch (\Throwable $th) {
+    return \response($th->getMessage(), 422);
+    }
     }
 
     /**
@@ -148,6 +169,6 @@ class MedicamentoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
     }
 }

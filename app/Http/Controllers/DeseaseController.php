@@ -86,7 +86,26 @@ class DeseaseController extends Controller
      */
     public function show($id)
     {
-        //
+           //Muestra la enfermedad especifica
+    try {
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(['msg'=>'Usuario no encontrado'], 404);
+        }
+        if (Gate::allows('solo_adm',$user )) {
+    $desease = Desease::where('id', $id)->get();
+    $response=[
+
+          'Enfermedad' => $desease,
+    ];
+    return response()->json($response, 200);
+    }else{
+    $response = ['Msg'=>'No Autorizado'];
+    return response()->json($response,404);
+    }
+        } catch (\Throwable $th) {
+    return \response($th->getMessage(), 422);
+    }
+
     }
 
 
