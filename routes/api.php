@@ -16,20 +16,36 @@ use Illuminate\Http\Request;
 Route::group(['prefix' => 'v1'], function () {
 
     Route::group(['prefix' => 'expediente'], function ($router) {
-
+        //Login
         Route::post('login', 'AuthController@login');
         Route::post('logout', 'AuthController@logout');
+
+        //Usuarios registrar
         Route::post('registar', 'AuthController@register');
+        Route::patch('actualizapaciente/{id}', 'PacienteController@update');
         Route::post('registarMedico', 'AdministradorController@store');
-        Route::post('registarPerfil', 'ProfileController@store');
+        Route::patch('actualizamedico/{id}', 'MedicoController@update');
+        Route::patch('actualizaadm/{id}', 'AdministradorController@update');
+
+
+        //Perfil
         Route::get('perfil', 'ProfileController@show');
-        Route::patch('actualizaadm', 'AdministradorController@update');
-        Route::post('registarAsociado', 'PacienteController@store');
-        Route::patch('actualizamedico', 'MedicoController@update');
-        Route::patch('actualizapaciente', 'PacienteController@update');
+        Route::post('registarPerfil', 'ProfileController@store');
+
+        //Rutas enfermedad, alergia y actividad
         Route::resource('enfermedad', 'DeseaseController');
+        Route::get('enfermedadEliminada', 'DeseaseController@showEliminadas');
+        Route::get('restaurarEnfermedad/{id}', 'DeseaseController@restaurar');
+
         Route::resource('alergia', 'AlergiaController');
+        Route::get('alergiaEliminada', 'AlergiaController@showEliminadas');
+        Route::get('restaurarAlergia/{id}', 'AlergiaController@restaurar');
+
         Route::resource('actividad', 'ActivityController');
+        Route::get('actividadEliminada', 'ActivityController@showEliminadas');
+        Route::get('restaurarActividad/{id}', 'ActivityController@restaurar');
+
+
     });
 
 });

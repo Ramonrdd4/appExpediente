@@ -171,10 +171,29 @@ class DeseaseController extends Controller
         if (Gate::allows('solo_adm',$user )) {
             if($desease = Desease::find($id)){
               $desease->delete();
-              $response = ['Msg'=>'Alergia eliminada con exito!'];
+              $response = ['Msg'=>'Enfermedad eliminada con exito!'];
             }else{
-                $response = ['Msg'=>'Alergia no existe!'];
+                $response = ['Msg'=>'Enfermedad no existe!'];
             }
+        return response()->json($response,200);
+      }else {
+        $response = ['Msg'=>'No Autorizado'];
+        return response()->json($response,404);
+    }
+    }
+    //Restaurar datos
+    public function restaurar($id)
+    {
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(['msg'=>'Usuario no encontrado'], 404);
+        }
+        if (Gate::allows('solo_adm',$user )) {
+           
+        if(Desease::onlyTrashed()->find($id)->restore()){
+            $response = ['Msg'=>'Enfermedad restaurada con exito!'];
+        }else{
+            $response=['Msg' => 'Enfermedad no existe!'];
+        }
         return response()->json($response,200);
       }else {
         $response = ['Msg'=>'No Autorizado'];
@@ -219,6 +238,21 @@ class DeseaseController extends Controller
             'msg'=>'Error durante el registro'
         ];
         return response()->json($response, 404);
+    }
+    public function showEliminadas()
+    {
+        //Muestra todas las enfermedades eliminadas
+        try {
+            $actividad = Desease::onlyTrashed()->get();
+            $response=[
+
+                'msg' => 'Lista de enfermedades eliminadas',
+                'Enfermedad' => $actividad,
+            ];
+            return response()->json($response, 200);
+        } catch (\Throwable $th) {
+            return \response($th->getMessage(), 422);
+        }
     }
 
 }

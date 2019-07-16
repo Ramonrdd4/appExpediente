@@ -179,6 +179,27 @@ class ActivityController extends Controller
         return response()->json($response,404);
     }
     }
+    //Restaurar datos
+    public function restaurar($id)
+    {
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(['msg'=>'Usuario no encontrado'], 404);
+        }
+        if (Gate::allows('solo_adm',$user )) {
+
+
+        if(Activity::onlyTrashed()->find($id)->restore()){
+            $response = ['Msg'=>'Actividad restaurada con exito!'];
+        }else{
+            $response=['Msg' => 'Actividad no existe!'];
+        }
+        return response()->json($response,200);
+      }else {
+        $response = ['Msg'=>'No Autorizado'];
+        return response()->json($response,404);
+    }
+    }
+
     //Metodo del usuario (Ramon)
     public function storeActivityxUsuario(Request $request)
     {
@@ -218,5 +239,20 @@ class ActivityController extends Controller
             'msg'=>'Error durante el registro'
         ];
         return response()->json($response, 404);
+    }
+    public function showEliminadas()
+    {
+        //Muestra todas las Actividades eliminadas
+        try {
+            $actividad = Activity::onlyTrashed()->get();
+            $response=[
+
+                'msg' => 'Lista de Actividades eliminadas',
+                'Actividad' => $actividad,
+            ];
+            return response()->json($response, 200);
+        } catch (\Throwable $th) {
+            return \response($th->getMessage(), 422);
+        }
     }
 }
