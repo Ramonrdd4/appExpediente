@@ -27,6 +27,8 @@ class CreateProfilesTable extends Migration
             //Laves foraneas
             $table->unsignedInteger('idUsuario');
             $table->foreign('idUsuario')->references('id')->on('users');
+            $table->unsignedInteger('idExpediente');
+            $table->foreign('idExpediente')->references('id')->on('expedientes');
             //Identificador de dueño booleano
             $table->boolean('esDuenho');
             $table->timestamps();

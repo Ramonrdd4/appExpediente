@@ -30,7 +30,8 @@ Route::group(['prefix' => 'v1'], function () {
 
         //Perfil
         Route::get('perfil', 'ProfileController@show');
-        Route::post('registarPerfil', 'ProfileController@store');
+        Route::post('registarPerfildueno', 'ProfileController@store');
+        Route::post('registarPerfil', 'ProfileController@storeasociado');
 
         //Rutas enfermedad, alergia y actividad
         Route::resource('enfermedad', 'DeseaseController');

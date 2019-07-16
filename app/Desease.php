@@ -14,5 +14,6 @@ class Desease extends Model
     {
         return $this->hasMany('App\Expedientes');
     }
+  
     protected $dates = ['deleted_at'];
 }

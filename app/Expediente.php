@@ -45,4 +45,8 @@ class Expediente extends Model
     {
         return $this->hasMany('App\Desease');
     }
+    public function parentezco()
+    {
+        return $this->hasMany('App\Parentezco');
+    }
 }

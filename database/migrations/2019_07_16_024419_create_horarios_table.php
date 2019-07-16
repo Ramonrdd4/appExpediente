@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateExpedientesTable extends Migration
+class CreateHorariosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class CreateExpedientesTable extends Migration
      */
     public function up()
     {
-        Schema::create('expedientes', function (Blueprint $table) {
-            $table->unsignedInteger('id')->primary();
+        Schema::create('horarios', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->date('Fecha_cita');
             $table->timestamps();
+            //foranea
+            
         });
     }
 
@@ -26,6 +29,6 @@ class CreateExpedientesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('expedientes');
+        Schema::dropIfExists('horarios');
     }
 }
