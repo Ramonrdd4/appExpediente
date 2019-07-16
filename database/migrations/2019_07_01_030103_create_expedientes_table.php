@@ -16,17 +16,15 @@ class CreateExpedientesTable extends Migration
         Schema::create('expedientes', function (Blueprint $table) {
             $table->unsignedInteger('id')->primary();
             //foraneas
-            $table->unsignedInteger('id_perfil');
-            $table->unsignedInteger('id_fumado');
-            $table->unsignedInteger('id_alcoholismo');
-
-
-
-
-            $table->foreign('id_fumado')->references('id')->on('fumados');
-            $table->foreign('id_alcoholismo')->references('id')->on('alcohols');
-            $table->foreign('id_perfil')->references('id')->on('profiles');
+            $table->unsignedInteger('idperfil');
+            $table->unsignedInteger('idfumado');
+            $table->unsignedInteger('idalcoholismo');
             $table->timestamps();
+
+            $table->foreign('idfumado')->references('id')->on('fumados');
+            $table->foreign('idalcoholismo')->references('id')->on('alcohols');
+            $table->foreign('idperfil')->references('id')->on('profiles');
+
 
         });
     }
@@ -39,12 +37,12 @@ class CreateExpedientesTable extends Migration
     public function down()
     {
         Schema::table('expedientes', function (Blueprint $table) {
-            $table->dropForeign('expedientes_id_perfil_foreign');
-            $table->dropColumn('id_perfil');
-            $table->dropForeign('expedientes_id_fumado_foreign');
-            $table->dropColumn('id_fumado');
-            $table->dropForeign('expedientes_id_alcoholismo_foreign');
-            $table->dropColumn('id_alcoholismo');
+            $table->dropForeign('expedientes_idperfil_foreign');
+            $table->dropColumn('idperfil');
+            $table->dropForeign('expedientes_idfumado_foreign');
+            $table->dropColumn('idfumado');
+            $table->dropForeign('expedientes_idalcoholismo_foreign');
+            $table->dropColumn('idalcoholismo');
         });
         Schema::dropIfExists('expedientes');
     }

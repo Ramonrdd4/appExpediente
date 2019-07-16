@@ -14,11 +14,11 @@ class CreateHorariosTable extends Migration
     public function up()
     {
         Schema::create('horarios', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->date('Fecha_cita');
             $table->timestamps();
             //foranea
-            
+
         });
     }
 

@@ -14,7 +14,7 @@ class CreateServicioConsultasTable extends Migration
     public function up()
     {
         Schema::create('servicio__consultas', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->double('Precio');
             $table->string('Ubicacion');
             $table->unsignedInteger('id_Doctor');

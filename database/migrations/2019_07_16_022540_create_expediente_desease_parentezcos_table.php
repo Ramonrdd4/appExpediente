@@ -14,7 +14,7 @@ class CreateExpedienteDeseaseParentezcosTable extends Migration
     public function up()
     {
         Schema::create('expediente_desease_parentezcos', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->unsignedInteger('id_Expediente');
             $table->unsignedInteger('id_parentezco');
             $table->timestamps();

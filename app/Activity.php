@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Activity extends Model
 {
     protected $fillable = ['nombre'];
+
+    public $table='activities';
+
     use SoftDeletes;
 
 

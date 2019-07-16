@@ -14,7 +14,7 @@ class CreateAgendasTable extends Migration
     public function up()
     {
         Schema::create('agendas', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->boolean('estado_cita');
             $table->unsignedInteger('id_paciente');
             $table->unsignedInteger('id_Horario');
