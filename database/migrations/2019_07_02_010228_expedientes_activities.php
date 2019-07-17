@@ -14,15 +14,9 @@ class ExpedientesActivities extends Migration
     public function up()
     {
         Schema::create('expediente_activity', function (Blueprint $table) {
-<<<<<<< HEAD
-            $table->increments('id');
+            $table->increments('id')->primary();
             $table->unsignedInteger('expediente_id');
             $table->unsignedInteger('activity_id');
-=======
-            $table->increments('id')->primary();
-            $table->integer('expediente_id')->unsigned();
-            $table->integer('activity_id')->unsigned();
->>>>>>> 86c91d3955d9b21f30ebe10c26d32482be3887f7
             $table->integer('minutos')->unsigned();
             $table->integer('cantidad')->unsigned();
             $table->timestamps();
