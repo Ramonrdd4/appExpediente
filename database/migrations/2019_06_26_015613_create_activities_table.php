@@ -14,11 +14,11 @@ class CreateActivitiesTable extends Migration
     public function up()
     {
         Schema::create('activities', function (Blueprint $table) {
-            $table->increments('id')->primary();
+            $table->increments('id');
             $table->string('nombre');
-            $table->integer('listaId')->nullable();
+            $table->unsignedInteger('listaId')->nullable();
             //Relacion con lista
-            $table->foreign('listaId')->references('id')->on('lista_activities');
+            $table->foreign('listaId')->references('id')->on('lista_acitivities');
             $table->softDeletes();
             $table->timestamps();
         });
