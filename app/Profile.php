@@ -17,4 +17,8 @@ class Profile extends Model
     {
         return $this->hasOne('App\Expediente', 'id', 'id');
     }
+    public function Agenda()
+    {
+        return $this->hasmany('App\Agenda');
+    }
 }

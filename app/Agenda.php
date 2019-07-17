@@ -8,11 +8,11 @@ class Agenda extends Model
 {
     public function Horario()
     {
-        return $this->hasmany('App\Horario');
+        return $this->belongsTo('App\Horario');
     }
 
-    public function user()
+    public function Profile()
     {
-        return $this->hasmany('App\User');
+        return $this->belongsTo('App\Profile');
     }
 }

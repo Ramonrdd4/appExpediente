@@ -16,8 +16,13 @@ class CreateHorariosTable extends Migration
         Schema::create('horarios', function (Blueprint $table) {
             $table->increments('id');
             $table->date('Fecha_cita');
+            $table->time('hora_cita');
+            $table->boolean('estado');
+            $table->unsignedInteger('id_servicioConsulta');
             $table->timestamps();
             //foranea
+            $table->foreign('id_servicioConsulta')->references('id')->on('servicio__consultas');
+
 
         });
     }

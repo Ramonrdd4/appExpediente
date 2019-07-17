@@ -14,11 +14,11 @@ class CreateExpedientesTable extends Migration
     public function up()
     {
         Schema::create('expedientes', function (Blueprint $table) {
-            $table->unsignedInteger('id')->primary();
+            $table->increments('id');
             //foraneas
             $table->unsignedInteger('idperfil');
-            $table->unsignedInteger('idfumado');
-            $table->unsignedInteger('idalcoholismo');
+            $table->unsignedInteger('idfumado')->nullable();
+            $table->unsignedInteger('idalcoholismo')->nullable();
             $table->timestamps();
 
             $table->foreign('idfumado')->references('id')->on('fumados');

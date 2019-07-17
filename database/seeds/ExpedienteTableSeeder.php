@@ -12,7 +12,9 @@ class ExpedienteTableSeeder extends Seeder
     public function run()
     {
         $expediente= App\Expediente::create([
-            'id'=> 116850044
+            'idperfil'=> 116850044,
+            'idfumado'=>1
+            
         ]);
         $expediente->save();
     }

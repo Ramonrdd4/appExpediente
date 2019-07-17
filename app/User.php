@@ -38,14 +38,14 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     public function rol(){
-        return $this->belongsTo('App\Role', 'rol_id', 'id');
+        return $this->belongsTo('App\Role');
     }
 
     public function profiles()
     {
         return $this->hasMany('App\Profile');
     }
-    
+
 
 
     /**
@@ -66,6 +66,10 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+    public function servicio_Consulta()
+    {
+        return $this->hasmany('App\Servicio_Consulta');
     }
 
 

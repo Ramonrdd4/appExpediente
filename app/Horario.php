@@ -10,4 +10,8 @@ class Horario extends Model
     {
         return $this->hasMany('App\Agenda');
     }
+    public function servicio_consulta()
+    {
+        return $this->belongsTo('App\Servicio_Consulta');
+    }
 }

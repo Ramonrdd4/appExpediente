@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
         $this->call(AlergiasTableSeeder::class);
         $this->call(ActivitiesTableSeeder::class);
         $this->call(MedicamentosTableSeeder::class);
-        $this->call(ExpedienteTableSeeder::class);
         $this->call(FumadoTableSeeder::class);
+        $this->call(ExpedienteTableSeeder::class);
         $this->call(AlcoholTableSeeder::class);
     }
 }
