@@ -14,7 +14,7 @@ class CreateDeseasesTable extends Migration
     public function up()
     {
         Schema::create('deseases', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')->primary();
             $table->string('nombre');
             $table->string('observaciones');
             $table->softDeletes();

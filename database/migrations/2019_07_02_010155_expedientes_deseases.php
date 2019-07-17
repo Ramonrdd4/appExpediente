@@ -14,7 +14,7 @@ class ExpedientesDeseases extends Migration
     public function up()
     {
         Schema::create('expediente_desease', function (Blueprint $table){
-            $table->increments('id');
+            $table->increments('id')->primary();
             $table->integer('expediente_id')->unsigned();
             $table->integer('desease_id')->unsigned();
             $table->timestamps();

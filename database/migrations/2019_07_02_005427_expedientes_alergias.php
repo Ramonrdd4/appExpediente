@@ -14,7 +14,7 @@ class ExpedientesAlergias extends Migration
     public function up()
     {
         Schema::create('expediente_alergia', function (Blueprint $table){
-            $table->increments('id');
+            $table->increments('id')->primary();
             $table->unsignedInteger('expediente_id');
             $table->unsignedInteger('alergia_id');
             $table->timestamps();
