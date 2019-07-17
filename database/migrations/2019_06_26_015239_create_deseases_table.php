@@ -17,6 +17,9 @@ class CreateDeseasesTable extends Migration
             $table->increments('id')->primary();
             $table->string('nombre');
             $table->string('observaciones');
+            $table->integer('listaId')->nullable();
+            //Relacion con lista
+            $table->foreign('listaId')->references('id')->on('lista_deseases');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -29,6 +32,10 @@ class CreateDeseasesTable extends Migration
      */
     public function down()
     {
+        Schema::table('deseases', function (Blueprint $table){
+            $table->dropForeign('deseases_listaId_foreign');
+            $table->dropColumn('listaId');
+        });
         Schema::dropIfExists('deseases');
     }
 }

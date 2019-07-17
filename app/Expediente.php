@@ -28,22 +28,22 @@ class Expediente extends Model
 
     public function alergias()
     {
-        return $this->hasMany('App\Alergias');
+        return $this->belongsToMany('App\Alergia', 'expediente_alergia', 'expediente_id', 'alergia_id')->withTimestamps();
     }
 
     public function medicamentos()
     {
-        return $this->hasMany('App\Medicamento');
+        return $this->belongsToMany('App\Medicamento', 'medicamento_expediente', 'expediente_id', 'medicamento_id')->withTimestamps();
     }
 
     public function activities()
     {
-        return $this->hasMany('App\Activity');
+        return $this->belongsToMany('App\Activity', 'expediente_activity', 'expediente_id', 'activity_id')->withTimestamps();
     }
 
     public function deseases()
     {
-        return $this->hasMany('App\Desease');
+        return $this->belongsToMany('App\Desease', 'expediente_desease', 'expediente_id', 'desease_id')->withTimestamps();
     }
     public function parentezco()
     {

@@ -12,8 +12,13 @@ class Desease extends Model
 
     public function expedientes()
     {
-        return $this->hasMany('App\Expedientes');
+        return $this->belongsToMany('App\Expediente', 'expediente_desease', 'desease_id', 'expediente_id');
     }
-  
+
+    public function lista()
+    {
+        return $this->belongsTo('App\listaDesease', 'listaId', 'id');
+    }
+
     protected $dates = ['deleted_at'];
 }

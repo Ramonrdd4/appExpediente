@@ -19,8 +19,10 @@ class CreateAlergiasTable extends Migration
             $table->string('nombre');
             $table->string('categoria'); //alimentos, medicamentos y ambiente
             $table->string('reaccion');
-            $table->softDeletes();
             $table->string('observaciones');
+            //Relacion con lista
+            $table->foreign('listaId')->references('id')->on('lista_activities');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -32,6 +34,10 @@ class CreateAlergiasTable extends Migration
      */
     public function down()
     {
+        Schema::table('alergias', function (Blueprint $table){
+            $table->dropForeign('alergias_listaId_foreign');
+            $table->dropColumn('listaId');
+        });
         Schema::dropIfExists('alergias');
     }
 }

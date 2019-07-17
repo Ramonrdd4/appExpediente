@@ -6,12 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Medicamento extends Model
 {
-
+    protected $fillable = ['nombre', 'descripcion'];
+    use SoftDeletes;
 
     public function expedientes()
     {
-        return $this->hasMany('App\Expedientes');
+        return $this->belongsToMany('App\Expediente', 'medicamento_expediente', 'medicamento_id', 'expediente_id');
     }
-   
 
+    protected $dates = ['deleted_at'];
 }
