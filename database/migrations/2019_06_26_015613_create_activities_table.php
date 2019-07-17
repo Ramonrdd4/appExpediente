@@ -16,6 +16,7 @@ class CreateActivitiesTable extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->increments('id')->primary();
             $table->string('nombre');
+            $table->integer('listaId')->nullable();
             //Relacion con lista
             $table->foreign('listaId')->references('id')->on('lista_activities');
             $table->softDeletes();

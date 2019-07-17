@@ -20,6 +20,7 @@ class CreateAlergiasTable extends Migration
             $table->string('categoria'); //alimentos, medicamentos y ambiente
             $table->string('reaccion');
             $table->string('observaciones');
+            $table->integer('listaId')->nullable();
             //Relacion con lista
             $table->foreign('listaId')->references('id')->on('lista_activities');
             $table->softDeletes();
