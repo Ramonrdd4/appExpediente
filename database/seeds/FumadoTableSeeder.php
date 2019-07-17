@@ -12,6 +12,7 @@ class FumadoTableSeeder extends Seeder
     public function run()
     {
         $fumado= App\Fumado::create([
+            'id'=>116850044,
             'estadoFumado'=>3,
             'tiempoInicio'=>'N/A',
             'frecuencia'=>0,
