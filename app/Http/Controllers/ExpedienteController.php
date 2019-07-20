@@ -54,6 +54,19 @@ class ExpedienteController extends Controller
     $expediente->alcohols()->associate($alcohols->id);
     $expediente->fumados()->associate($fumados->id);
     if( $expediente->save()){
+        //array de Actividades
+        $prop->activities()->
+        attach($request->input('actividades') === null ? [] :
+        $request->input('actividades'));
+
+
+
+        //Property con características
+        $prop = $prop->where('id',$prop->id)->with('activities','zone')->first();
+        $response=[
+            'msg'=>'Información del lugar incluyendo el detalle del usuario, zona y lista de actividades. ',
+            'Lugar'=>$prop
+        ];
         return response()->json(['expediente' => $expediente]);
     }else{
         $response = ['Msg'=>'Error al registrar el expediente, por favor intentelo más tarde!'];
