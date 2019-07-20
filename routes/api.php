@@ -46,7 +46,21 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('actividadEliminada', 'ActivityController@showEliminadas');
         Route::get('restaurarActividad/{id}', 'ActivityController@restaurar');
 
-
+        //Rutas de alergias frecuentes
+        Route::group(['prefix' => 'listaAlergias'], function ($router){
+            Route::patch('eliminarDeListaFrecuente/{id}', 'ListaAlergiaController@eliminarDeLista');
+        });
+        Route::resource('listaAlergias', 'ListaAlergiaController');
+        //Rutas de actividades frecuentes
+        Route::group(['prefix' => 'listaActivities'], function ($router){
+            Route::patch('eliminarDeListaFrecuente/{id}', 'ListaActivityController@eliminarDeLista');
+        });
+        Route::resource('listaActivities', 'ListaAlergiaController');
+        //Ruta de enfermedades frecuentes
+        Route::group(['prefix' => 'listaDeseases'], function ($router){
+            Route::patch('eliminarDeListaFrecuente/{id}', 'ListaDeseaseController@eliminarDeLista');
+        });
+        Route::resource('listaDeseases', 'ListaDeseaseController');
     });
 
 });

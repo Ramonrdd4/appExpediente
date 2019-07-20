@@ -17,18 +17,18 @@ class AlergiaController extends Controller
      */
     public function index()
     {
-//Muestra todas las Alergias menos las eliminadas
-try {
-    $alergia = Alergia::all();
-    $response=[
+    //Muestra todas las Alergias menos las eliminadas
+    try {
+        $alergia = Alergia::all();
+        $response=[
 
-        'msg' => 'Lista de Alergias',
-        'Alergia' => $alergia,
-    ];
-    return response()->json($response, 200);
-} catch (\Throwable $th) {
-    return \response($th->getMessage(), 422);
-}
+            'msg' => 'Lista de Alergias',
+            'Alergia' => $alergia,
+        ];
+        return response()->json($response, 200);
+    } catch (\Throwable $th) {
+        return \response($th->getMessage(), 422);
+        }
     }
 
 

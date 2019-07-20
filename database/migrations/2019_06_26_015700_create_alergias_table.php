@@ -15,13 +15,14 @@ class CreateAlergiasTable extends Migration
     public function up()
     {
         Schema::create('alergias', function (Blueprint $table) {
-            $table->increments('id')->primary();
+            $table->increments('id');
             $table->string('nombre');
             $table->string('categoria'); //alimentos, medicamentos y ambiente
             $table->string('reaccion');
             $table->string('observaciones');
+            $table->unsignedInteger('listaId')->nullable();
             //Relacion con lista
-            $table->foreign('listaId')->references('id')->on('lista_activities');
+            $table->foreign('listaId')->references('id')->on('lista_alergias');
             $table->softDeletes();
             $table->timestamps();
         });

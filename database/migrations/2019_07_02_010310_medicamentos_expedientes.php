@@ -14,7 +14,7 @@ class MedicamentosExpedientes extends Migration
     public function up()
     {
         Schema::create('medicamento_expediente', function (Blueprint $table){
-            $table->increments('id')->primary();
+            $table->increments('id');
             $table->integer('medicamento_id')->unsigned();
             $table->integer('expediente_id')->unsigned();
             $table->timestamps();

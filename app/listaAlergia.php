@@ -8,6 +8,8 @@ class listaAlergia extends Model
 {
     public function alergias()
     {
-        return $this->hasMany('App\Alergias');
+        return $this->hasMany('App\Alergia', 'listaId', 'id');
     }
+
+    
 }

@@ -14,7 +14,7 @@ class CreateCirugiasTable extends Migration
     public function up()
     {
         Schema::create('cirugias', function (Blueprint $table) {
-            $table->increments('id')->primary();
+            $table->increments('id');
             $table->dateTime('fecha');
             $table->string('lugar');
             $table->unsignedInteger('idExpediente');
@@ -32,7 +32,7 @@ class CreateCirugiasTable extends Migration
     public function down()
     {
         Schema::table('cirugias', function (Blueprint $table) {
-            $table->dropForeign('cirugias_expedienteId_foreign');
+            $table->dropForeign('cirugias_idExpediente_foreign');
             $table->dropColumn('idExpediente');
         });
         Schema::dropIfExists('cirugias');

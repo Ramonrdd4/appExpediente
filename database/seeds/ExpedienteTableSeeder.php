@@ -13,8 +13,9 @@ class ExpedienteTableSeeder extends Seeder
     {
         $expediente= App\Expediente::create([
             'idperfil'=> 116850044,
-            'idfumado'=>1
-            
+            'idfumado'=>116850044,
+            'idalcoholismo'=>116850044
+
         ]);
         $expediente->save();
     }
