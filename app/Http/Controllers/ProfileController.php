@@ -180,7 +180,7 @@ class ProfileController extends Controller
     $perfil->esDuenho = false;
     $perfil->user()->associate($user->id);
     if( $perfil->save()){
-        return response()->json(['user' => $perfil]);
+        return response()->json(['perfil' => $perfil]);
     }else{
         $response = ['Msg'=>'Error al registrar el perfil, por favor intentelo más tarde!'];
         return response()->json($response,404);
