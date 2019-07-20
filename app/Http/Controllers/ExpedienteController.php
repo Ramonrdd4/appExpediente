@@ -55,17 +55,25 @@ class ExpedienteController extends Controller
     $expediente->fumados()->associate($fumados->id);
     if( $expediente->save()){
         //array de Actividades
-        $prop->activities()->
+        $expediente->activities()->
         attach($request->input('actividades') === null ? [] :
         $request->input('actividades'));
 
+          //array de enfermedades
+          $expediente->deseases()->
+          attach($request->input('enfermedades') === null ? [] :
+          $request->input('enfermedades'));
 
+            //array de alergias
+        $expediente->alergias()->
+        attach($request->input('alergias') === null ? [] :
+        $request->input('alergias'));
 
-        //Property con características
-        $prop = $prop->where('id',$prop->id)->with('activities','zone')->first();
+        //expediente con características
+        $expediente = $expediente->where('id',$expediente->id)->with('activities','deseases','alergias')->first();
         $response=[
-            'msg'=>'Información del lugar incluyendo el detalle del usuario, zona y lista de actividades. ',
-            'Lugar'=>$prop
+            'msg'=>'Información del expediente incluyendo las listas de activities, enfermedades y alergias. ',
+            'Lugar'=>$expediente
         ];
         return response()->json(['expediente' => $expediente]);
     }else{
