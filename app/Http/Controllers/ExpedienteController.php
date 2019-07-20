@@ -65,7 +65,7 @@ class ExpedienteController extends Controller
     return response()->json($response,404);
 }
     }
-}
+
 
     /**
      * Display the specified resource.
