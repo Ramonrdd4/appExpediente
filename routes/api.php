@@ -46,6 +46,11 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('actividadEliminada', 'ActivityController@showEliminadas');
         Route::get('restaurarActividad/{id}', 'ActivityController@restaurar');
 
+        //Rutas de alergias frecuentes
+        Route::group(['prefix' => 'listaAlergias'], function ($router){
+            Route::patch('eliminarDeListaFrecuente/{id}', 'ListaAlergiaController@eliminarDeLista');
+        });
+        Route::resource('listaAlergias', 'ListaAlergiaController');
 
     });
 
