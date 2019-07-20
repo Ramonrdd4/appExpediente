@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\listaAlergia;
-use App\Alergia;
 use Illuminate\Http\Request;
+use App\listaDesease;
+use App\Desease;
 
-class ListaAlergiaController extends Controller
+class ListaDeseaseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,11 +17,10 @@ class ListaAlergiaController extends Controller
     {
         try
         {
-            //$listaAlergia = listaAlergia::orderBy('id')->with(['alergias'])->first();
-            $listaAlergia = listaAlergia::orderBy('id')->withCount(['alergias'])->get();
+            $listaDesease = listaDesease::orderBy('id')->with(['deseases'])->first();
             $response=[
-                'msg' => 'Lista de Alergias más frecuentes',
-                'Alergias' => $listaAlergia
+                'msg' => 'Lista de enfermedades más frecuentes',
+                'Enfermedades' => $listaDesease
             ];
             return response()->json($response, 200);
         }
@@ -82,27 +81,27 @@ class ListaAlergiaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $alergia = Alergia::find($request->input('alergia_id'));
-        if($alergia->listaId == 1){
+        $desease = Desease::find($request->input('desease_id'));
+        if($desease->listaId == 1){
             $response =[
-                'msg' => 'La alergia ya se encuentra en la lista.'
+                'msg' => 'La enfermedad ya se encuentra en la lista.'
             ];
             return response()->json($response, 403);
         }
-        $alergias = Alergia::where('listaId', 1)->get();
-        if(count($alergias) >= 10){
+        $deseases = Desease::where('listaId', 1)->get();
+        if(count($deseases) >= 10){
             $response =[
                 'msg' => 'No puede agregar más elementos a la lista, ya esta al máximo.'
             ];
             return response()->json($response, 403);
         }
 
-        $alergia->lista()->associate($id);
-        if($alergia->save()){
-            $listaAlergia = listaAlergia::orderBy('id')->with(['alergias'])->first();
+        $desease->lista()->associate($id);
+        if($desease->save()){
+            $listaDesease = listaDesease::orderBy('id')->with(['deseases'])->first();
             $response=[
-                'msg' => 'Alergia agredada a la lista!',
-                'Alergias' => $listaAlergia
+                'msg' => 'Enfermedad agredada a la lista!',
+                'Enfermedades' => $listaDesease
             ];
             return response()->json($response, 200);
         }
@@ -118,23 +117,20 @@ class ListaAlergiaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function eliminarDeLista(Request $request, $id)
+    public function eliminarDeLista(Request $request,$id)
     {
-        $alergia = Alergia::find($request->input('alergia_id'));
-        if($alergia == null){
-            return response()->json(['msg'=>'Alergia especificada no encontrada'], 404);
+        $desease = Desease::find($request->input('desease_id'));
+        if($desease == null){
+            return response()->json(['msg'=>'Emfermedad especificada no encontrada'], 404);
         }
-        $alergia->listaId = null;
-        if($alergia->save()){
-            $listaAlergia = listaAlergia::orderBy('id')->with(['alergias'])->first();
+        $desease->listaId = null;
+        if($desease->save()){
+            $listaDesease = listaDesease::orderBy('id')->with(['deseases'])->first();
             $response=[
-                'msg' => 'Alergia eliminada de la lista!',
-                'Alergias' => $listaAlergia
+                'msg' => 'Enfermedad eliminada de la lista!',
+                'Enfermedades' => $listaDesease
             ];
             return response()->json($response, 200);
         }
-
-
-
     }
 }
