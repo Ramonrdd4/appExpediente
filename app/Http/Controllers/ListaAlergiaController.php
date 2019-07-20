@@ -82,7 +82,7 @@ class ListaAlergiaController extends Controller
     public function update(Request $request, $id)
     {
         $cantidad = listaAlergia::where('id', $id)->withCount(['alergias'])->get();
-        if($cantidad-> >= 10){
+        if($cantidad >= 10){
             $response =[
                 'msg' => 'No puede agregar más elementos a la lista, ya esta al máximo.'
             ];
