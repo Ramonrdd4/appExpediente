@@ -124,6 +124,9 @@ class ListaActivityController extends Controller
         if($activity == null){
             return response()->json(['msg'=>'Actividad especificada no encontrada'], 404);
         }
+        if($activity->listaId == null){
+            return response()->json(['msg'=>'Actividad especificada no se encuentera en la lista'], 404);
+        }
         $activity->listaId = null;
         if($activity->save()){
             $listaActivity = listaAcitivity::orderBy('id')->with(['activities'])->first();

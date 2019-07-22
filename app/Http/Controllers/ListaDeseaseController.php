@@ -123,6 +123,9 @@ class ListaDeseaseController extends Controller
         if($desease == null){
             return response()->json(['msg'=>'Emfermedad especificada no encontrada'], 404);
         }
+        if($desease->listaId == null){
+            return response()->json(['msg'=>'Emfermedad especificada no se encuntra en la lista'], 404);
+        }
         $desease->listaId = null;
         if($desease->save()){
             $listaDesease = listaDesease::orderBy('id')->with(['deseases'])->first();

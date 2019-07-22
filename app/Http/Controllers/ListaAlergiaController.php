@@ -124,6 +124,9 @@ class ListaAlergiaController extends Controller
         if($alergia == null){
             return response()->json(['msg'=>'Alergia especificada no encontrada'], 404);
         }
+        if($alergia->listaId == null){
+            return response()->json(['msg'=>'Alergia especificada no se encuentra en la lista'], 404);
+        }
         $alergia->listaId = null;
         if($alergia->save()){
             $listaAlergia = listaAlergia::orderBy('id')->with(['alergias'])->first();
