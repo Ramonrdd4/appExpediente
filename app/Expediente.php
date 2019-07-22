@@ -6,19 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Expediente extends Model
 {
+    protected $fillable = ['idperfil'];
+
     public function profile()
     {
-        return $this->belongsTo('App\Profile', 'id', 'id');
+        return $this->belongsTo('App\Profile');
     }
 
     public function fumado()
     {
-        return $this->hasOne('App\Fumado', 'id', 'id');
+        return $this->belongsTo('App\Fumado');
     }
 
     public function alcohol()
     {
-        return $this->hasOne('App\Alcohol', 'id', 'id');
+        return $this->belongsTo('App\Alcohol');
     }
 
     public function cirugias()

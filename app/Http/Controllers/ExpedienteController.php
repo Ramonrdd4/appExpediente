@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use App\Expediente;
+use App\Fumado;
+use App\Alcohol;
+use JWTAuth;
+
 
 class ExpedienteController extends Controller
 {
@@ -40,19 +46,39 @@ class ExpedienteController extends Controller
             return response()->json(['msg'=>'Usuario no encontrado'], 404);
         }
         $this->validate($request, [
-                'idperfil'=>'required|min:9',
-                'idfumado' => 'required|min:5',
-                'idalcoholismo' => 'required|min:6'
+                'idperfil'=>'required|min:1'
+
+
         ]);
     } catch (\Illuminate\Validation\ValidationException $e ) {
         return \response($e->errors(),422);
     }
     if (Gate::allows('solo_pacientedueno',$user )) {
     $expediente = new Expediente();
-    $expediente->idperfil = $request->idperfil;
-    $expediente->profiles()->associate($profiles->id);
-    $expediente->alcohols()->associate($alcohols->id);
-    $expediente->fumados()->associate($fumados->id);
+        //crear el fumado
+        if($request->fuma!=null){
+            $fuma = new Fumado();
+            $fuma->id = $request->idperfil;
+            $fuma->estadofumado = $request->estadofumado;
+            $fuma->tiempoInicio = $request->tiempoIniciof;
+            $fuma->frecuencia = $request->frecuenciaf;
+            $fuma->observaciones = $request->observacionesf;
+            $expediente->fumado()->associate($request->idperfil);
+        }
+        if($request->alcohol!=null){
+            $alcohol = new Alcohol();
+            $alcohol->id = $request->idperfil;
+            $alcohol->estadoAlcohol = $request->estadoAlcohol;
+            $alcohol->tiempoInicio = $request->tiempoInicioa;
+            $alcohol->frecuencia = $request->frecuenciaa;
+            $alcohol->tipoLicor = $request->tipoLicora;
+            $alcohol->observaciones = $request->observacionesa;
+            $expediente->alcohol()->associate($request->idperfil);
+        }
+
+    $expediente->profile()->associate($request->idperfil);
+
+
     if( $expediente->save()){
         //array de Actividades
         $expediente->activities()->
@@ -68,6 +94,10 @@ class ExpedienteController extends Controller
         $expediente->alergias()->
         attach($request->input('alergias') === null ? [] :
         $request->input('alergias'));
+        //array de parentezco
+        $expediente->parentezco()->
+        attach($request->input('parentezco') === null ? [] :
+        $request->input('parentezco'));
 
         //expediente con características
         $expediente = $expediente->where('id',$expediente->id)->with('activities','deseases','alergias')->first();
