@@ -8,6 +8,7 @@ class Profile extends Model
 {
     protected $fillable = ['id','nombre', 'primerApellido','segundoApellido','sexo','fechaNacimiento','tipoSangre','direccion','numTelefonico','contactoEmergencia'];
 
+    protected $primaryKey = 'id';
     public function user()
     {
         return $this->belongsTo('App\User', 'idUsuario', 'id');
@@ -15,7 +16,7 @@ class Profile extends Model
 
     public function expediente()
     {
-        return $this->belongsTo('App\Expediente');
+        return $this->belongsTo('App\Expediente','id','idperfil');
     }
     public function Agenda()
     {

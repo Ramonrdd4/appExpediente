@@ -16,7 +16,7 @@ class Activity extends Model
 
     public function expedientes()
     {
-        return $this->belongsToMany('App\Expediente', 'expediente_activity', 'activity_id', 'expediente_id');
+        return $this->belongsToMany('App\Expediente', 'expediente_activity', 'id', 'expediente_id');
     }
 
     public function lista()

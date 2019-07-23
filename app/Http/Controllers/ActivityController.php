@@ -214,20 +214,19 @@ class ActivityController extends Controller
             if(!$user = JWTAuth::parseToken()->authenticate()){
                 return response()->json(['msg'=>'Usuario no encontrado'],404);
             }
-
         }
         catch (\Illuminate\Validation\ValidationException $e) {
             return \response($e->errors(),422);
         }
-
         $actividad = new Activity([
             'nombre'=>$request->input('nombre'),
             'observaciones'=>$request->input('observaciones')
         ]);
-
         if($actividad->save()){
             //Asociar con expediente
-            $actividad->expedientes()->attach($request->input('expediente')=== null ? [] : $request->input('expediente'), ['minutos'=> $request->input('minutos'), 'cantidad'=> $request->input('cantidad')]);
+            $actividad->expedientes()->attach($request->input('expediente')=== null ? [] :
+            $request->input('expediente'), ['minutos'=> $request->input('minutos'),
+            'cantidad'=> $request->input('cantidad')]);
 
             $response=[
                 'msg'=> 'Actividad registrada',

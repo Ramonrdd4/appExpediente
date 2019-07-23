@@ -47,8 +47,6 @@ class ExpedienteController extends Controller
         }
         $this->validate($request, [
                 'idperfil'=>'required|min:1'
-
-
         ]);
     } catch (\Illuminate\Validation\ValidationException $e ) {
         return \response($e->errors(),422);
