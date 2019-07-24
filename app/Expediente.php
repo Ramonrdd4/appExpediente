@@ -49,8 +49,5 @@ class Expediente extends Model
     {
         return $this->belongsToMany('App\Desease', 'expediente_desease', 'desease_id', 'expediente_id')->withTimestamps();
     }
-    public function parentezco()
-    {
-        return $this->belongsToMany('App\Parentezco');
-    }
+ 
 }
