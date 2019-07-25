@@ -42,12 +42,12 @@ class Expediente extends Model
 
     public function activities()
     {
-        return $this->belongsToMany('App\Activity', 'expediente_activity', 'id', 'activity_id')->withTimestamps();
+        return $this->belongsToMany('App\Activity', 'expediente_activity', 'expediente_id', 'activity_id')->withTimestamps();
     }
 
     public function deseases()
     {
         return $this->belongsToMany('App\Desease', 'expediente_desease', 'desease_id', 'expediente_id')->withTimestamps();
     }
- 
+
 }

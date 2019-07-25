@@ -271,4 +271,40 @@ class AlergiaController extends Controller
             return \response($th->getMessage(), 422);
         }
     }
+        //Metodo del usuario (Fabiola)
+        public function storeAlergiasxUsuario(Request $request)
+        {
+          try{
+              $this -> validate($request, [
+                  'expediente_id'=>'required|numeric:9',
+                  'alergia_id'=>'required|numeric:1'
+              ]);
+              //Obtener el usuario autentificado actual
+              if(!$user = JWTAuth::parseToken()->authenticate()){
+                  return response()->json(['msg'=>'Usuario no encontrado'],404);
+              }
+          }
+          catch (\Illuminate\Validation\ValidationException $e) {
+              return \response($e->errors(),422);
+          }
+          if (Gate::allows('solo_pacientedueno',$user )) {
+              $expediente = Expediente::where('idperfil', $request->input('expediente_id'))->first();
+              $alergia = $request->input('alergia_id');
+
+              if($expediente===null){
+                  return response()->json("Expediente no encontrado");
+              }
+              //Asocia con el expediente
+              $expediente->alergias()->attach($actividad);
+
+              $response =[
+                  'msg'=>'Alergia agregada exitosamente!',
+              ];
+              return response()->json($response, 200);
+
+          }else {
+              $response = ['Msg'=>'No Autorizado'];
+              return response()->json($response,404);
+          }
+      }
 }

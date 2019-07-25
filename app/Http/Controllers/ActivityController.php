@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Activity;
 use Illuminate\Support\Facades\Gate;
 use App\User;
+use App\Expediente;
 use JWTAuth;
 
 class ActivityController extends Controller
@@ -262,7 +263,7 @@ class ActivityController extends Controller
                 'minutos'=>'required|numeric',
                 'cantidad'=>'required|numeric',
                 'expediente_id'=>'required|numeric:9',
-                'alergia_id'=>'required|numeric:1'
+                'actividad_id'=>'required|numeric:1'
             ]);
             //Obtener el usuario autentificado actual
             if(!$user = JWTAuth::parseToken()->authenticate()){
@@ -272,21 +273,28 @@ class ActivityController extends Controller
         catch (\Illuminate\Validation\ValidationException $e) {
             return \response($e->errors(),422);
         }
-        if (Gate::allows('solo_adm',$user )) {
-            $expediente = Expediente::find($request->input('expediente_id'));
-            $alergia = $request->input('alergia_id');
+        if (Gate::allows('solo_pacientedueno',$user )) {
+            $expediente = Expediente::where('idperfil', $request->input('expediente_id'))->first();
+            $actividad = $request->input('actividad_id');
             $minutos=$request->input('minutos');
-            $cantidad=$request->input('catidad');
+            $cantidad=$request->input('cantidad');
 
             if($expediente===null){
                 return response()->json("Expediente no encontrado");
             }
             //Asocia con el expediente
-            $expediente->alergias()->attach()
+            $expediente->activities()->attach($actividad,['minutos'=>$minutos,'cantidad'=>$cantidad]);
 
+            $response =[
+                'msg'=>'Actividad agregada exitosamente!',
+            ];
+            return response()->json($response, 200);
 
+        }else {
+            $response = ['Msg'=>'No Autorizado'];
+            return response()->json($response,404);
         }
     }
 
     }
-}
+
