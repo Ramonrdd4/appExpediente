@@ -41,10 +41,17 @@ Route::group(['prefix' => 'v1'], function () {
         Route::resource('alergia', 'AlergiaController');
         Route::get('alergiaEliminada', 'AlergiaController@showEliminadas');
         Route::get('restaurarAlergia/{id}', 'AlergiaController@restaurar');
+        Route::post('alergiaXexpediente', 'AlergiaController@storeAlergiaxUsuario');
 
         Route::resource('actividad', 'ActivityController');
         Route::get('actividadEliminada', 'ActivityController@showEliminadas');
         Route::get('restaurarActividad/{id}', 'ActivityController@restaurar');
+
+        //Rutas de medicamentos
+        Route::group(['prefix' => 'medicamentos'], function ($router){
+            Route::post('medicamentoXexpediente', 'MedicamentoController@storeMedicamentoXUsuario');
+        });
+        Route::resource('medicamento', 'MedicamentoController');
 
         //Rutas de alergias frecuentes
         Route::group(['prefix' => 'listaAlergias'], function ($router){

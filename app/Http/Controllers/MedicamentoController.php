@@ -7,6 +7,7 @@ use App\Medicamento;
 use Illuminate\Support\Facades\Gate;
 use App\User;
 use JWTAuth;
+use App\Expediente;
 
 class MedicamentoController extends Controller
 {
@@ -161,6 +162,43 @@ class MedicamentoController extends Controller
         return response()->json($response, 404);
     }
 
+    public function storeMedicamentoXUsuario(Request $request)
+    {
+        try{
+            $this -> validate($request, [
+                'medicamento_id'=>'required|numeric|min:1',
+                'expediente_id'=>'required|numeric'
+            ]);
+            //Obtener el usuario autentificado actual
+           /* if(!$user = JWTAuth::parseToken()->authenticate()){
+                return response()->json(['msg'=>'Usuario no encontrado'],404);
+            } */
+
+        }
+        catch (\Illuminate\Validation\ValidationException $e) {
+            return \response($e->errors(),422);
+        }
+
+        $medicamento = Medicamento::find($request->input('medicamento_id'));
+        $expediente = Expediente::find($request->input('expediente_id'));
+
+
+        if($medicamento != null and $expediente != null){
+            //Asociar con expediente
+            $medicamento->expedientes()->attach($request->input('expediente_id')=== null ? [] : $request->input('expediente_id'));
+            $expediente = Expediente::find($request->input('expediente_id'))->with('medicamentos')->first();
+            $response=[
+                'msg'=> 'Medicamento registrado al expediente',
+                'Expediente'=> $expediente
+            ];
+            return response()->json($response, 201);
+        }
+        $response=[
+            'msg'=>'Error durante el registro'
+        ];
+        return response()->json($response, 404);
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -169,6 +207,6 @@ class MedicamentoController extends Controller
      */
     public function destroy($id)
     {
-        
+
     }
 }

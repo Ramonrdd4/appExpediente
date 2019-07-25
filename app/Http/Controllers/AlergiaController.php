@@ -7,6 +7,7 @@ use App\Alergia;
 use Illuminate\Support\Facades\Gate;
 use App\User;
 use JWTAuth;
+use App\Expediente;
 
 class AlergiaController extends Controller
 {
@@ -218,36 +219,30 @@ class AlergiaController extends Controller
     {
         try{
             $this -> validate($request, [
-                'nombre'=>'required|min:5',
-                'categoria'=>'required',
-                'reaccion'=>'required',
-                'observaciones'=>'required',
-                'expediente'=>'required|numeric:9'
+                'alergia_id'=>'required|numeric|min:1',
+                'expediente_id'=>'required|numeric'
             ]);
             //Obtener el usuario autentificado actual
-            if(!$user = JWTAuth::parseToken()->authenticate()){
+           /* if(!$user = JWTAuth::parseToken()->authenticate()){
                 return response()->json(['msg'=>'Usuario no encontrado'],404);
-            }
+            } */
 
         }
         catch (\Illuminate\Validation\ValidationException $e) {
             return \response($e->errors(),422);
         }
 
-        $alergia = new Alergia([
-            'nombre'=>$request->input('nombre'),
-            'categoria'=>$request->input('categoria'),
-            'reaccion'=>$request->input('reaccion'),
-            'observaciones'=>$request->input('observaciones')
-        ]);
+        $alergia = Alergia::find($request->input('alergia_id'));
+        $expediente = Expediente::find($request->input('expediente_id'));
 
-        if($alergia->save()){
+
+        if($alergia != null and $expediente != null){
             //Asociar con expediente
-            $alergia->expedientes()->attach($request->input('expediente')=== null ? [] : $request->input('expediente'));
-
+            $alergia->expedientes()->attach($request->input('expediente_id')=== null ? [] : $request->input('expediente_id'));
+            $expediente = Expediente::find($request->input('expediente_id'))->with('alergias')->first();
             $response=[
-                'msg'=> 'Alergia registrada',
-                'alergia'=> $alergia
+                'msg'=> 'Alergia registrada al expediente',
+                'Expediente'=> $expediente
             ];
             return response()->json($response, 201);
         }
