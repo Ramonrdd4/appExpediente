@@ -7,6 +7,7 @@ use App\Alergia;
 use Illuminate\Support\Facades\Gate;
 use App\User;
 use JWTAuth;
+use App\Expediente;
 
 class AlergiaController extends Controller
 {
@@ -295,7 +296,7 @@ class AlergiaController extends Controller
                   return response()->json("Expediente no encontrado");
               }
               //Asocia con el expediente
-              $expediente->alergias()->attach($actividad);
+              $expediente->alergias()->attach($alergia);
 
               $response =[
                   'msg'=>'Alergia agregada exitosamente!',

@@ -7,7 +7,7 @@ use App\Desease;
 use Illuminate\Support\Facades\Gate;
 use App\User;
 use JWTAuth;
-
+use App\Expediente;
 class DeseaseController extends Controller
 {
     /**
@@ -188,7 +188,7 @@ class DeseaseController extends Controller
             return response()->json(['msg'=>'Usuario no encontrado'], 404);
         }
         if (Gate::allows('solo_adm',$user )) {
-           
+
         if(Desease::onlyTrashed()->find($id)->restore()){
             $response = ['Msg'=>'Enfermedad restaurada con exito!'];
         }else{
@@ -254,5 +254,41 @@ class DeseaseController extends Controller
             return \response($th->getMessage(), 422);
         }
     }
+    //Metodo del usuario (Fabiola)
+    public function storeEnfermedadesxUsuario(Request $request)
+    {
+      try{
+          $this -> validate($request, [
+              'expediente_id'=>'required|numeric:9',
+              'enfermedad_id'=>'required|numeric:1'
+          ]);
+          //Obtener el usuario autentificado actual
+          if(!$user = JWTAuth::parseToken()->authenticate()){
+              return response()->json(['msg'=>'Usuario no encontrado'],404);
+          }
+      }
+      catch (\Illuminate\Validation\ValidationException $e) {
+          return \response($e->errors(),422);
+      }
+      if (Gate::allows('solo_pacientedueno',$user )) {
+          $expediente = Expediente::where('idperfil', $request->input('expediente_id'))->first();
+          $enfermedad = $request->input('enfermedad_id');
+
+          if($expediente===null){
+              return response()->json("Expediente no encontrado");
+          }
+          //Asocia con el expediente
+          $expediente->deseases()->attach($enfermedad);
+
+          $response =[
+              'msg'=>'Enfermedad agregada exitosamente!',
+          ];
+          return response()->json($response, 200);
+
+      }else {
+          $response = ['Msg'=>'No Autorizado'];
+          return response()->json($response,404);
+      }
+  }
 
 }

@@ -39,8 +39,10 @@ Route::group(['prefix' => 'v1'], function () {
         Route::resource('enfermedad', 'DeseaseController');
         Route::get('enfermedadEliminada', 'DeseaseController@showEliminadas');
         Route::get('restaurarEnfermedad/{id}', 'DeseaseController@restaurar');
-        //agregar alergia a expediente
+        //agregar alergia,enfermedad y actividad a expediente
         Route::post('agregaActividad', 'ActivityController@storeActividadxUsuario');
+        Route::post('agregaEnfermedad', 'DeseaseController@storeEnfermedadesxUsuario');
+        Route::post('agregaAlergia', 'AlergiaController@storeAlergiasxUsuario');
 
         Route::resource('alergia', 'AlergiaController');
         Route::get('alergiaEliminada', 'AlergiaController@showEliminadas');

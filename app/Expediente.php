@@ -47,7 +47,7 @@ class Expediente extends Model
 
     public function deseases()
     {
-        return $this->belongsToMany('App\Desease', 'expediente_desease', 'desease_id', 'expediente_id')->withTimestamps();
+        return $this->belongsToMany('App\Desease', 'expediente_desease', 'expediente_id', 'desease_id')->withTimestamps();
     }
 
 }
