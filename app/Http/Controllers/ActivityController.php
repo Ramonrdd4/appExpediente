@@ -254,4 +254,39 @@ class ActivityController extends Controller
             return \response($th->getMessage(), 422);
         }
     }
+      //Metodo del usuario (Fabiola)
+      public function storeActividadxUsuario(Request $request)
+      {
+        try{
+            $this -> validate($request, [
+                'minutos'=>'required|numeric',
+                'cantidad'=>'required|numeric',
+                'expediente_id'=>'required|numeric:9',
+                'alergia_id'=>'required|numeric:1'
+            ]);
+            //Obtener el usuario autentificado actual
+            if(!$user = JWTAuth::parseToken()->authenticate()){
+                return response()->json(['msg'=>'Usuario no encontrado'],404);
+            }
+        }
+        catch (\Illuminate\Validation\ValidationException $e) {
+            return \response($e->errors(),422);
+        }
+        if (Gate::allows('solo_adm',$user )) {
+            $expediente = Expediente::find($request->input('expediente_id'));
+            $alergia = $request->input('alergia_id');
+            $minutos=$request->input('minutos');
+            $cantidad=$request->input('catidad');
+
+            if($expediente===null){
+                return response()->json("Expediente no encontrado");
+            }
+            //Asocia con el expediente
+            $expediente->alergias()->attach()
+
+
+        }
+    }
+
+    }
 }
