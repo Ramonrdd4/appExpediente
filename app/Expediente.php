@@ -6,19 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class Expediente extends Model
 {
+    protected $fillable = ['idperfil'];
+
+
+
     public function profile()
     {
-        return $this->belongsTo('App\Profile', 'id', 'id');
+        return $this->belongsTo('App\Profile','idperfil','id');
     }
 
     public function fumado()
     {
-        return $this->hasOne('App\Fumado', 'id', 'id');
+        return $this->belongsTo('App\Fumado','idperfil','id');
     }
 
     public function alcohol()
     {
-        return $this->hasOne('App\Alcohol', 'id', 'id');
+        return $this->belongsTo('App\Alcohol','idperfil','id');
     }
 
     public function cirugias()
@@ -38,15 +42,15 @@ class Expediente extends Model
 
     public function activities()
     {
-        return $this->belongsToMany('App\Activity', 'expediente_activity', 'expediente_id', 'activity_id')->withTimestamps();
+        return $this->belongsToMany('App\Activity', 'expediente_activity', 'id', 'activity_id')->withTimestamps();
     }
 
     public function deseases()
     {
-        return $this->belongsToMany('App\Desease', 'expediente_desease', 'expediente_id', 'desease_id')->withTimestamps();
+        return $this->belongsToMany('App\Desease', 'expediente_desease', 'desease_id', 'expediente_id')->withTimestamps();
     }
     public function parentezco()
     {
-        return $this->hasMany('App\Parentezco');
+        return $this->belongsToMany('App\Parentezco');
     }
 }

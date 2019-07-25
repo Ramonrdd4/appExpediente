@@ -8,6 +8,6 @@ class Fumado extends Model
 {
     public function expediente()
     {
-        return $this->belongsTo('App\Expediente', 'id', 'id');
+        return $this->belongsTo('App\Expediente');
     }
 }

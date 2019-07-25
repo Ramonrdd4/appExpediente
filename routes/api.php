@@ -33,6 +33,8 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('registarPerfildueno', 'ProfileController@store');
         Route::post('registarPerfil', 'ProfileController@storeasociado');
 
+        //Expediente
+        Route::post('registarExpediente', 'ExpedienteController@store');
         //Rutas enfermedad, alergia y actividad
         Route::resource('enfermedad', 'DeseaseController');
         Route::get('enfermedadEliminada', 'DeseaseController@showEliminadas');
@@ -68,6 +70,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::patch('eliminarDeListaFrecuente/{id}', 'ListaDeseaseController@eliminarDeLista');
         });
         Route::resource('listaDeseases', 'ListaDeseaseController');
+
     });
 
 });
