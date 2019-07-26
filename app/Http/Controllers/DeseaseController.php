@@ -272,13 +272,23 @@ class DeseaseController extends Controller
       }
       if (Gate::allows('solo_pacientedueno',$user )) {
           $expediente = Expediente::where('idperfil', $request->input('expediente_id'))->first();
-          $enfermedad = $request->input('enfermedad_id');
+          $enfermedad = Desease::where('idperfil',$request->input('enfermedad_id'))->first();
 
           if($expediente===null){
               return response()->json("Expediente no encontrado");
           }
-          //Asocia con el expediente
-          $expediente->deseases()->attach($enfermedad);
+          if($alergia->nombre=='Otra'){
+            $nombre=$request->input('nombre');
+            $observaciones=$request->input('observaciones');
+
+            $expediente->deseases()->attach($enfermedad->id,['nombre'=>$minutos,'categoria'=>$cantidad,'observaciones'->$observaciones]);
+          }else{
+            //Asocia con el expediente
+            $expediente->deseases()->attach($enfermedad->id);
+          }
+
+
+
 
           $response =[
               'msg'=>'Enfermedad agregada exitosamente!',

@@ -275,15 +275,24 @@ class ActivityController extends Controller
         }
         if (Gate::allows('solo_pacientedueno',$user )) {
             $expediente = Expediente::where('idperfil', $request->input('expediente_id'))->first();
-            $actividad = $request->input('actividad_id');
+            $actividad = Activity::where('id', $request->input('actividad_id'))->first();
             $minutos=$request->input('minutos');
             $cantidad=$request->input('cantidad');
+
+
+
 
             if($expediente===null){
                 return response()->json("Expediente no encontrado");
             }
             //Asocia con el expediente
-            $expediente->activities()->attach($actividad,['minutos'=>$minutos,'cantidad'=>$cantidad]);
+            if($actividad->nombre=='Otra'){
+                $nombre=$request->input('nombre');
+                $expediente->activities()->attach($actividad->id,['minutos'=>$minutos,'cantidad'=>$cantidad,'nombre'=>$nombre]);
+            }else{
+                $expediente->activities()->attach($actividad->id,['minutos'=>$minutos,'cantidad'=>$cantidad]);
+            }
+
 
             $response =[
                 'msg'=>'Actividad agregada exitosamente!',
