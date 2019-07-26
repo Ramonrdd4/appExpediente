@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Servicio_Consulta;
 use Illuminate\Http\Request;
+use JWTAuth;
+use Illuminate\Support\Facades\Gate;
 
 class ServicioConsultaController extends Controller
 {
@@ -35,7 +37,36 @@ class ServicioConsultaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Crear servicio de consulta doctor
+        try {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['msg'=>'Usuario no encontrado'], 404);
+            }
+            $this->validate($request, [
+                    'Precio' => 'required|numeric:5',
+                    'Ubicacion' => 'required|min:6',
+                    'id_doctor' => 'required|min:1',
+                    'especialidad_id' => 'required|min:1',
+            ]);
+
+
+
+        } catch (\Illuminate\Validation\ValidationException $e ) {
+            return \response($e->errors(),422);
+        }
+        if (Gate::allows('solo_medico',$user )) {
+        $servicioConsulta = new Servicio_Consulta();
+        $servicioConsulta->precio = $request->Precio;
+        $servicioConsulta->ubicacion = $request->Ubicacion;
+        $servicioConsulta->especialidad()->associate($request->especialidad_id);
+        $servicioConsulta->user()->associate($request->id_doctor);
+        $servicioConsulta->save();
+
+        return response()->json(['Servicio Consulta' => $servicioConsulta]);
+    }else {
+        $response = ['Msg'=>'No Autorizado'];
+        return response()->json($response,404);
+    }
     }
 
     /**

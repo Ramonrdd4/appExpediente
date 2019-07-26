@@ -9,11 +9,11 @@ class Servicio_Consulta extends Model
     //
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User','id_Doctor','id');
     }
     public function especialidad()
     {
-        return $this->belongsTo('App\Especialidad');
+        return $this->belongsTo('App\Especialidad','id_Especialidad','id');
     }
     public function horarios()
     {

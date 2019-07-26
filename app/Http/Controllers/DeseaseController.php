@@ -286,10 +286,50 @@ class DeseaseController extends Controller
             //Asocia con el expediente
             $expediente->deseases()->attach($enfermedad->id);
           }
+          $response =[
+              'msg'=>'Enfermedad agregada exitosamente!',
+          ];
+          return response()->json($response, 200);
 
+      }else {
+          $response = ['Msg'=>'No Autorizado'];
+          return response()->json($response,404);
+      }
+  }
+    //Metodo del usuario parentezco (Fabiola)
+    public function storeEnfermedadesxUsuarioPariente(Request $request)
+    {
+      try{
+          $this -> validate($request, [
+              'expediente_id'=>'required|numeric:9',
+              'enfermedad_id'=>'required|numeric:1',
+              'parentezco'=>'required|min:4',
+          ]);
+          //Obtener el usuario autentificado actual
+          if(!$user = JWTAuth::parseToken()->authenticate()){
+              return response()->json(['msg'=>'Usuario no encontrado'],404);
+          }
+      }
+      catch (\Illuminate\Validation\ValidationException $e) {
+          return \response($e->errors(),422);
+      }
+      if (Gate::allows('solo_pacientedueno',$user )) {
+          $expediente = Expediente::where('idperfil', $request->input('expediente_id'))->first();
+          $enfermedad = Desease::where('id',$request->input('enfermedad_id'))->first();
+          $parentezco =$request->input('parentezco');
 
+          if($expediente===null){
+              return response()->json("Expediente no encontrado");
+          }
+          if($enfermedad->nombre=='Otra'){
+            $nombre=$request->input('nombre');
+            $observaciones=$request->input('observaciones');
 
-
+            $expediente->deseases()->attach($enfermedad->id,['parentezco'=>$parentezco,'nombre'=>$nombre,'observaciones'=>$observaciones]);
+          }else{
+            //Asocia con el expediente
+            $expediente->deseases()->attach($enfermedad->id,['parentezco'=>$parentezco]);
+          }
           $response =[
               'msg'=>'Enfermedad agregada exitosamente!',
           ];

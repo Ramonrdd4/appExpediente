@@ -75,6 +75,11 @@ Route::group(['prefix' => 'v1'], function () {
         });
         Route::resource('listaDeseases', 'ListaDeseaseController');
 
+        //Crear un servio consulta
+        Route::group(['prefix' => 'medico'], function ($router){
+            Route::post('agregarServicio', 'ServicioConsultaController@store');
+        });
+
     });
 
 });

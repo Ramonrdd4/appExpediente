@@ -15,8 +15,8 @@ class CreateServicioConsultasTable extends Migration
     {
         Schema::create('servicio__consultas', function (Blueprint $table) {
             $table->increments('id');
-            $table->double('Precio');
-            $table->string('Ubicacion');
+            $table->double('precio');
+            $table->string('ubicacion');
             $table->unsignedInteger('id_Doctor');
             $table->unsignedInteger('id_Especialidad');
 
