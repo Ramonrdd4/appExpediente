@@ -77,6 +77,11 @@ class MedicamentosTableSeeder extends Seeder
         $medicamento->nombre='Amoxicilina';
         $medicamento->descripcion='Antibiótico, familia de la penicilina';
         $medicamento->save();
+           //14.
+           $medicamento = new App\Medicamento();
+           $medicamento->nombre='Otro';
+           $medicamento->descripcion='N/R';
+           $medicamento->save();
 
     }
 }
