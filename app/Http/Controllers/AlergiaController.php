@@ -284,17 +284,17 @@ class AlergiaController extends Controller
           }
           if (Gate::allows('solo_pacientedueno',$user )) {
               $expediente = Expediente::where('idperfil', $request->input('expediente_id'))->first();
-              $alergia = Expediente::where('id',$request->input('alergia_id'))->first();
+              $alergia = Alergia::where('id',$request->input('alergia_id'))->first();
 
               if($expediente===null){
                   return response()->json("Expediente no encontrado");
               }
-              if($alergia->nombre=='Otra'){
+              if($alergia->nombre=="Otro"){
                 $nombre=$request->input('nombre');
                 $reaccion=$request->input('reaccion');
                 $observaciones=$request->input('observaciones');
-                
-                $expediente->alergias()->attach($alergia->id,['nombre'=>$minutos,'categoria'=>$cantidad,'reaccion'=>$reaccion,'observaciones'->$observaciones]);
+                $categoria=$request->input('categoria');
+                $expediente->alergias()->attach($alergia->id,['nombre'=>$nombre,'categoria'=>$categoria,'reaccion'=>$reaccion,'observaciones'=>$observaciones]);
               }else{
                 //Asocia con el expediente
                 $expediente->alergias()->attach($alergia->id);

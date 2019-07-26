@@ -17,7 +17,7 @@ class ExpedientesAlergias extends Migration
             $table->increments('id');
             $table->unsignedInteger('expediente_id');
             $table->unsignedInteger('alergia_id');
-            $table->string('nombre');
+            $table->string('nombre')->nullable();
             $table->string('categoria')->nullable(); //alimentos, medicamentos y ambiente
             $table->string('reaccion')->nullable();
             $table->string('observaciones')->nullable();
