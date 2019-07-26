@@ -17,7 +17,7 @@ class CreateHorariosTable extends Migration
             $table->increments('id');
             $table->date('Fecha_cita');
             $table->time('hora_cita');
-            $table->boolean('estado');
+            $table->boolean('estado');//si se asigno esta en false y si esta disponible en true
             $table->unsignedInteger('id_servicioConsulta');
             $table->timestamps();
             //foranea

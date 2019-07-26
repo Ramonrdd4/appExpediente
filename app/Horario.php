@@ -12,6 +12,6 @@ class Horario extends Model
     }
     public function servicio_consulta()
     {
-        return $this->belongsTo('App\Servicio_Consulta');
+        return $this->belongsTo('App\Servicio_Consulta','id_servicioConsulta','id');
     }
 }

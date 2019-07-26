@@ -17,6 +17,6 @@ class Servicio_Consulta extends Model
     }
     public function horarios()
     {
-        return $this->hasMany('App\Horario');
+        return $this->hasMany('App\Horario','id','id_servicioConsulta');
     }
 }
