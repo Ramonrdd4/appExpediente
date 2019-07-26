@@ -17,9 +17,9 @@ class ExpedientesActivities extends Migration
             $table->increments('id');
             $table->unsignedInteger('expediente_id');
             $table->unsignedInteger('activity_id');
-            $table->string('nombre')->unsigned()->nullable();
-            $table->integer('minutos')->unsigned()->nullable();
-            $table->integer('cantidad')->unsigned()->nullable();
+            $table->string('nombre')->nullable();
+            $table->integer('minutos')->nullable();
+            $table->integer('cantidad')->nullable();
             $table->timestamps();
             //Llaves foraneas
             $table->foreign('expediente_id')->references('id')->on('expedientes');
