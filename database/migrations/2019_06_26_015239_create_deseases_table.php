@@ -17,9 +17,7 @@ class CreateDeseasesTable extends Migration
             $table->increments('id');
             $table->string('nombre');
             $table->string('observaciones');
-            $table->unsignedInteger('listaId')->nullable();
             //Relacion con lista
-            $table->foreign('listaId')->references('id')->on('lista_deseases');
             $table->softDeletes();
             $table->timestamps();
         });

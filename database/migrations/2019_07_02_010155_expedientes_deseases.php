@@ -18,6 +18,8 @@ class ExpedientesDeseases extends Migration
             $table->integer('expediente_id')->unsigned();
             $table->integer('desease_id')->unsigned();
             $table->string('parentezco')->nullable();
+            $table->string('nombre')->nullable();
+            $table->string('observaciones')->nullable();
             $table->timestamps();
             //Llaves foraneas
             $table->foreign('expediente_id')->references('id')->on('expedientes');
