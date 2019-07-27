@@ -56,17 +56,24 @@ class HorarioController extends Controller
             return \response($e->errors(),422);
         }
         if (Gate::allows('solo_medico',$user )) {
-     
-        $horario = new Horario();
-        $horario->Fecha_cita = $request->Fecha_cita;
-        $horario->hora_cita = $request->hora_cita;
-        $horario->estado = true;
-        $horario->servicio_consulta()->associate($request->id_servicioConsulta);
-        $horario->save();
+        $carbon= Carbon::now();
+        $carbon = $carbon->format('Y-m-d');
+        $fecha = $request->Fecha_cita;
+        if($fecha>$carbon){
+            $horario = new Horario();
+            $horario->Fecha_cita = $request->Fecha_cita;
+            $horario->hora_cita = $request->hora_cita;
+            $horario->estado = true;
+            $horario->servicio_consulta()->associate($request->id_servicioConsulta);
+            $horario->save();
 
-        $HorarioSave=$horario->with('servicio_consulta')->first();
+            $HorarioSave=$horario->with('servicio_consulta')->get();
 
-        return response()->json(['servicio_consulta' => $HorarioSave]);
+            return response()->json(['servicio_consulta' => $HorarioSave]);
+        }else{
+            $response = ['Msg'=>'La fecha es menor o igual que la actual'];
+            return response()->json($response,404);
+        }
     }else {
         $response = ['Msg'=>'No Autorizado'];
         return response()->json($response,404);
@@ -79,9 +86,27 @@ class HorarioController extends Controller
      * @param  \App\Horario  $horario
      * @return \Illuminate\Http\Response
      */
-    public function show(Horario $horario)
+    public function show($id)
     {
-
+    //muestra los horarios por servicio
+    try {
+           if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(['msg'=>'Usuario no encontrado'], 404);
+        }
+        if (Gate::allows('solo_pacientedueno',$user )) {
+    $horario= Horario::where('id_servicioConsulta',$id)->get();
+       $response=[
+        'msg' => 'Lista de Horaios',
+        'Horario' => $horario,
+    ];
+    return response()->json($response, 200);
+    }else{
+    $response = ['Msg'=>'No Autorizado'];
+    return response()->json($response,404);
+    }
+        } catch (\Throwable $th) {
+    return \response($th->getMessage(), 422);
+    }
     }
 
     /**

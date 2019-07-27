@@ -46,7 +46,26 @@ class MedicoController extends Controller
      */
     public function show(Medico $medico)
     {
-        //
+        //muestra los medicos
+        try {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['msg'=>'Usuario no encontrado'], 404);
+            }
+            if (Gate::allows('solo_pacientedueno',$user )) {
+        $user = User::where('rol_id', 2)->get();
+        $response=[
+
+            'msg' => 'Lista de Medicos',
+            'Perfil' => $user,
+        ];
+        return response()->json($response, 200);
+        }else{
+        $response = ['Msg'=>'No Autorizado'];
+        return response()->json($response,404);
+        }
+            } catch (\Throwable $th) {
+        return \response($th->getMessage(), 422);
+        }
     }
 
     /**

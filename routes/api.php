@@ -81,6 +81,12 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('agregaHorario', 'HorarioController@store');
         });
 
+        //Cita
+        Route::group(['prefix' => 'cita'], function ($router){
+            Route::post('ListaHorario/{id}', 'HorarioController@show');
+            Route::post('ListaServicio/{id}', 'ServicioConsultaController@show');
+        });
+
     });
 
 });

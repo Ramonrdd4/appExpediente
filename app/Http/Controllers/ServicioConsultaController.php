@@ -75,10 +75,28 @@ class ServicioConsultaController extends Controller
      * @param  \App\Servicio_Consulta  $servicio_Consulta
      * @return \Illuminate\Http\Response
      */
-    public function show(Servicio_Consulta $servicio_Consulta)
+    public function show($id)
     {
-        //
-    }
+        //muestra los horarios por medico
+    try {
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+         return response()->json(['msg'=>'Usuario no encontrado'], 404);
+     }
+     if (Gate::allows('solo_pacientedueno',$user )) {
+        $servicio= Servicio_Consulta::where('id_Doctor',$id)->get();
+          $response=[
+            'msg' => 'Lista de Servicio Consulta',
+            'Horario' => $servicio,
+        ];
+        return response()->json($response, 200);
+        }else{
+        $response = ['Msg'=>'No Autorizado'];
+        return response()->json($response,404);
+        }
+            } catch (\Throwable $th) {
+        return \response($th->getMessage(), 422);
+        }
+            }
 
     /**
      * Show the form for editing the specified resource.

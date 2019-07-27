@@ -49,7 +49,8 @@ class PacienteController extends Controller
      */
     public function show(Paciente $paciente)
     {
-        //
+      
+
     }
 
     /**
