@@ -35,6 +35,29 @@ Route::group(['prefix' => 'v1'], function () {
 
         //Expediente
         Route::post('registarExpediente', 'ExpedienteController@store');
+
+        //Fumado
+        Route::group(['prefix' => 'fumado'], function () {
+            Route::get('show/{id}', 'FumadoController@show');
+            Route::post('store', 'FumadoController@store');
+            Route::patch('update/{id}', 'FumadoController@update');
+        });
+
+        //Alcohol
+        Route::group(['prefix' => 'alcohol'], function () {
+            Route::get('show/{id}', 'AlcoholController@show');
+            Route::post('store', 'AlcoholController@store');
+            Route::patch('update/{id}', 'AlcoholController@update');
+        });
+
+        //Cirugia
+        Route::group(['prefix' => 'cirugias'], function () {
+            Route::get('index/{id}', 'CirugiaController@index');
+            Route::get('show/{id}', 'CirugiaController@show');
+            Route::post('store', 'CirugiaController@store');
+            Route::patch('update/{id}', 'CirugiaController@update');
+        });
+
         //Rutas enfermedad, alergia y actividad
         Route::resource('enfermedad', 'DeseaseController');
         Route::get('enfermedadEliminada', 'DeseaseController@showEliminadas');

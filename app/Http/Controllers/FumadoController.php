@@ -2,19 +2,11 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
 use Illuminate\Http\Request;
-
-class AlcoholController extends Controller
-{
-    //
-=======
-use App\Alcohol;
+use App\Fumado;
 use App\Expediente;
-use Illuminate\Http\Request;
-use Tymon\JWTAuth\JWTAuth;
 
-class AlcoholController extends Controller
+class FumadoController extends Controller
 {
     public function store(Request $request)
     {
@@ -22,11 +14,9 @@ class AlcoholController extends Controller
         {
             $this -> validate($request, [
                 'expediente_id'=>'required|min:9',
-                'estadoAlcohol'=> 'required|numeric:1',
+                'estadoFumado'=> 'required|numeric:1',
                 'tiempoInicio'=>'required',
                 'frecuencia'=> 'required|numeric',
-                'tipoLicor'=> 'required',
-                'cantidad' => 'required|numeric',
                 'observaciones'=>'required'
             ]);
             /*if(!$user = JWTAuth::parseToken()->authenticate()){
@@ -38,33 +28,32 @@ class AlcoholController extends Controller
         }
         $expedinte = Expediente::where('idperfil', $request->input('expediente_id'))->get();
         if($expedinte == null){
-            return response()->json(['msg'=>'Expediente especificado no encontrado'], 404);
+            return response()->json(['msg'=>'Expediente no encontrado'], 404);
         }
-        $alcohol = Alcohol::where('id', $request->input('expediente_id'))->get();
-        if($alcohol != null){
-            return response()->json(['msg'=>'El expediente ya cuenta con un registro de alcoholismo'], 404);
+        $fumado = Fumado::where('id', $request->input('expediente_id'))->get();
+        if($fumado != null){
+            return response()->json(['msg'=>'El expediente ya cuenta con un registro de fumado'], 404);
         }
-        $alcohol = new Alcohol([
+        $fumado = new Fumado([
             'id'=> $request->input('expediente_id'),
-            'estadoAlcohol'=> $request->input('estadoAlcohol'),
-            'tiempoInicio'=> $request->input('tiempoInicio'),
-            'frecuencia'=> $request->input('frecuencia'),
-            'tipoLicor' => $request->input('tipoLicor'),
-            'cantidad' => $request->input('cantidad'),
+            'estadoFumado'=> $request->input('estadoFumado'),
+            'tiempoInicio'=> $request->inptu('tiempoInicio'),
+            'frecuencia'=> $request->inptu('frecuencia'),
             'observaciones' => $request ->input('observaciones')
         ]);
 
-        if($alcohol->save()){
-            $alcohol->expediente()->associate($request->input('expediente_id'));
-            $expedinte = Expediente::find($request->input('expediente_id'))->with('alcohol')->get();
+        if($fumado->save()){
+            $fumado->expediente()->associate($request->input('expediente_id'));
+            $expedinte = Expediente::where('idperfil',$request->input('expediente_id'))->with('fumado')->getFirst();
             $response=[
-                'msg' => 'Registro de Alcoholismo guardado',
+                'msg' => 'Registro de Fumado guardado',
                 'Expediente' => $expedinte
             ];
             return response()->json($response, 200);
         }
         return response()->json($response, 404);
     }
+
 
     public function show($id)
     {
@@ -73,10 +62,10 @@ class AlcoholController extends Controller
             /*if (!$user = JWTAuth::parseToken()->authenticate()) {
                 return response()->json(['msg'=>'Usuario no encontrado'], 404);
             }*/
-            $alcohol = Alcohol::find($id);
-            if($alcohol != null){
+            $fumado = Fumado::find($id);
+            if($fumado != null){
                 $response = [
-                    'Registro de Alcoholismo' => $alcohol
+                    'Registro de Fumado' => $fumado
                 ];
                 return response()->json($response, 200);
             }else{
@@ -92,11 +81,9 @@ class AlcoholController extends Controller
         try
         {
             $this -> validate($request, [
-                'estadoAlcohol'=> 'required|numeric:1',
+                'estadoFumado'=> 'required|numeric|min:1',
                 'tiempoInicio'=>'required',
                 'frecuencia'=> 'required|numeric',
-                'tipoLicor'=> 'required',
-                'cantidad' => 'required|numeric',
                 'observaciones'=>'required'
             ]);
             /*if(!$user = JWTAuth::parseToken()->authenticate()){
@@ -105,17 +92,16 @@ class AlcoholController extends Controller
         }catch (\Illuminate\Validation\ValidationException $e) {
             return \response($e->errors(),422);
         }
-        $alcohol = Alcohol::find($id);
-        $alcohol->estadoAlcohol = $request->input('estadoAlcohol');
-        $alcohol->tiempoInicio = $request->input('tiempoInicio');
-        $alcohol->tipoLicor = $request->input('tipoLicor');
-        $alcohol->cantidad = $request->input('cantidad');
-        $alcohol->observaciones = $request->input('observaciones');
+        $fumado = Fumado::find($id);
+        $fumado->estadoFumado = $request->input('estadoFumado');
+        $fumado->tiempoInicio = $request->input('tiempoInicio');
+        $fumado->frecuencia = $request->input('frecuencia');
+        $fumado->observaciones = $request->input('observaciones');
 
-        if($alcohol->save()){
+        if($fumado->save()){
             $response=[
-                'msg' => 'Registro de Alcoholismo actualizado',
-                'Registro' => $alcohol
+                'msg' => 'Registro de Fumado actualizado',
+                'Registro' => $fumado
             ];
             return response()->json($response, 201);
         }
@@ -125,5 +111,4 @@ class AlcoholController extends Controller
         return response()->json($response, 404);
 
     }
->>>>>>> 3ad58e4f15d264c777c3bd87469cba1c04aca238
 }
