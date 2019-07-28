@@ -19,16 +19,16 @@ class AlergiaController extends Controller
     public function index()
     {
     //Muestra todas las Alergias menos las eliminadas
-    try {
-        $alergia = Alergia::all();
-        $response=[
+        try {
+            $alergia = Alergia::all();
+            $response=[
 
-            'msg' => 'Lista de Alergias',
-            'Alergia' => $alergia,
-        ];
-        return response()->json($response, 200);
-    } catch (\Throwable $th) {
-        return \response($th->getMessage(), 422);
+                'msg' => 'Lista de Alergias',
+                'Alergia' => $alergia,
+            ];
+            return response()->json($response, 200);
+        } catch (\Throwable $th) {
+            return \response($th->getMessage(), 422);
         }
     }
 
@@ -144,10 +144,10 @@ class AlergiaController extends Controller
         }
         if (Gate::allows('solo_adm',$user )) {
         $alergia = Alergia::find($id);
-            $alergia->nombre = $request->nombre;
-            $alergia->categoria = $request->categoria;
-            $alergia->reaccion = $request->reaccion;
-            $alergia->observaciones = $request->observaciones;
+            $alergia->nombre = $request->input('nombre');
+            $alergia->categoria = $request->input('categoria');
+            $alergia->reaccion = $request->input('reaccion');
+            $alergia->observaciones = $request->input('observaciones');
 
         if($alergia->save()){
 

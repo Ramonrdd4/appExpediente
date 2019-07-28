@@ -18,7 +18,16 @@ class MedicamentoController extends Controller
      */
     public function index()
     {
-        //
+        try{
+            $medicamento = Medicamento::all();
+            $response=[
+                'msg' => 'Lista de Medicamento',
+                'Medicamentos' => $medicamento,
+            ];
+            return response()->json($response, 200);
+        } catch(\Trowable $th) {
+            return \response($th->getMessage(), 422);
+        }
     }
 
     /**
@@ -62,7 +71,7 @@ class MedicamentoController extends Controller
 
         if($medicamento->save()){
             //Asociar con expediente
-            $medicamento->expedientes()->attach($request->input('expediente')=== null ? [] : $request->input('expediente'));
+            $medicamento = Medicamento::all();
 
             $response=[
                 'msg'=> 'Medicamento registrado',
@@ -148,7 +157,7 @@ class MedicamentoController extends Controller
 
         if($medicamento->save()){
             //Asociar con expediente
-            $medicamento->expedientes()->attach($request->input('expediente')=== null ? [] : $request->input('expediente'));
+            $medicamento = Medicamento::all();
 
             $response=[
                 'msg'=> 'Medicamento actualizado',
