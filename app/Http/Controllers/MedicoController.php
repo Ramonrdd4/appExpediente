@@ -44,7 +44,7 @@ class MedicoController extends Controller
      * @param  \App\Medico  $medico
      * @return \Illuminate\Http\Response
      */
-    public function show(Medico $medico)
+    public function show()
     {
         //muestra los medicos
         try {

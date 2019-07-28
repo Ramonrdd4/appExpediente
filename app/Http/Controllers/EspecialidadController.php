@@ -44,9 +44,9 @@ class EspecialidadController extends Controller
      * @param  \App\Especialidad  $especialidad
      * @return \Illuminate\Http\Response
      */
-    public function show(Especialidad $especialidad)
+    public function show($especialidad)
     {
-        //
+       
     }
 
     /**
