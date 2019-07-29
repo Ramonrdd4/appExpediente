@@ -125,5 +125,6 @@ class AlcoholController extends Controller
         return response()->json($response, 404);
 
     }
->>>>>>> 3ad58e4f15d264c777c3bd87469cba1c04aca238
+>>>>>>>
+
 }
