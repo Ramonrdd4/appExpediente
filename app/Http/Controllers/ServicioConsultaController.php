@@ -77,7 +77,7 @@ class ServicioConsultaController extends Controller
      */
     public function show($id)
     {
-        //muestra los horarios por medico
+        //muestra los servicios por medico
     try {
         if (!$user = JWTAuth::parseToken()->authenticate()) {
          return response()->json(['msg'=>'Usuario no encontrado'], 404);
