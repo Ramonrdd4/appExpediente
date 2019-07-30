@@ -59,17 +59,25 @@ class HorarioController extends Controller
         $carbon= Carbon::now();
         $carbon = $carbon->format('Y-m-d');
         $fecha = $request->Fecha_cita;
+        $hora =  $request->Fecha_cita;
+        $medico = $user;
         if($fecha>$carbon){
-            $horario = new Horario();
-            $horario->Fecha_cita = $request->Fecha_cita;
-            $horario->hora_cita = $request->hora_cita;
-            $horario->estado = true;
-            $horario->servicio_consulta()->associate($request->id_servicioConsulta);
-            $horario->save();
+            if($this->validarFecha($medico,$fecha,$hora)){
+                $horario = new Horario();
+                $horario->Fecha_cita = $request->Fecha_cita;
+                $horario->hora_cita = $request->hora_cita;
+                $horario->estado = true;
+                $horario->servicio_consulta()->associate($request->id_servicioConsulta);
+                $horario->save();
 
-            $HorarioSave=$horario->with('servicio_consulta')->get();
+                $HorarioSave=$horario->with('servicio_consulta')->get();
 
-            return response()->json(['servicio_consulta' => $HorarioSave]);
+                return response()->json(['servicio_consulta' => $HorarioSave]);
+            }else{
+                $response = ['Msg'=>'Tiene que haber 30 minutos entre consultas como minimo.'];
+                return response()->json($response,404);
+            }
+
         }else{
             $response = ['Msg'=>'La fecha es menor o igual que la actual'];
             return response()->json($response,404);
@@ -141,5 +149,35 @@ class HorarioController extends Controller
     public function destroy(Horario $horario)
     {
         //
+    }
+    private static function validarFecha($usuario, $fechaRequest, $horaRequest){
+        $fecha = new Carbon($fechaRequest);
+        $hora = new Carbon($horaRequest);
+
+        $serv = $usuario->servicio_Consulta()->get();
+        foreach($serv as $servicios)
+        {
+            $horarios = Horario::where('id_servicioConsulta', $servicios->id)->get();
+
+            //Valida que no hayan citas en el mismo horario
+            foreach ($horarios as $horario)
+            {
+                $fechaAsignada = new Carbon($horario->fechaCita);
+                $horaAsignada = new Carbon($horario->hora_cita);
+                if($fecha->isSameDay($fechaAsignada))
+                {
+
+                        $diferenciaMinutos = $hora->gt($horaAsignada)?
+                        $horaAsignada->diffInMinutes($hora) : $hora->diffInMinutes($horaAsignada);
+
+                        if($diferenciaMinutos < 30){
+                            return false;
+
+                        }
+
+                }
+            }
+        }
+        return true;
     }
 }

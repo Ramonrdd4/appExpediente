@@ -51,6 +51,8 @@ class AgendaController extends Controller
             return \response($e->errors(),422);
         }
         if (Gate::allows('solo_pacientedueno',$user )) {
+
+
             $Agenda = new Agenda();
             $Agenda->estado_cita = true;
             $Agenda->Horario()->associate($request->id_Horario);
@@ -111,4 +113,5 @@ class AgendaController extends Controller
     {
         //
     }
+  
 }
