@@ -26,6 +26,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ExpedienteTableSeeder::class);
         $this->call(CirugiasTableSeeder::class);
         $this->call(EspecialidadTableSeeder::class);
+        $this->call(servicio__consultas::class);
+        $this->call(HorarioTableSeeder::class);
 
 
 

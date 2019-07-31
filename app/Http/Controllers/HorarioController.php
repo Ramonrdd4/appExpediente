@@ -67,12 +67,12 @@ class HorarioController extends Controller
                 $horario->Fecha_cita = $request->Fecha_cita;
                 $horario->hora_cita = $request->hora_cita;
                 $horario->estado = true;
-                $horario->servicio_consulta()->associate($request->id_servicioConsulta);
+                $horario->servicio__consultas()->associate($request->id_servicioConsulta);
                 $horario->save();
 
-                $HorarioSave=$horario->with('servicio_consulta')->get();
+                $HorarioSave=$horario->with('servicio__consultas')->get();
 
-                return response()->json(['servicio_consulta' => $HorarioSave]);
+                return response()->json(['servicio__consultas' => $HorarioSave]);
             }else{
                 $response = ['Msg'=>'Tiene que haber 30 minutos entre consultas como minimo.'];
                 return response()->json($response,404);
@@ -103,7 +103,7 @@ class HorarioController extends Controller
         }
     //    if (Gate::allows('solo_pacientedueno',$user )) {
     $horario= Horario::where('id_servicioConsulta',$id)->get();
-    $serv = $user->servicio_Consulta()->get();
+    $serv = $user->servicio__consultas()->get();
        $response=[
         'msg' => 'Lista de servicios',
         'Horario' => $serv,
@@ -155,7 +155,7 @@ class HorarioController extends Controller
         $fecha = new Carbon($fechaRequest);
         $hora = new Carbon($horaRequest);
 
-        $serv = $usuario->servicio_Consulta()->get();
+        $serv = $usuario->servicio__consultas()->get();
         foreach($serv as $servicios)
         {
             $horarios = Horario::where('id_servicioConsulta', $servicios->id)->get();

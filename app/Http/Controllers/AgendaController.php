@@ -59,9 +59,9 @@ class AgendaController extends Controller
             $Agenda->Profile()->associate($request->id_perfil);
             $Agenda->save();
 
-            $AgendaSave=$Agenda->with('servicio_consulta')->get();
+            $AgendaSave=$Agenda->with('servicio__consultas')->get();
 
-            return response()->json(['servicio_consulta' => $AgendaSave]);
+            return response()->json(['servicio__consultas' => $AgendaSave]);
 
     }else {
         $response = ['Msg'=>'No Autorizado'];
@@ -113,5 +113,5 @@ class AgendaController extends Controller
     {
         //
     }
-  
+
 }

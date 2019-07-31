@@ -53,7 +53,7 @@ class ServicioConsultasController extends Controller
             return \response($e->errors(),422);
         }
         if (Gate::allows('solo_medico',$user )) {
-        $servicioConsulta = new Servicio_Consulta();
+        $servicioConsulta = new servicio__consultas();
         $servicioConsulta->precio = $request->Precio;
         $servicioConsulta->ubicacion = $request->Ubicacion;
         $servicioConsulta->especialidad()->associate($request->especialidad_id);
@@ -81,7 +81,7 @@ class ServicioConsultasController extends Controller
          return response()->json(['msg'=>'Usuario no encontrado'], 404);
      }
      if (Gate::allows('solo_medico',$user )) {
-        $servicio= Servicio_Consulta::where('id_Doctor',$id)->get();
+        $servicio= servicio__consultas::where('id_Doctor',$id)->get();
           $response=[
             'msg' => 'Lista de Servicio Consulta',
             'Horario' => $servicio,

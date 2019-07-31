@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class servicio__consultas extends Model
 {
      //
+     public $table='servicio__consultas';
+
+
+
     public function user()
      {
          return $this->belongsTo('App\User','id_Doctor','id');
