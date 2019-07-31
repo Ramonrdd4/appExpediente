@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Servicio_Consulta;
+use App\servicio__consultas;
 use Illuminate\Http\Request;
-use JWTAuth;
-use Illuminate\Support\Facades\Gate;
 
-class ServicioConsultaController extends Controller
+class ServicioConsultasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -72,7 +70,7 @@ class ServicioConsultaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Servicio_Consulta  $servicio_Consulta
+     * @param  \App\servicio__consultas  $servicio__consultas
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -82,7 +80,7 @@ class ServicioConsultaController extends Controller
         if (!$user = JWTAuth::parseToken()->authenticate()) {
          return response()->json(['msg'=>'Usuario no encontrado'], 404);
      }
-     if (Gate::allows('solo_pacientedueno',$user )) {
+     if (Gate::allows('solo_medico',$user )) {
         $servicio= Servicio_Consulta::where('id_Doctor',$id)->get();
           $response=[
             'msg' => 'Lista de Servicio Consulta',
@@ -101,10 +99,10 @@ class ServicioConsultaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Servicio_Consulta  $servicio_Consulta
+     * @param  \App\servicio__consultas  $servicio__consultas
      * @return \Illuminate\Http\Response
      */
-    public function edit(Servicio_Consulta $servicio_Consulta)
+    public function edit(servicio__consultas $servicio__consultas)
     {
         //
     }
@@ -113,10 +111,10 @@ class ServicioConsultaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Servicio_Consulta  $servicio_Consulta
+     * @param  \App\servicio__consultas  $servicio__consultas
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Servicio_Consulta $servicio_Consulta)
+    public function update(Request $request, servicio__consultas $servicio__consultas)
     {
         //
     }
@@ -124,10 +122,10 @@ class ServicioConsultaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Servicio_Consulta  $servicio_Consulta
+     * @param  \App\servicio__consultas  $servicio__consultas
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Servicio_Consulta $servicio_Consulta)
+    public function destroy(servicio__consultas $servicio__consultas)
     {
         //
     }

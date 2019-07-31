@@ -101,17 +101,18 @@ class HorarioController extends Controller
            if (!$user = JWTAuth::parseToken()->authenticate()) {
             return response()->json(['msg'=>'Usuario no encontrado'], 404);
         }
-        if (Gate::allows('solo_pacientedueno',$user )) {
+    //    if (Gate::allows('solo_pacientedueno',$user )) {
     $horario= Horario::where('id_servicioConsulta',$id)->get();
+    $serv = $user->servicio_Consulta()->get();
        $response=[
-        'msg' => 'Lista de Horaios',
-        'Horario' => $horario,
+        'msg' => 'Lista de servicios',
+        'Horario' => $serv,
     ];
-    return response()->json($response, 200);
-    }else{
-    $response = ['Msg'=>'No Autorizado'];
-    return response()->json($response,404);
-    }
+   return response()->json($response, 200);
+    //}else{
+    //$response = ['Msg'=>'No Autorizado'];
+   // return response()->json($response,404);
+    //}
         } catch (\Throwable $th) {
     return \response($th->getMessage(), 422);
     }
