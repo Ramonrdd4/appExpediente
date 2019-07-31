@@ -11,8 +11,8 @@ class Horario extends Model
     {
         return $this->hasMany('App\Agenda');
     }
-    public function servicio_consulta()
+    public function servicio__consultas()
     {
-        return $this->belongsTo('App\Servicio_Consulta','id_servicioConsulta','id');
+        return $this->belongsTo('App\servicio__consultas','id_servicioConsulta','id');
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use JWTAuth;
 use Illuminate\Support\Facades\Gate;
 use Carbon\Carbon;
+use App\servicio__consultas;
 
 
 class HorarioController extends Controller
@@ -59,10 +60,10 @@ class HorarioController extends Controller
         $carbon= Carbon::now();
         $carbon = $carbon->format('Y-m-d');
         $fecha = $request->Fecha_cita;
-        $hora =  $request->Fecha_cita;
-        $medico = $user;
+        $hora =  $request->hora_cita;
+        $usuario = $user;
         if($fecha>$carbon){
-            if($this->validarFecha($medico,$fecha,$hora)){
+            if($this->validarFecha($usuario,$fecha,$hora)){
                 $horario = new Horario();
                 $horario->Fecha_cita = $request->Fecha_cita;
                 $horario->hora_cita = $request->hora_cita;
@@ -101,18 +102,14 @@ class HorarioController extends Controller
            if (!$user = JWTAuth::parseToken()->authenticate()) {
             return response()->json(['msg'=>'Usuario no encontrado'], 404);
         }
-    //    if (Gate::allows('solo_pacientedueno',$user )) {
+
     $horario= Horario::where('id_servicioConsulta',$id)->get();
-    $serv = $user->servicio__consultas()->get();
        $response=[
-        'msg' => 'Lista de servicios',
-        'Horario' => $serv,
+        'msg' => 'Lista de horarios',
+        'Horario' => $servicio,
     ];
    return response()->json($response, 200);
-    //}else{
-    //$response = ['Msg'=>'No Autorizado'];
-   // return response()->json($response,404);
-    //}
+
         } catch (\Throwable $th) {
     return \response($th->getMessage(), 422);
     }
@@ -155,8 +152,8 @@ class HorarioController extends Controller
         $fecha = new Carbon($fechaRequest);
         $hora = new Carbon($horaRequest);
 
-        $serv = $usuario->servicio__consultas()->get();
-        foreach($serv as $servicios)
+        $servicio = servicio__consultas::where('id_Doctor',$usuario->id)->get();
+        foreach($servicio as $servicios)
         {
             $horarios = Horario::where('id_servicioConsulta', $servicios->id)->get();
 
@@ -164,9 +161,9 @@ class HorarioController extends Controller
             foreach ($horarios as $horario)
             {
                 $fechaAsignada = new Carbon($horario->fechaCita);
+                $fechaAsignada = $fechaAsignada->format('Y-m-d');
                 $horaAsignada = new Carbon($horario->hora_cita);
-                if($fecha->isSameDay($fechaAsignada))
-                {
+               
 
                         $diferenciaMinutos = $hora->gt($horaAsignada)?
                         $horaAsignada->diffInMinutes($hora) : $hora->diffInMinutes($horaAsignada);
@@ -176,7 +173,7 @@ class HorarioController extends Controller
 
                         }
 
-                }
+
             }
         }
         return true;

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\servicio__consultas;
 use Illuminate\Http\Request;
+use JWTAuth;
+use Illuminate\Support\Facades\Gate;
 
 class ServicioConsultasController extends Controller
 {
