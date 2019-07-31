@@ -9,6 +9,7 @@ class servicio__consultas extends Model
      //
      public $table='servicio__consultas';
 
+     
 
 
     public function user()

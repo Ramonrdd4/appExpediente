@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Horario extends Model
 {
+    protected $fillable = ['Fecha_cita','hora_cita'];
     public function Agenda()
     {
         return $this->hasMany('App\Agenda');
