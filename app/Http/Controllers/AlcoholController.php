@@ -2,13 +2,6 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
-use Illuminate\Http\Request;
-
-class AlcoholController extends Controller
-{
-    //
-=======
 use App\Alcohol;
 use App\Expediente;
 use Illuminate\Http\Request;
@@ -125,7 +118,6 @@ class AlcoholController extends Controller
         return response()->json($response, 404);
 
     }
->>>>>>>
 
 
 }

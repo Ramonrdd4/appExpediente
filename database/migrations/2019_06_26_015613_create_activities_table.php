@@ -29,9 +29,6 @@ class CreateActivitiesTable extends Migration
      */
     public function down()
     {
-        Schema::table('activities', function (Blueprint $table){
-            $table->dropColumn('listaId');
-        });
         Schema::dropIfExists('activities');
     }
 }

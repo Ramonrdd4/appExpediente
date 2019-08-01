@@ -14,16 +14,19 @@ class CreateExpedientesTable extends Migration
     public function up()
     {
         Schema::create('expedientes', function (Blueprint $table) {
-            $table->increments('id');
+            $table->unsignedInteger('id')->primary();
+            $table->boolean('tieneAlergia');
+            $table->boolean('tieneEnfermedadF');
+            $table->boolean('tieneActividad');
             //foraneas
-            $table->unsignedInteger('idperfil');
+
             $table->unsignedInteger('idfumado')->nullable();
             $table->unsignedInteger('idalcoholismo')->nullable();
             $table->timestamps();
 
             $table->foreign('idfumado')->references('id')->on('fumados');
             $table->foreign('idalcoholismo')->references('id')->on('alcohols');
-            $table->foreign('idperfil')->references('id')->on('profiles');
+            // $table->foreign('idperfil')->references('id')->on('profiles');
 
 
         });
@@ -37,8 +40,8 @@ class CreateExpedientesTable extends Migration
     public function down()
     {
         Schema::table('expedientes', function (Blueprint $table) {
-            $table->dropForeign('expedientes_idperfil_foreign');
-            $table->dropColumn('idperfil');
+            // $table->dropForeign('expedientes_idperfil_foreign');
+            // $table->dropColumn('idperfil');
             $table->dropForeign('expedientes_idfumado_foreign');
             $table->dropColumn('idfumado');
             $table->dropForeign('expedientes_idalcoholismo_foreign');

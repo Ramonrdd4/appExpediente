@@ -8,7 +8,12 @@ class Expediente extends Model
 {
     protected $fillable = ['idperfil'];
 
-
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
 
     public function profile()
     {
@@ -17,12 +22,12 @@ class Expediente extends Model
 
     public function fumado()
     {
-        return $this->belongsTo('App\Fumado','idperfil','id');
+        return $this->hasOne('App\Fumado', 'id', 'id');
     }
 
     public function alcohol()
     {
-        return $this->belongsTo('App\Alcohol','idperfil','id');
+        return $this->hasOne('App\Alcohol', 'id', 'id');
     }
 
     public function cirugias()
@@ -49,5 +54,6 @@ class Expediente extends Model
     {
         return $this->belongsToMany('App\Desease', 'expediente_desease', 'expediente_id', 'desease_id')->withTimestamps();
     }
+
 
 }

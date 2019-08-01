@@ -16,8 +16,9 @@ class Profile extends Model
 
     public function expediente()
     {
-        return $this->belongsTo('App\Expediente','id','idperfil');
+        return $this->hasOne('App\Expediente', 'id', 'id');
     }
+
     public function Agenda()
     {
         return $this->hasmany('App\Agenda');

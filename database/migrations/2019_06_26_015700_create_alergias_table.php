@@ -33,10 +33,6 @@ class CreateAlergiasTable extends Migration
      */
     public function down()
     {
-        Schema::table('alergias', function (Blueprint $table){
-            $table->dropForeign('alergias_listaId_foreign');
-            $table->dropColumn('listaId');
-        });
         Schema::dropIfExists('alergias');
     }
 }
