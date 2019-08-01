@@ -26,7 +26,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('registarMedico', 'AdministradorController@store');
         Route::patch('actualizamedico/{id}', 'MedicoController@update');
         Route::patch('actualizaadm/{id}', 'AdministradorController@update');
-
+      
 
         //Perfil
         Route::get('perfil', 'ProfileController@show');
@@ -102,7 +102,9 @@ Route::group(['prefix' => 'v1'], function () {
         Route::group(['prefix' => 'medico'], function ($router){
             Route::post('agregarServicio', 'ServicioConsultaController@store');
             Route::post('agregaHorario', 'HorarioController@store');
+
         });
+        //medicos
 
         //Cita
         Route::group(['prefix' => 'cita'], function ($router){

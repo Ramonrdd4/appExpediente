@@ -35,7 +35,38 @@ class AgendaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Agrega una agenda
+        try {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['msg'=>'Usuario no encontrado'], 404);
+            }
+            $this->validate($request, [
+                    'id_Horario' => 'required|min:1',
+                    'id_perfil' => 'required|min:9',
+            ]);
+
+
+
+        } catch (\Illuminate\Validation\ValidationException $e ) {
+            return \response($e->errors(),422);
+        }
+        if (Gate::allows('solo_pacientedueno',$user )) {
+
+
+            $Agenda = new Agenda();
+            $Agenda->estado_cita = true;
+            $Agenda->Horario()->associate($request->id_Horario);
+            $Agenda->Profile()->associate($request->id_perfil);
+            $Agenda->save();
+
+            $AgendaSave=$Agenda->with('servicio_consulta')->get();
+
+            return response()->json(['servicio_consulta' => $AgendaSave]);
+
+    }else {
+        $response = ['Msg'=>'No Autorizado'];
+        return response()->json($response,404);
+    }
     }
 
     /**
@@ -82,4 +113,5 @@ class AgendaController extends Controller
     {
         //
     }
+  
 }

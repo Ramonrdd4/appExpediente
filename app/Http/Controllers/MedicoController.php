@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Medico;
+use App\Servicio_Consulta;
+use App\User;
+
 use Illuminate\Http\Request;
 
 class MedicoController extends Controller
@@ -131,4 +134,5 @@ class MedicoController extends Controller
     {
         //
     }
+   
 }
