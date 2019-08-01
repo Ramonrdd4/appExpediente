@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Fumado;
-use App\Expediente;
+use App\Profile;
 
 class FumadoController extends Controller
 {
@@ -13,7 +13,7 @@ class FumadoController extends Controller
         try
         {
             $this -> validate($request, [
-                'expediente_id'=>'required|min:9',
+                'perfil_id'=>'required|min:9',
                 'estadoFumado'=> 'required|numeric:1',
                 'tiempoInicio'=>'required',
                 'frecuencia'=> 'required|numeric',
@@ -26,16 +26,16 @@ class FumadoController extends Controller
         catch(\Illuminate\Validation\ValidationException $e){
             return \response($e->errors(),422);
         }
-        $expedinte = Expediente::where('idperfil', $request->input('expediente_id'))->get();
-        if($expedinte == null){
-            return response()->json(['msg'=>'Expediente no encontrado'], 404);
+        $perfil = Profile::where('id', $request->input('perfil_id'))->get();
+        if($perfil == null){
+            return response()->json(['msg'=>'Perfil no encontrado'], 404);
         }
-        $fumado = Fumado::where('id', $request->input('expediente_id'))->get();
+        $fumado = Fumado::where('id', $request->input('perfil_id'))->get();
         if($fumado != null){
             return response()->json(['msg'=>'El expediente ya cuenta con un registro de fumado'], 404);
         }
         $fumado = new Fumado([
-            'id'=> $request->input('expediente_id'),
+            'id'=> $request->input('perfil_id'),
             'estadoFumado'=> $request->input('estadoFumado'),
             'tiempoInicio'=> $request->inptu('tiempoInicio'),
             'frecuencia'=> $request->inptu('frecuencia'),
@@ -43,11 +43,10 @@ class FumadoController extends Controller
         ]);
 
         if($fumado->save()){
-            $fumado->expediente()->associate($request->input('expediente_id'));
-            $expedinte = Expediente::where('idperfil',$request->input('expediente_id'))->with('fumado')->getFirst();
+            $fumado = Fumado::find($request->input('perfil_id'));
             $response=[
                 'msg' => 'Registro de Fumado guardado',
-                'Expediente' => $expedinte
+                'Registro' => $fumado
             ];
             return response()->json($response, 200);
         }

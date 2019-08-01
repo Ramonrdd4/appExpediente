@@ -311,4 +311,53 @@ class AlergiaController extends Controller
               return response()->json($response,404);
           }
       }
+
+      public function storeAlergiaDeUsuario(Request $request, $id)
+      {
+          try{
+              $this -> validate($request, [
+                  'nombre'=>'required|min:5',
+                  'categoria'=>'required',
+                  'reaccion'=>'required',
+                  'observaciones'=>'required',
+                  'expediente_id' => 'required|numeric|min:16'
+              ]);
+              //Obtener el usuario autentificado actual
+              if(!$user = JWTAuth::parseToken()->authenticate()){
+                  return response()->json(['msg'=>'Usuario no encontrado'],404);
+              }
+              $expediente = Expediente::find($id);
+
+
+          }
+          catch (\Illuminate\Validation\ValidationException $e) {
+              return \response($e->errors(),422);
+          }
+          if (Gate::allows('solo_pacientedueno',$user )) {
+          $alergia = new Alergia([
+              'nombre'=>$request->input('nombre'),
+              'categoria'=>$request->input('categoria'),
+              'reaccion'=>$request->input('reaccion'),
+              'observaciones'=>$request->input('observaciones')
+          ]);
+
+          if($alergia->save()){
+            $expediente->alergias()->attach($alergia);
+            $expediente = Expediente::where('id', $id)->with('alergias');
+              $response=[
+                  'msg'=> 'Alergia registrada',
+                  'alergia'=> $alergia,
+                  'expediente' => $expediente
+              ];
+              return response()->json($response, 201);
+          }
+          $response=[
+              'msg'=>'Error durante el registro'
+          ];
+          return response()->json($response, 404);
+            }else{
+          $response = ['Msg'=>'No Autorizado'];
+          return response()->json($response,404);
+           }
+      }
 }

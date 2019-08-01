@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Expediente extends Model
 {
-    protected $fillable = ['idperfil'];
+    protected $fillable = ['id', 'tieneAlergia', 'tieneEnfermedadF', 'tieneActividad', 'idFumado', 'idalcoholismo'];
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -17,17 +17,18 @@ class Expediente extends Model
 
     public function profile()
     {
-        return $this->belongsTo('App\Profile','idperfil','id');
+        return $this->belongsTo('App\Profile', 'id');
     }
+
 
     public function fumado()
     {
-        return $this->hasOne('App\Fumado', 'id', 'id');
+        return $this->belongsTo('App\Fumado', 'idfumado', 'id');
     }
 
     public function alcohol()
     {
-        return $this->hasOne('App\Alcohol', 'id', 'id');
+        return $this->belongsTo('App\Alcohol', 'idalcoholismo', 'id');
     }
 
     public function cirugias()

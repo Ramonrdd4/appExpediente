@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Alcohol;
-use App\Expediente;
+use App\Profile;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\JWTAuth;
 
@@ -14,7 +14,7 @@ class AlcoholController extends Controller
         try
         {
             $this -> validate($request, [
-                'expediente_id'=>'required|min:9',
+                'perfil_id'=>'required|min:9',
                 'estadoAlcohol'=> 'required|numeric:1',
                 'tiempoInicio'=>'required',
                 'frecuencia'=> 'required|numeric',
@@ -29,16 +29,16 @@ class AlcoholController extends Controller
         catch(\Illuminate\Validation\ValidationException $e){
             return \response($e->errors(),422);
         }
-        $expedinte = Expediente::where('idperfil', $request->input('expediente_id'))->get();
-        if($expedinte == null){
-            return response()->json(['msg'=>'Expediente especificado no encontrado'], 404);
+        $perfil = Profile::where('id', $request->input('perfil_id'))->get();
+        if($perfil == null){
+            return response()->json(['msg'=>'Perfil especificado no encontrado'], 404);
         }
-        $alcohol = Alcohol::where('id', $request->input('expediente_id'))->get();
+        $alcohol = Alcohol::where('id', $request->input('perfil_id'))->get();
         if($alcohol != null){
-            return response()->json(['msg'=>'El expediente ya cuenta con un registro de alcoholismo'], 404);
+            return response()->json(['msg'=>'Ya existe un registro de alcoholismo con la identificación especificada'], 403);
         }
         $alcohol = new Alcohol([
-            'id'=> $request->input('expediente_id'),
+            'id'=> $request->input('perfil_id'),
             'estadoAlcohol'=> $request->input('estadoAlcohol'),
             'tiempoInicio'=> $request->input('tiempoInicio'),
             'frecuencia'=> $request->input('frecuencia'),
@@ -48,11 +48,10 @@ class AlcoholController extends Controller
         ]);
 
         if($alcohol->save()){
-            $alcohol->expediente()->associate($request->input('expediente_id'));
-            $expedinte = Expediente::find($request->input('expediente_id'))->with('alcohol')->get();
+            $alcohol= Alcohol::find($request->input('perfil_id'));
             $response=[
                 'msg' => 'Registro de Alcoholismo guardado',
-                'Expediente' => $expedinte
+                'Registro' => $alcohol
             ];
             return response()->json($response, 200);
         }

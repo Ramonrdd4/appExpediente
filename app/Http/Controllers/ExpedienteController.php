@@ -46,15 +46,29 @@ class ExpedienteController extends Controller
             return response()->json(['msg'=>'Usuario no encontrado'], 404);
         }
         $this->validate($request, [
-                'idperfil'=>'required|min:1'
+                'id'=>'required|min:9',
         ]);
     } catch (\Illuminate\Validation\ValidationException $e ) {
         return \response($e->errors(),422);
     }
     if (Gate::allows('solo_pacientedueno',$user )) {
     $expediente = new Expediente();
+    $expediente->id = $request->input('id');
+    $expediente->tieneAlergia = false;
+    $expediente->tieneEnfermedadF = false;
+    $expediente->tieneActividad = false;
 
-    $expediente->profile()->associate($request->idperfil);
+    $fumado = Fumado::find($request->input('id'));
+    if($fumado == null){
+        return response()->json(['msg'=>'Aun no cuenta con registro de fumado'], 404);
+    }
+    $expediente->fumado()->associate($request->input('id'));
+
+    $alcohol = Fumado::find($request->input(id));
+    if($alcohol == null){
+        return response()->json(['msg'=>'Aun no cuenta con registro de alocholismo'], 404);
+    }
+    $expediente->alcohol()->associate($request->input('id'));
 
 
     if( $expediente->save()){
@@ -62,11 +76,11 @@ class ExpedienteController extends Controller
         $expediente = $expediente->where('id',$expediente->id)->first();
         $response=[
             'msg'=>'Información del expediente',
-            'Lugar'=>$expediente
+            'Expediente'=>$expediente
         ];
         return response()->json(['expediente' => $expediente]);
     }else{
-        $response = ['Msg'=>'Error al registrar el expediente, por favor intentelo más tarde!'];
+        $response = ['Msg'=>'Error al registrar el expediente, por favor intentelo de nuevo'];
         return response()->json($response,404);
     }
 

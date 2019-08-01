@@ -20,6 +20,7 @@ class CreateFumadosTable extends Migration
             $table->unsignedInteger('frecuencia'); //Cantidad de cigarros por semana, promedio.
             $table->string('observaciones');
             $table->timestamps();
+
         });
     }
 
@@ -30,6 +31,7 @@ class CreateFumadosTable extends Migration
      */
     public function down()
     {
+
         Schema::dropIfExists('fumados');
     }
 }

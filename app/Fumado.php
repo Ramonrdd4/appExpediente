@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Fumado extends Model
 {
+    public $incrementing = false;
     public function expediente()
     {
-        return $this->belongsTo('App\Expediente');
+        return $this->hasOne('App\Expediente', 'idfumado');
     }
 }
