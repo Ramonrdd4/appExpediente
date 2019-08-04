@@ -24,7 +24,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('registar', 'AuthController@register');
         Route::patch('actualizapaciente/{id}', 'PacienteController@update');
         Route::post('registarMedico', 'AdministradorController@store');
-        Route::patch('actualizaUsuario', 'AuthController@update');
+        Route::put('actualizaUsuario', 'AuthController@update');
         Route::patch('actualizaadm/{id}', 'AdministradorController@update');
 
 
