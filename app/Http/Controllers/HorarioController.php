@@ -163,7 +163,7 @@ class HorarioController extends Controller
                 $fechaAsignada = new Carbon($horario->fechaCita);
                 $fechaAsignada = $fechaAsignada->format('Y-m-d');
                 $horaAsignada = new Carbon($horario->hora_cita);
-               
+
 
                         $diferenciaMinutos = $hora->gt($horaAsignada)?
                         $horaAsignada->diffInMinutes($hora) : $hora->diffInMinutes($horaAsignada);
@@ -177,5 +177,20 @@ class HorarioController extends Controller
             }
         }
         return true;
+    }
+    public function responseErrors($errors, $statusHTML)
+    {
+        $transformed = [];
+
+        foreach ($errors as $field => $message) {
+            $transformed[] = [
+                'field' => $field,
+                'message' => $message[0]
+            ];
+        }
+
+        return response()->json([
+            'errors' => $transformed
+        ], $statusHTML);
     }
 }
