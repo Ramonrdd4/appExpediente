@@ -91,7 +91,7 @@ class AuthController extends Controller
             'expires_in' => $this->guard()->factory()->getTTL() * 60
         ]);
     }
-//registar normal
+//registar due;o de la cuenta
     public function register(Request $request)
 {
     try {
@@ -101,7 +101,15 @@ class AuthController extends Controller
                 'primerApellido' => 'required|min:6',
                 'segundoApellido' => 'required|min:6',
                 'sexo' => 'required|min:1',
-                'password' => 'required|min:6'
+                'password' => 'required|min:6',
+                //esto es del perfil
+                'fechaNacimiento'=> 'required|date',
+                'tipoSangre'=> 'required|min:2',
+                'direccion'=> 'required|min:5',
+                'numTelefonico'=>'required|numeric|min:0',
+                'contactoEmergencia'=>'required|numeric|min:0',
+
+
         ]);
     } catch (\Illuminate\Validation\ValidationException $e ) {
         return $this->responseErrors($e->errors(), 422);
@@ -116,9 +124,35 @@ class AuthController extends Controller
     $user1->password = bcrypt($request->password);
 
 
-        $user1->rol()->associate(3);
+     $user1->rol()->associate(3);
 
-    $user1->save();
+        $user1->save();
+
+        //agrego el perfil
+        $perfil = new Profile();
+        $perfil->id = $request->id;
+        $perfil->nombre = $request->nombre;
+        $perfil->primerApellido = $request->primerApellido;
+        $perfil->segundoApellido = $request->segundoApellido;
+        $perfil->sexo = $request->sexo;
+        $perfil->fechaNacimiento = $request->fechaNacimiento;
+        $perfil->tipoSangre = $request->tipoSangre;
+        $perfil->direccion = $request->direccion;
+        $perfil->numTelefonico = $request->numTelefonico;
+        $perfil->contactoEmergencia = $request->contactoEmergencia;
+        $perfil->esDuenho = true;
+        $perfil->user()->associate($user1->id);
+
+        $perfil->save();
+        //Creo un expediente
+
+        $expediente = new Expediente();
+        $expediente->id = $user1->id;
+        $expediente->tieneAlergia = false;
+        $expediente->tieneEnfermedadF = false;
+        $expediente->tieneActividad = false;
+        $expediente->save();
+
     return response()->json(['user' => $user1]);
 }
 public function update(Request $request)
