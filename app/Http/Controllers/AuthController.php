@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use JWTAuth;
-
-
+use App\Profile;
+use App\Expediente;
 class AuthController extends Controller
 {
     /**
@@ -98,8 +98,8 @@ class AuthController extends Controller
         $this->validate($request, [
             'email' => 'required|email|unique:users,email',
                 'nombre' => 'required|min:5',
-                'primerApellido' => 'required|min:6',
-                'segundoApellido' => 'required|min:6',
+                'primerApellido' => 'required|min:4',
+                'segundoApellido' => 'required|min:4',
                 'sexo' => 'required|min:1',
                 'password' => 'required|min:6',
                 //esto es del perfil
@@ -130,7 +130,7 @@ class AuthController extends Controller
 
         //agrego el perfil
         $perfil = new Profile();
-        $perfil->id = $request->id;
+        $perfil->id = $user1->id;
         $perfil->nombre = $request->nombre;
         $perfil->primerApellido = $request->primerApellido;
         $perfil->segundoApellido = $request->segundoApellido;
