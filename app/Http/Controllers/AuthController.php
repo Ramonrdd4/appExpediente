@@ -96,7 +96,7 @@ class AuthController extends Controller
 {
     try {
         $this->validate($request, [
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
                 'nombre' => 'required|min:5',
                 'primerApellido' => 'required|min:6',
                 'segundoApellido' => 'required|min:6',
@@ -104,7 +104,7 @@ class AuthController extends Controller
                 'password' => 'required|min:6'
         ]);
     } catch (\Illuminate\Validation\ValidationException $e ) {
-        return \response($e->errors(),422);
+        return $this->responseErrors($e->errors(), 422);
     }
 
     $user1 = new User();
@@ -139,7 +139,7 @@ public function update(Request $request)
 
 
     } catch (\Illuminate\Validation\ValidationException $e ) {
-        return \response($e->errors(),422);
+          return $this->responseErrors($e->errors(), 422);
     }
 
     $user1 = User::find($user->id);
@@ -150,22 +150,6 @@ public function update(Request $request)
     $user1->password = bcrypt($request->password);
     $user1->save();
     return response()->json(['user' => $user1]);
-}
-
-public function responseErrors($errors, $statusHTML)
-{
-    $transformed = [];
-
-    foreach ($errors as $field => $message) {
-        $transformed[] = [
-            'field' => $field,
-            'message' => $message[0]
-        ];
-    }
-
-    return response()->json([
-        'errors' => $transformed
-    ], $statusHTML);
 }
 
 public function responseErrors($errors, $statusHTML)
