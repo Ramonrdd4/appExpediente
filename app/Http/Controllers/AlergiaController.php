@@ -92,27 +92,18 @@ class AlergiaController extends Controller
      */
     public function show($id)
     {
-         //Muestra la alergia especifica
-    try {
-        if (!$user = JWTAuth::parseToken()->authenticate()) {
-            return response()->json(['msg'=>'Usuario no encontrado'], 404);
-        }
-        if (Gate::allows('solo_adm',$user )) {
-    $alergia = Alergia::where('id', $id)->get();
-    $response=[
+        //Muestra la alergia especifica
+        try {
 
-          'Alergia' => $alergia,
-    ];
-    return response()->json($response, 200);
-    }else{
-    $response = ['Msg'=>'No Autorizado'];
-    return response()->json($response,404);
-    }
+            $alergia = Alergia::where('id', $id)->get();
+            $response = [
+                'msg' => 'Información sobre la alergia',
+                'Alergia' => $alergia
+            ];
+            return response()->json($response, 200);
         } catch (\Throwable $th) {
-    return \response($th->getMessage(), 422);
-    }
-
-
+            return \response($th->getMessage(), 422);
+        }
     }
 
 
@@ -129,7 +120,7 @@ class AlergiaController extends Controller
         try{
             $this -> validate($request, [
                 'nombre'=>'required|min:5',
-                'categoria'=>'required',
+                'categorias'=>'required',
                 'reaccion'=>'required',
                 'observaciones'=>'required',
             ]);
@@ -145,7 +136,7 @@ class AlergiaController extends Controller
         if (Gate::allows('solo_adm',$user )) {
         $alergia = Alergia::find($id);
             $alergia->nombre = $request->input('nombre');
-            $alergia->categoria = $request->input('categoria');
+            $alergia->categoria = $request->input('categorias');
             $alergia->reaccion = $request->input('reaccion');
             $alergia->observaciones = $request->input('observaciones');
 
