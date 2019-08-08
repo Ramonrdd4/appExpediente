@@ -56,7 +56,7 @@ class AlergiaController extends Controller
 
         }
         catch (\Illuminate\Validation\ValidationException $e) {
-            return \response($e->errors(),422);
+           return $this->responseErrors($e->errors(), 422);
         }
         if (Gate::allows('solo_adm',$user )) {
         $alergia = new Alergia([
@@ -140,7 +140,7 @@ class AlergiaController extends Controller
 
         }
         catch (\Illuminate\Validation\ValidationException $e) {
-            return \response($e->errors(),422);
+           return $this->responseErrors($e->errors(), 422);
         }
         if (Gate::allows('solo_adm',$user )) {
         $alergia = Alergia::find($id);
@@ -229,7 +229,7 @@ class AlergiaController extends Controller
 
         }
         catch (\Illuminate\Validation\ValidationException $e) {
-            return \response($e->errors(),422);
+           return $this->responseErrors($e->errors(), 422);
         }
 
         $alergia = Alergia::find($request->input('alergia_id'));
@@ -280,7 +280,7 @@ class AlergiaController extends Controller
               }
           }
           catch (\Illuminate\Validation\ValidationException $e) {
-              return \response($e->errors(),422);
+             return $this->responseErrors($e->errors(), 422);
           }
           if (Gate::allows('solo_pacientedueno',$user )) {
               $expediente = Expediente::where('idperfil', $request->input('expediente_id'))->first();
@@ -331,7 +331,7 @@ class AlergiaController extends Controller
 
           }
           catch (\Illuminate\Validation\ValidationException $e) {
-              return \response($e->errors(),422);
+             return $this->responseErrors($e->errors(), 422);
           }
           if (Gate::allows('solo_pacientedueno',$user )) {
           $alergia = new Alergia([
