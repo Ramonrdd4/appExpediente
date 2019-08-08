@@ -66,8 +66,19 @@ class AdministradorController extends Controller
         $user1->sexo = $request->sexo;
         $user1->password = bcrypt($request->password);
         $user1->rol()->associate(2);
-        $user1->save();
-        return response()->json(['user' => $user1]);
+
+        if ($user1->save()) {
+            $user1->especialidades()->attach($request->input('especialidades_id') === null ? [] : $request->input('especialidades_id'));
+
+            $usuarioResp = User::where('id', $user1->id)->with('especialidades')->first();
+            $response = [
+                'msg' => 'Medico creado!',
+                'usuario' => [$usuarioResp]
+
+            ];
+            return response()->json($response, 200);
+        }
+
     }else {
         $response = ['Msg'=>'No Autorizado'];
         return response()->json($response,404);

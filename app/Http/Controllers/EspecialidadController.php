@@ -14,7 +14,16 @@ class EspecialidadController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $especialidades = Especialidad::all();
+            $response = [
+                'msg' => 'Lista de especialidades',
+                'especialidades' => $especialidades,
+            ];
+            return response()->json($response, 200);
+        } catch (\Throwable $th) {
+             return $this->responseErrors($e->errors(), 422);
+        }
     }
 
     /**
