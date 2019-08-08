@@ -67,9 +67,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-    public function servicio_Consulta()
+    public function servicio__consultas()
     {
-        return $this->hasmany('App\Servicio_Consulta','id','id_Doctor');
+        return $this->hasmany('App\servicio__consultas','id','id_Doctor');
     }
 
 

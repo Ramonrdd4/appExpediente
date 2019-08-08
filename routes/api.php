@@ -24,9 +24,9 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('registar', 'AuthController@register');
         Route::patch('actualizapaciente/{id}', 'PacienteController@update');
         Route::post('registarMedico', 'AdministradorController@store');
-        Route::patch('actualizamedico/{id}', 'MedicoController@update');
+        Route::put('actualizaUsuario', 'AuthController@update');
         Route::patch('actualizaadm/{id}', 'AdministradorController@update');
-      
+
 
         //Perfil
         Route::get('perfil', 'ProfileController@show');
@@ -100,7 +100,7 @@ Route::group(['prefix' => 'v1'], function () {
 
         //Crear un servio consulta
         Route::group(['prefix' => 'medico'], function ($router){
-            Route::post('agregarServicio', 'ServicioConsultaController@store');
+            Route::post('agregarServicio', 'ServicioConsultasController@store');
             Route::post('agregaHorario', 'HorarioController@store');
 
         });
@@ -109,7 +109,7 @@ Route::group(['prefix' => 'v1'], function () {
         //Cita
         Route::group(['prefix' => 'cita'], function ($router){
             Route::post('ListaHorario/{id}', 'HorarioController@show');
-            Route::post('ListaServicio/{id}', 'ServicioConsultaController@show');
+            Route::post('ListaServicio/{id}', 'ServicioConsultasController@show');
         });
 
     });

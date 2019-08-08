@@ -33,5 +33,16 @@ class UserTableSeeder extends Seeder
             'rol_id'=>3
         ]);
         $objetoUsuario->save();
+
+        $objetoUsuario= \App\User::create([
+            'email'=>'sandra@gmail.com',
+            'password'=>bcrypt('usuario123'),
+            'nombre'=>'Sandra',
+            'primerApellido'=>'Vargas',
+            'segundoApellido'=>'Rodriguez',
+            'sexo'=>'femenino',
+            'rol_id'=>2
+        ]);
+        $objetoUsuario->save();
     }
 }

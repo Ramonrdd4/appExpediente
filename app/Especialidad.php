@@ -8,8 +8,8 @@ class Especialidad extends Model
 {
     public $table='especialidades';
 
-    public function servicio_Consulta()
+    public function servicio__consultas()
     {
-        return $this->hasmany('App\Servicio_Consulta','id','id_Especialidad');
+        return $this->hasmany('App\servicio__consultas','id','id_Especialidad');
     }
 }
