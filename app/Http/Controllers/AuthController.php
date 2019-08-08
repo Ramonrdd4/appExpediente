@@ -200,24 +200,6 @@ public function responseErrors($errors, $statusHTML)
         'errors' => $transformed
     ], $statusHTML);
 }
-public function ListaMedicos(){
-       //muestra los medicos
-       try {
-        if (!$user = JWTAuth::parseToken()->authenticate()) {
-            return response()->json(['msg'=>'Usuario no encontrado'], 404);
-        }
 
-    $user = User::where('rol_id', 2)->get();
-    $response=[
-
-        'msg' => 'Lista de Medicos',
-        'Perfil' => $user,
-    ];
-    return response()->json($response, 200);
-
-        } catch (\Throwable $th) {
-    return \response($th->getMessage(), 422);
-    }
-}
 
 }

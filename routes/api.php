@@ -19,7 +19,7 @@ Route::group(['prefix' => 'v1'], function () {
         //Login
         Route::post('login', 'AuthController@login');
         Route::post('logout', 'AuthController@logout');
-        Route::get('Listamedicos', 'AuthController@ListaMedicos');
+
 
         //Usuarios registrar
         Route::post('registar', 'AuthController@register');
@@ -104,7 +104,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('agregarServicio', 'ServicioConsultasController@store');
             Route::post('agregaHorario', 'HorarioController@store');
             Route::get('especialidades', 'EspecialidadController@index');
-
+            Route::get('Listamedicos', 'MedicoController@index');
 
         });
 
