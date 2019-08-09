@@ -22,7 +22,7 @@ class EspecialidadController extends Controller
             ];
             return response()->json($response, 200);
         } catch (\Throwable $th) {
-             return $this->responseErrors($e->errors(), 422);
+            return response()->json($th->getMessage(), 422);
         }
     }
 

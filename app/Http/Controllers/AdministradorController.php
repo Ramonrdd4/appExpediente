@@ -44,7 +44,7 @@ class AdministradorController extends Controller
                 return response()->json(['msg'=>'Usuario no encontrado'], 404);
             }
             $this->validate($request, [
-                'email' => 'required|email',
+                'email' => 'required|email|unique:users,email',
                     'nombre' => 'required|min:5',
                     'primerApellido' => 'required|min:6',
                     'segundoApellido' => 'required|min:6',
@@ -66,18 +66,11 @@ class AdministradorController extends Controller
         $user1->sexo = $request->sexo;
         $user1->password = bcrypt($request->password);
         $user1->rol()->associate(2);
+        $user1->save();
 
-        if ($user1->save()) {
-            $user1->especialidades()->attach($request->input('especialidades_id') === null ? [] : $request->input('especialidades_id'));
 
-            $usuarioResp = User::where('id', $user1->id)->with('especialidades')->first();
-            $response = [
-                'msg' => 'Medico creado!',
-                'usuario' => [$usuarioResp]
+    return response()->json(['user' => $user1],200);
 
-            ];
-            return response()->json($response, 200);
-        }
 
     }else {
         $response = ['Msg'=>'No Autorizado'];

@@ -113,7 +113,7 @@ Route::group(['prefix' => 'v1'], function () {
         //Cita
         Route::group(['prefix' => 'cita'], function ($router){
             Route::post('ListaHorario/{id}', 'HorarioController@show');
-            Route::post('ListaServicio/{id}', 'ServicioConsultasController@show');
+            Route::get('ListaServicio/{id}', 'ServicioConsultasController@show');
         });
 
     });

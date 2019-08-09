@@ -18,12 +18,6 @@ class MedicoController extends Controller
      */
     public function index()
     {
-          //muestra los medicos
-          try {
-            if (!$user = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['msg'=>'Usuario no encontrado'], 404);
-            }
-
         $user = User::where('rol_id', 2)->get();
         $response=[
 
@@ -31,10 +25,6 @@ class MedicoController extends Controller
             'Medicos' => $user,
         ];
         return response()->json($response, 200);
-
-            } catch (\Throwable $th) {
-        return \response($th->getMessage(), 422);
-        }
     }
 
     /**

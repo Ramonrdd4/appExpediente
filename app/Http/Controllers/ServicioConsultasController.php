@@ -39,9 +39,6 @@ class ServicioConsultasController extends Controller
     {
         //Crear servicio de consulta doctor
         try {
-            if (!$user = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['msg'=>'Usuario no encontrado'], 404);
-            }
             $this->validate($request, [
                     'Precio' => 'required|numeric:5',
                     'Ubicacion' => 'required|min:6',
@@ -52,7 +49,7 @@ class ServicioConsultasController extends Controller
 
 
         } catch (\Illuminate\Validation\ValidationException $e ) {
-            return \response($e->errors(),422);
+             return $this->responseErrors($e->errors(), 422);
         }
         if (Gate::allows('solo_medico',$user )) {
         $servicioConsulta = new servicio__consultas();
@@ -81,7 +78,11 @@ class ServicioConsultasController extends Controller
     try {
         if (!$user = JWTAuth::parseToken()->authenticate()) {
          return response()->json(['msg'=>'Usuario no encontrado'], 404);
-     }
+        }
+    } catch (\Illuminate\Validation\ValidationException $e ) {
+            return $this->responseErrors($e->errors(), 422);
+            }
+
      if (Gate::allows('solo_medico',$user )) {
         $servicio= servicio__consultas::where('id_Doctor',$id)->get();
           $response=[
@@ -93,9 +94,7 @@ class ServicioConsultasController extends Controller
         $response = ['Msg'=>'No Autorizado'];
         return response()->json($response,404);
         }
-            } catch (\Throwable $th) {
-        return \response($th->getMessage(), 422);
-        }
+
             }
 
     /**
