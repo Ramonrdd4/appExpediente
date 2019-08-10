@@ -84,10 +84,10 @@ class ServicioConsultasController extends Controller
             }
 
      if (Gate::allows('solo_medico',$user )) {
-        $servicio= servicio__consultas::where('id_Doctor',$id)->get();
+        $servicio= servicio__consultas::where('id_Doctor',$id)-> with('especialidad')->get();;
           $response=[
             'msg' => 'Lista de Servicio Consulta',
-            'Horario' => $servicio,
+            'servicio' => $servicio,
         ];
         return response()->json($response, 200);
         }else{
