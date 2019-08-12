@@ -102,6 +102,7 @@ Route::group(['prefix' => 'v1'], function () {
         //Crear un servio consulta
         Route::group(['prefix' => 'medico'], function ($router){
             Route::post('agregarServicio', 'ServicioConsultasController@store');
+            Route::post('actualizaServicio/{id}', 'ServicioConsultasController@update');
             Route::post('agregaHorario', 'HorarioController@store');
             Route::get('especialidades', 'EspecialidadController@index');
             Route::get('Listamedicos', 'MedicoController@index');
