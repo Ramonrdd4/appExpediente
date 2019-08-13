@@ -33,6 +33,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('perfil', 'ProfileController@show');
         Route::post('registarPerfildueno', 'ProfileController@store');
         Route::post('registarPerfil', 'ProfileController@storeasociado');
+        Route::get('perfil/{id}', 'ProfileController@showPerfil');
 
         //Expediente
         Route::post('registarExpediente', 'ExpedienteController@store');
