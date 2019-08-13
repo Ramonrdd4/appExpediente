@@ -102,7 +102,7 @@ Route::group(['prefix' => 'v1'], function () {
         //Crear un servio consulta
         Route::group(['prefix' => 'medico'], function ($router){
             Route::post('agregarServicio', 'ServicioConsultasController@store');
-            Route::post('actualizaServicio/{id}', 'ServicioConsultasController@update');
+            Route::patch('actualizaServicio/{id}', 'ServicioConsultasController@update');
             Route::post('agregaHorario', 'HorarioController@store');
             Route::get('especialidades', 'EspecialidadController@index');
             Route::get('Listamedicos', 'MedicoController@index');
@@ -115,6 +115,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::group(['prefix' => 'cita'], function ($router){
             Route::post('ListaHorario/{id}', 'HorarioController@show');
             Route::get('ListaServicio/{id}', 'ServicioConsultasController@show');
+            Route::get('Servicio/{id}', 'ServicioConsultasController@showServicio');
         });
 
     });

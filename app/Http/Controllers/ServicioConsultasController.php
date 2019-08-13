@@ -73,14 +73,7 @@ class ServicioConsultasController extends Controller
     {
         //muestra los servicios por medico
         try {
-            $this->validate($request, [
-                    'precio' => 'required',
-                    'ubicacion' => 'required|min:6',
-                    'id_doctor' => 'required|min:1',
-                    'especialidad_id' => 'required|min:1',
-            ]);
-
-         if (!$user = JWTAuth::parseToken()->authenticate()) {
+           if (!$user = JWTAuth::parseToken()->authenticate()) {
          return response()->json(['msg'=>'Usuario no encontrado'], 404);
         }
     } catch (\Illuminate\Validation\ValidationException $e ) {
@@ -98,6 +91,19 @@ class ServicioConsultasController extends Controller
         $response = ['Msg'=>'No Autorizado'];
         return response()->json($response,404);
         }
+
+            }
+        public function showServicio($id)
+    {
+        //muestra los servicios por medico
+
+        $servicio= servicio__consultas::where('id',$id)-> with('especialidad')->get();;
+          $response=[
+            'msg' => 'Lista de Servicio Consulta',
+            'servicio' => $servicio,
+        ];
+        return response()->json($response, 200);
+
 
             }
 
@@ -121,23 +127,33 @@ class ServicioConsultasController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //Crear servicio de consulta doctor
         try {
             if (!$user = JWTAuth::parseToken()->authenticate()) {
-             return response()->json(['msg'=>'Usuario no encontrado'], 404);
+                return response()->json(['msg'=>'Usuario no encontrado'], 404);
             }
+            $this->validate($request, [
+                    'precio' => 'required',
+                    'ubicacion' => 'required|min:6',
+                    'id_doctor' => 'required|min:1',
+                    'especialidad_id' => 'required|min:1',
+            ]);
+
         } catch (\Illuminate\Validation\ValidationException $e ) {
-                return $this->responseErrors($e->errors(), 422);
-                }
+             return $this->responseErrors($e->errors(), 422);
+        }
+
 
          if (Gate::allows('solo_medico',$user )) {
-            $servicio= servicio__consultas::where('id',$id);
-            $servicioConsulta->precio = $request->precio;
-            $servicioConsulta->ubicacion = $request->ubicacion;
-            $servicioConsulta->especialidad()->associate($request->especialidad_id);
-            $servicioConsulta->user()->associate($request->id_doctor);
-            $servicioConsulta->save();
 
-            return response()->json(['Servicio Consulta' => $servicioConsulta]);
+            $servicio= servicio__consultas::find($id);
+            $servicio->precio = $request->precio;
+             $servicio->ubicacion = $request->ubicacion;
+            $servicio->especialidad()->associate($request->especialidad_id);
+            $servicio->user()->associate($request->id_doctor);
+            $servicio->save();
+
+            return response()->json(['Servicio Consulta' => $servicio]);
 
             }else{
             $response = ['Msg'=>'No Autorizado'];
