@@ -16,6 +16,7 @@ class CreateActivitiesTable extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre');
+            $table->string('ruta_imagen')->nullable();
             //Relacion con lista
             $table->softDeletes();
             $table->timestamps();

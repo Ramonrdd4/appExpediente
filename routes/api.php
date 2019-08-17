@@ -68,6 +68,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('agregaActividad', 'ActivityController@storeActividadxUsuario');
         Route::post('agregaEnfermedad', 'DeseaseController@storeEnfermedadesxUsuario');
         Route::post('agregaAlergia', 'AlergiaController@storeAlergiasxUsuario');
+        Route::post('agregaimagenAlergia/{id}', 'AlergiaController@storeImagen');
 
         Route::resource('alergia', 'AlergiaController');
         Route::get('alergiaEliminada', 'AlergiaController@showEliminadas');
