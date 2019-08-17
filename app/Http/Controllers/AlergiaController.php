@@ -154,6 +154,23 @@ class AlergiaController extends Controller
             return \response($th->getMessage(), 422);
         }
     }
+    public function ObtenerImagen($filename)
+    {
+        $archivo = Storage::get('public/subida/imagenes/alergia/'.$filename);
+        if($archivo != null){
+            $mime = Storage::mimeType(('public/subida/imagenes/alergia/'.$filename));
+
+            return response($archivo,200)->header('Content-Type', $mime);
+        }else{
+            $response = [
+                'msg' => 'Imagen no encontrada'
+            ];
+            return response()->json($response, 404);
+
+        }
+
+
+    }
 
 
     /**
