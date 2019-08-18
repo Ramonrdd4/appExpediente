@@ -25,5 +25,19 @@ class CirugiasTableSeeder extends Seeder
             'idExpediente' => 116850046
         ]);
         $cirugia->save();
+
+        $cirugia = App\Cirugia::create([
+            'fecha' => Carbon::create('2007', '06', '28'),
+            'lugar' => 'Riñon izquierdo',
+            'idExpediente' => 116850044
+        ]);
+        $cirugia->save();
+
+        $cirugia = App\Cirugia::create([
+            'fecha' => Carbon::create('2002', '03', '25'),
+            'lugar' => 'Rodilla Derecha',
+            'idExpediente' => 116850044
+        ]);
+        $cirugia->save();
     }
 }

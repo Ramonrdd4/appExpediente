@@ -21,6 +21,9 @@ class ExpedienteTableSeeder extends Seeder
 
         ]);
         $expediente->save();
+        $expediente->alergias()->attach([1, 2, 4]);
+        $expediente->deseases()->attach([2, 5, 3]);
+        $expediente->medicamentos()->attach([4, 2, 7]);
 
         $expediente= App\Expediente::create([
             'id'=> 116850045,
