@@ -37,6 +37,9 @@ Route::group(['prefix' => 'v1'], function () {
 
         //Expediente
         Route::post('registarExpediente', 'ExpedienteController@store');
+        Route::get('mostrarExpediente/{id}', 'ExpedienteController@show');
+        Route::get('listaAlergiasExpediente/{id}', 'ExpedienteController@listarAlergiasXPaciente');
+        Route::get('listaDeseasesExpediente/{id}', 'ExpedienteController@listarEnfermedadesXPaciente');
 
         //Fumado
         Route::group(['prefix' => 'fumado'], function () {

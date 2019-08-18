@@ -124,6 +124,8 @@ class ActivityController extends Controller
         try{
             $this -> validate($request, [
                 'nombre'=>'required|min:5',
+                'minutos'=>'required|numeric',
+                'cantidad'=>'required|numeric',
             ]);
             //Obtener el usuario autentificado actual
             if(!$user = JWTAuth::parseToken()->authenticate()){
@@ -202,7 +204,7 @@ class ActivityController extends Controller
     }
 
     //Metodo del usuario (Ramon)
-    public function storeActivityxUsuario(Request $request)
+    /*public function storeActivityxUsuario(Request $request)
     {
         try{
             $this -> validate($request, [
@@ -239,7 +241,7 @@ class ActivityController extends Controller
             'msg'=>'Error durante el registro'
         ];
         return response()->json($response, 404);
-    }
+    } */
     public function showEliminadas()
     {
         //Muestra todas las Actividades eliminadas
@@ -260,10 +262,10 @@ class ActivityController extends Controller
       {
         try{
             $this -> validate($request, [
+                'nombre' => 'required',
                 'minutos'=>'required|numeric',
                 'cantidad'=>'required|numeric',
-                'expediente_id'=>'required|numeric:9',
-                'actividad_id'=>'required|numeric:1'
+
             ]);
             //Obtener el usuario autentificado actual
             if(!$user = JWTAuth::parseToken()->authenticate()){

@@ -99,7 +99,24 @@ class ExpedienteController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['msg' => 'Usuario no encontrado'], 404);
+            }
+            if (Gate::allows('solo_pacientedueno',$user )){
+
+                $expediente = Expediente::where('id', $id)->with('fumado', 'alcohol')->get();
+                $response = [
+                    'msg' => 'Detalle de expediente',
+                    'Expediente' => $expediente
+                ];
+                return response()->json($response, 200);
+            }
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return \response($e->errors(), 422);
+        }
+
     }
 
     /**
@@ -149,5 +166,45 @@ class ExpedienteController extends Controller
         return response()->json([
             'errors' => $transformed
         ], $statusHTML);
+    }
+
+    public function listarAlergiasXPaciente($id){
+        try {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['msg' => 'Usuario no encontrado'], 404);
+            }
+            if (Gate::allows('solo_pacientedueno',$user )){
+
+                $expediente = Expediente::where('id', $id)->with('alergias')->get();
+                $response = [
+                    'msg' => 'Detalle de expediente',
+                    'Expediente' => $expediente
+                ];
+                return response()->json($response, 200);
+            }
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return \response($e->errors(), 422);
+        }
+    }
+
+    public function listarEnfermedadesXPaciente($id){
+        try {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['msg' => 'Usuario no encontrado'], 404);
+            }
+            if (Gate::allows('solo_pacientedueno',$user )){
+
+                $expediente = Expediente::where('id', $id)->with('deseases')->get();
+                $response = [
+                    'msg' => 'Detalle de expediente',
+                    'Expediente' => $expediente
+                ];
+                return response()->json($response, 200);
+            }
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return \response($e->errors(), 422);
+        }
     }
 }

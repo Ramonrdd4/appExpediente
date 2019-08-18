@@ -68,7 +68,7 @@ class AlcoholController extends Controller
             $alcohol = Alcohol::find($id);
             if($alcohol != null){
                 $response = [
-                    'Registro de Alcoholismo' => $alcohol
+                    'Registro' => $alcohol
                 ];
                 return response()->json($response, 200);
             }else{

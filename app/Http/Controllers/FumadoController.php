@@ -64,7 +64,7 @@ class FumadoController extends Controller
             $fumado = Fumado::find($id);
             if($fumado != null){
                 $response = [
-                    'Registro de Fumado' => $fumado
+                    'Registro' => $fumado
                 ];
                 return response()->json($response, 200);
             }else{

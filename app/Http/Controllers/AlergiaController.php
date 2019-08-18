@@ -366,4 +366,6 @@ class AlergiaController extends Controller
               'errors' => $transformed
           ], $statusHTML);
       }
+
+      
 }
