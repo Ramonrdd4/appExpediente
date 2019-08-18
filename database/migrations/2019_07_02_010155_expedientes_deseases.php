@@ -20,6 +20,7 @@ class ExpedientesDeseases extends Migration
             $table->string('parentezco')->nullable();
             $table->string('nombre')->nullable();
             $table->string('observaciones')->nullable();
+
             $table->timestamps();
             //Llaves foraneas
             $table->foreign('expediente_id')->references('id')->on('expedientes');

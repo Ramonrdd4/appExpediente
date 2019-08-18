@@ -122,7 +122,7 @@ class ProfileController extends Controller
     $response=[
 
         'msg' => 'Perfil',
-        'Perfil' => $perfil,
+        'Perfil' => [$perfil],
     ];
     return response()->json($response, 200);
     }else{

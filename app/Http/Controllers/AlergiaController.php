@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Gate;
 use App\User;
 use JWTAuth;
 use App\Expediente;
+use Illuminate\Support\Facades\Storage;
 
 class AlergiaController extends Controller
 {
@@ -83,6 +84,54 @@ class AlergiaController extends Controller
         return response()->json($response,404);
          }
     }
+    public function storeImagen($id, Request $request)
+    {
+        try {
+            $this->validate($request, [
+                'imagen' => 'required|image|mimes:jpeg,png,jpg,gif'
+            ]);
+            if (!$usuario = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['msg' => 'Usuario no encontrado'], 404);
+            }
+            $alergia = Alergia::where('id', $id)->firstOrFail();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->responseErrors($e->errors(), 422);
+        }
+        if ($request->has('imagen')) {
+
+            // Obtiene el archivo imagen
+            $image = $request->file('imagen');
+
+            // Crea un nombre customizado para la imagen a guardar
+            //En este caso se usara el patrón de nombre_usuario + time()
+            $nombreCompleto = $usuario->nombre . '_alergia';
+            $name = $nombreCompleto . '_' . time();
+
+            // Se define la ruta del folder donde se guardarán las imagenes
+            $folder = '/subida/imagenes/alergia/';
+
+            $file_name = $name . '.' . $image->getClientOriginalExtension();
+            // Se crea la ruta del archivo donde se almacenará la imagen
+            $filePath = $folder . $file_name;
+
+            $image->storeAs($folder, $name.'.'.$image->getClientOriginalExtension(), 'public');
+
+            // Se le añade la ruta al Videojuego para insertarse en la base de datos
+            $alergia->ruta_imagen = $file_name;
+            if ($alergia->save()) {
+                $response = [
+                    'msg' => 'Imagen Guardada!',
+                    'alergias' => $alergia
+                ];
+                return response()->json($response, 201);
+            } else {
+                $response = [
+                    'msg' => 'Error durante la creación'
+                ];
+                return response()->json($response, 400);
+            }
+        }
+    }
 
     /**
      * Display the specified resource.
@@ -104,6 +153,23 @@ class AlergiaController extends Controller
         } catch (\Throwable $th) {
             return \response($th->getMessage(), 422);
         }
+    }
+    public function ObtenerImagen($filename)
+    {
+        $archivo = Storage::get('public/subida/imagenes/alergia/'.$filename);
+        if($archivo != null){
+            $mime = Storage::mimeType(('public/subida/imagenes/alergia/'.$filename));
+
+            return response($archivo,200)->header('Content-Type', $mime);
+        }else{
+            $response = [
+                'msg' => 'Imagen no encontrada'
+            ];
+            return response()->json($response, 404);
+
+        }
+
+
     }
 
 

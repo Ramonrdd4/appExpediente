@@ -17,6 +17,7 @@ class CreateDeseasesTable extends Migration
             $table->increments('id');
             $table->string('nombre');
             $table->string('observaciones');
+            $table->string('ruta_imagen')->nullable();
             //Relacion con lista
             $table->softDeletes();
             $table->timestamps();
