@@ -13,7 +13,7 @@ class AlcoholTableSeeder extends Seeder
     {
         $alcohol= App\Alcohol::create([
             'id'=>116850044,
-            'estadoAlcohol'=> 1,
+            'estadoAlcohol'=> 'Toma',
             'tiempoInicio' => 'mas de 1 año',
             'frecuencia' => 2,
             'tipoLicor' => 'Vino',
@@ -24,7 +24,7 @@ class AlcoholTableSeeder extends Seeder
 
         $alcohol= App\Alcohol::create([
             'id'=>116850045,
-            'estadoAlcohol'=> 2,
+            'estadoAlcohol'=> 'Tomaba',
             'tiempoInicio' => 'mas de 3 año',
             'frecuencia' => 4,
             'tipoLicor' => 'Licor',
@@ -35,7 +35,7 @@ class AlcoholTableSeeder extends Seeder
 
         $alcohol= App\Alcohol::create([
             'id'=>116850046,
-            'estadoAlcohol'=> 3,
+            'estadoAlcohol'=> 'No toma',
             'tiempoInicio' => 'N/A',
             'frecuencia' => 0,
             'tipoLicor' => 'N/A',

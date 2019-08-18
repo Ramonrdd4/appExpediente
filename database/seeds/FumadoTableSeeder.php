@@ -13,7 +13,7 @@ class FumadoTableSeeder extends Seeder
     {
         $fumado= App\Fumado::create([
             'id'=>116850044,
-            'estadoFumado'=>3,
+            'estadoFumado'=>'No fuma',
             'tiempoInicio'=>'N/A',
             'frecuencia'=>0,
             'observaciones'=>'Utiliza vaporizador'
@@ -22,7 +22,7 @@ class FumadoTableSeeder extends Seeder
 
         $fumado= App\Fumado::create([
             'id'=>116850045,
-            'estadoFumado'=>1,
+            'estadoFumado'=>'Fuma',
             'tiempoInicio'=>'Mas de 3 años',
             'frecuencia'=>7,
             'observaciones'=>'Tambien consume Canabis'
@@ -31,7 +31,7 @@ class FumadoTableSeeder extends Seeder
 
         $fumado= App\Fumado::create([
             'id'=>116850046,
-            'estadoFumado'=>2,
+            'estadoFumado'=>'Fumaba',
             'tiempoInicio'=>'Mas de 5 años',
             'frecuencia'=>15,
             'observaciones'=>'Se detuvo hace 1 año'
