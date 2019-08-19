@@ -49,6 +49,8 @@ class AlergiaController extends Controller
                 'categoria'=>'required',
                 'reaccion'=>'required',
                 'observaciones'=>'required',
+                //imagen
+                'imagen' => 'required|image|mimes:jpeg,png,jpg,gif'
             ]);
             //Obtener el usuario autentificado actual
             if(!$user = JWTAuth::parseToken()->authenticate()){
@@ -68,6 +70,7 @@ class AlergiaController extends Controller
         ]);
 
         if($alergia->save()){
+
 
             $response=[
                 'msg'=> 'Alergia registrada',
@@ -433,5 +436,5 @@ class AlergiaController extends Controller
           ], $statusHTML);
       }
 
-      
+
 }

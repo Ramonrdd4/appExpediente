@@ -54,7 +54,7 @@ class HorarioController extends Controller
 
 
         } catch (\Illuminate\Validation\ValidationException $e ) {
-            return \response($e->errors(),422);
+            return $this->responseErrors($e->errors(), 422);
         }
         if (Gate::allows('solo_medico',$user )) {
         $carbon= Carbon::now();
@@ -111,7 +111,7 @@ class HorarioController extends Controller
    return response()->json($response, 200);
 
         } catch (\Throwable $th) {
-    return \response($th->getMessage(), 422);
+          return $this->responseErrors($e->errors(), 422);
     }
     }
 
