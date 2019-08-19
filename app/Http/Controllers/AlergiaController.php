@@ -49,8 +49,6 @@ class AlergiaController extends Controller
                 'categoria'=>'required',
                 'reaccion'=>'required',
                 'observaciones'=>'required',
-                //imagen
-                'imagen' => 'required|image|mimes:jpeg,png,jpg,gif'
             ]);
             //Obtener el usuario autentificado actual
             if(!$user = JWTAuth::parseToken()->authenticate()){
@@ -74,7 +72,7 @@ class AlergiaController extends Controller
 
             $response=[
                 'msg'=> 'Alergia registrada',
-                'alergia'=> $alergia
+                'alergia'=> [$alergia]
             ];
             return response()->json($response, 201);
         }
@@ -124,7 +122,7 @@ class AlergiaController extends Controller
             if ($alergia->save()) {
                 $response = [
                     'msg' => 'Imagen Guardada!',
-                    'alergias' => $alergia
+                    'alergias' => [$alergia]
                 ];
                 return response()->json($response, 201);
             } else {
