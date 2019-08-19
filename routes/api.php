@@ -40,6 +40,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('mostrarExpediente/{id}', 'ExpedienteController@show');
         Route::get('listaAlergiasExpediente/{id}', 'ExpedienteController@listarAlergiasXPaciente');
         Route::get('listaDeseasesExpediente/{id}', 'ExpedienteController@listarEnfermedadesXPaciente');
+        Route::get('listaMedicamentosExpediente/{id}', 'ExpedienteController@listarMedicamentosXPaciente');
 
         //Fumado
         Route::group(['prefix' => 'fumado'], function () {

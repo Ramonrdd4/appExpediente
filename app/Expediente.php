@@ -48,7 +48,7 @@ class Expediente extends Model
 
     public function activities()
     {
-        return $this->belongsToMany('App\Activity', 'expediente_activity', 'expediente_id', 'activity_id')->withTimestamps();
+        return $this->belongsToMany('App\Activity', 'expediente_activity', 'expediente_id', 'activity_id')->withTimestamps()->withPivot('minutos', 'cantidad');
     }
 
     public function deseases()

@@ -207,4 +207,44 @@ class ExpedienteController extends Controller
             return \response($e->errors(), 422);
         }
     }
+
+    public function listarMedicamentosXPaciente($id){
+        try {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['msg' => 'Usuario no encontrado'], 404);
+            }
+            if (Gate::allows('solo_pacientedueno',$user )){
+
+                $expediente = Expediente::where('id', $id)->with('medicamentos')->get();
+                $response = [
+                    'msg' => 'Detalle de expediente',
+                    'Expediente' => $expediente
+                ];
+                return response()->json($response, 200);
+            }
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return \response($e->errors(), 422);
+        }
+    }
+
+    public function listarActividadesXPaciente($id){
+        try {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['msg' => 'Usuario no encontrado'], 404);
+            }
+            if (Gate::allows('solo_pacientedueno',$user )){
+
+                $expediente = Expediente::where('id', $id)->with('activities')->get();
+                $response = [
+                    'msg' => 'Detalle de expediente',
+                    'Expediente' => $expediente
+                ];
+                return response()->json($response, 200);
+            }
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return \response($e->errors(), 422);
+        }
+    }
 }
