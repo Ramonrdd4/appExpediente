@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ActivitiesTableSeeder::class);
         $this->call(MedicamentosTableSeeder::class);
         $this->call(FumadoTableSeeder::class);
-        $this->call(AlcoholTableSeeder::class); 
+        $this->call(AlcoholTableSeeder::class);
         $this->call(ExpedienteTableSeeder::class);
         $this->call(CirugiasTableSeeder::class);
         $this->call(EspecialidadTableSeeder::class);
