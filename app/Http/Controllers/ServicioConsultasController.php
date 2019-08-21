@@ -97,7 +97,7 @@ class ServicioConsultasController extends Controller
     {
         //muestra los servicios por medico
 
-        $servicio= servicio__consultas::where('id',$id)-> with('especialidad')->get();;
+        $servicio= servicio__consultas::where('id',$id)-> with('especialidad')->get();
           $response=[
             'msg' => 'Lista de Servicio Consulta',
             'servicio' => $servicio,

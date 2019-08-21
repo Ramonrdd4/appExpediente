@@ -102,6 +102,7 @@ class AuthController extends Controller
                 'sexo' => 'required|min:1',
                 'password' => 'required|min:6',
                 //esto es del perfil
+                'cedula'=> 'required|numeric|min:9|unique:profiles,id',
                 'fechaNacimiento'=> 'required|date',
                 'tipoSangre'=> 'required|min:2',
                 'direccion'=> 'required|min:5',
@@ -129,7 +130,7 @@ class AuthController extends Controller
 
         //agrego el perfil
         $perfil = new Profile();
-        $perfil->id = $user1->id;
+        $perfil->id =$request->cedula;
         $perfil->nombre = $request->nombre;
         $perfil->primerApellido = $request->primerApellido;
         $perfil->segundoApellido = $request->segundoApellido;
@@ -146,7 +147,7 @@ class AuthController extends Controller
         //Creo un expediente
 
         $expediente = new Expediente();
-        $expediente->id = $user1->id;
+        $expediente->id = $request->cedula;
         $expediente->tieneAlergia = false;
         $expediente->tieneEnfermedadF = false;
         $expediente->tieneActividad = false;

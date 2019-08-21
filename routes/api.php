@@ -116,6 +116,8 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('agregarServicio', 'ServicioConsultasController@store');
             Route::patch('actualizaServicio/{id}', 'ServicioConsultasController@update');
             Route::post('agregaHorario', 'HorarioController@store');
+            Route::get('listaHorariosSinasignar', 'HorarioController@index');
+            Route::delete('horario/{id}', 'HorarioController@destroy');
             Route::get('especialidades', 'EspecialidadController@index');
             Route::get('Listamedicos', 'MedicoController@index');
 
