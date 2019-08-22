@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Horario;
+use App\servicio__consultas;
 use Illuminate\Http\Request;
 use JWTAuth;
 use Illuminate\Support\Facades\Gate;
 use Carbon\Carbon;
-use App\servicio__consultas;
+
 
 
 class HorarioController extends Controller
@@ -28,7 +29,7 @@ class HorarioController extends Controller
     $horario= Horario::where('estado',1)->with('servicio__consultas')->get();;
     $response=[
      'msg' => 'Lista de horarios',
-     'horario' => $horario,
+     'horarios' => $horario,
     ];
         return response()->json($response, 200);
 
@@ -121,7 +122,7 @@ class HorarioController extends Controller
     $horario= Horario::where('id_servicioConsulta',$id)->get();
        $response=[
         'msg' => 'Lista de horarios',
-        'horario' => $horario,
+        'horarios' => $horario,
     ];
    return response()->json($response, 200);
 
@@ -195,6 +196,7 @@ class HorarioController extends Controller
                 $fechaAsignada = $fechaAsignada->format('Y-m-d');
                 $horaAsignada = new Carbon($horario->hora_cita);
 
+                    if ($fecha===$fechaAsignada) {
 
                         $diferenciaMinutos = $hora->gt($horaAsignada)?
                         $horaAsignada->diffInMinutes($hora) : $hora->diffInMinutes($horaAsignada);
@@ -203,6 +205,7 @@ class HorarioController extends Controller
                             return false;
 
                         }
+                    }
 
 
             }
@@ -223,6 +226,30 @@ class HorarioController extends Controller
         return response()->json([
             'errors' => $transformed
         ], $statusHTML);
+    }
+    public function HorariosMedico($id)
+    {
+        try {
+            if (!$usuario = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['msg' => 'Usuario no encontrado'], 404);
+            }
+
+            $serv_consulta = servicio__consultas::where('id_doctor', $id)->get();
+            $horarios = collect();
+            foreach ($serv_consulta as $serv) {
+                foreach ($serv->horarios()->withoutTrashed()->with('servicio__consultas.especialidad','Agenda.perfil')
+             ->get() as $hora) {
+                    $horarios->push($hora);
+                }
+            }
+            $response = [
+                'msg' => 'Lista de horarios',
+                'horarios' => $horarios
+            ];
+            return response()->json($response, 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->responseErrors($e->errors(), 422);
+        }
     }
 
 }

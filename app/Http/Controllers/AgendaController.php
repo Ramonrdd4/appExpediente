@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Agenda;
 use Illuminate\Http\Request;
+use JWTAuth;
+use Illuminate\Support\Facades\Gate;
+use App\Horario;
 
 class AgendaController extends Controller
 {
@@ -78,6 +81,37 @@ class AgendaController extends Controller
     public function show(Agenda $agenda)
     {
         //
+    }
+    public function detalleAgendaMedico($id)
+    {
+        try {
+            if (!$usuario = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['msg' => 'Usuario no encontrado'], 404);
+            }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->responseErrors($e->errors(), 422);
+        }
+
+        if (Gate::allows('solo_medico', $usuario)) {
+
+
+            $agendas = Horario::where('id', $id)->with([
+                'servicio__consultas.especialidad', 'servicio__consultas.user',
+                'Agenda.perfil'
+            ])->first();
+
+
+            $response = [
+                'msg' => 'Lista de Agendas',
+                'horarios' => [$agendas]
+            ];
+            return response()->json($response, 200);
+        }
+
+        $response = [
+            'msg' => 'No autorizado'
+        ];
+        return response()->json($response, 422);
     }
 
     /**

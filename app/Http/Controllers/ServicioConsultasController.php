@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\servicio__consultas;
 use Illuminate\Http\Request;
+use App\Horario;
 use JWTAuth;
 use Illuminate\Support\Facades\Gate;
 
@@ -81,7 +82,7 @@ class ServicioConsultasController extends Controller
             }
 
      if (Gate::allows('solo_medico',$user )) {
-        $servicio= servicio__consultas::where('id_Doctor',$id)-> with('especialidad')->get();;
+        $servicio= servicio__consultas::where('id_Doctor',$id)->with('especialidad')->get();
           $response=[
             'msg' => 'Lista de Servicio Consulta',
             'servicio' => $servicio,
@@ -97,7 +98,7 @@ class ServicioConsultasController extends Controller
     {
         //muestra los servicios por medico
 
-        $servicio= servicio__consultas::where('id',$id)-> with('especialidad')->get();
+        $servicio= servicio__consultas::where('id',$id)->with('especialidad')->get();
           $response=[
             'msg' => 'Lista de Servicio Consulta',
             'servicio' => $servicio,
