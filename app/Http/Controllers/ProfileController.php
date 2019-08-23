@@ -6,7 +6,7 @@ use App\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use JWTAuth;
-
+use App\Expediente;
 
 class ProfileController extends Controller
 {
@@ -36,7 +36,7 @@ class ProfileController extends Controller
             return response()->json(['msg'=>'Usuario no encontrado'], 404);
         }
         $this->validate($request, [
-                'id'=>'required|min:9',
+                'id'=>'required|min:9|unique:profiles,id',
                 'nombre' => 'required|min:5',
                 'primerApellido' => 'required|min:6',
                 'segundoApellido' => 'required|min:6',
@@ -49,7 +49,7 @@ class ProfileController extends Controller
 
         ]);
     } catch (\Illuminate\Validation\ValidationException $e ) {
-        return \response($e->errors(),422);
+          return $this->responseErrors($e->errors(), 422);
     }
     if (Gate::allows('solo_pacientedueno',$user )) {
     $perfil = new Profile();
@@ -66,6 +66,7 @@ class ProfileController extends Controller
     $perfil->esDuenho = true;
     $perfil->user()->associate($user->id);
     if( $perfil->save()){
+
         return response()->json(['user' => $perfil]);
     }else{
         $response = ['Msg'=>'Error al registrar el perfil, por favor intentelo más tarde!'];
@@ -171,7 +172,7 @@ class ProfileController extends Controller
 
         ]);
     } catch (\Illuminate\Validation\ValidationException $e ) {
-        return \response($e->errors(),422);
+          return $this->responseErrors($e->errors(), 422);
     }
     if (Gate::allows('solo_pacientedueno',$user )) {
     $perfil = Profile::find($id);
@@ -216,7 +217,7 @@ class ProfileController extends Controller
             return response()->json(['msg'=>'Usuario no encontrado'], 404);
         }
         $this->validate($request, [
-                'id'=>'required|min:9',
+                'cedula'=>'required|min:9|unique:profiles,id',
                 'nombre' => 'required|min:5',
                 'primerApellido' => 'required|min:6',
                 'segundoApellido' => 'required|min:6',
@@ -229,11 +230,11 @@ class ProfileController extends Controller
 
         ]);
     } catch (\Illuminate\Validation\ValidationException $e ) {
-        return \response($e->errors(),422);
+          return $this->responseErrors($e->errors(), 422);
     }
     if (Gate::allows('solo_pacientedueno',$user )) {
     $perfil = new Profile();
-    $perfil->id = $request->id;
+    $perfil->id = $request->cedula;
     $perfil->nombre = $request->nombre;
     $perfil->primerApellido = $request->primerApellido;
     $perfil->segundoApellido = $request->segundoApellido;
@@ -246,6 +247,14 @@ class ProfileController extends Controller
     $perfil->esDuenho = false;
     $perfil->user()->associate($user->id);
     if( $perfil->save()){
+
+        $expediente = new Expediente();
+        $expediente->id = $perfil->id;
+        $expediente->tieneAlergia = false;
+        $expediente->tieneEnfermedadF = false;
+        $expediente->tieneActividad = false;
+
+        $expediente->save();
         return response()->json(['perfil' => $perfil]);
     }else{
         $response = ['Msg'=>'Error al registrar el perfil, por favor intentelo más tarde!'];
@@ -272,4 +281,5 @@ class ProfileController extends Controller
             'errors' => $transformed
         ], $statusHTML);
     }
+
 }

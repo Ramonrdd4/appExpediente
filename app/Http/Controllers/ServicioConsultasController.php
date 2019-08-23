@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\servicio__consultas;
 use Illuminate\Http\Request;
+use App\Horario;
 use JWTAuth;
 use Illuminate\Support\Facades\Gate;
 
@@ -16,7 +17,28 @@ class ServicioConsultasController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            if (!$usuario = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['msg' => 'Usuario no encontrado'], 404);
+            }
+
+            if (Gate::allows('solo_pacientedueno', $usuario)) {
+                $serv_con = servicio__consultas::with(['especialidad', 'user'])->get();
+                $response = [
+                    'msg' => 'Lista de los servicios consulta',
+                    'servicio' => $serv_con
+                ];
+                return response()->json($response, 200);
+            } else {
+                return $this->customError(
+                    'No esta autorizado para ver el listado de servicios consultas',
+                    'No autorizado',
+                    400
+                );
+            }
+        } catch (\Exception $e) {
+            return $this->responseErrors($e->errors(), 422);
+        }
     }
 
     /**
@@ -81,7 +103,7 @@ class ServicioConsultasController extends Controller
             }
 
      if (Gate::allows('solo_medico',$user )) {
-        $servicio= servicio__consultas::where('id_Doctor',$id)-> with('especialidad')->get();;
+        $servicio= servicio__consultas::where('id_Doctor',$id)->with('especialidad')->get();
           $response=[
             'msg' => 'Lista de Servicio Consulta',
             'servicio' => $servicio,
@@ -97,7 +119,7 @@ class ServicioConsultasController extends Controller
     {
         //muestra los servicios por medico
 
-        $servicio= servicio__consultas::where('id',$id)-> with('especialidad')->get();;
+        $servicio= servicio__consultas::where('id',$id)->with('especialidad')->get();
           $response=[
             'msg' => 'Lista de Servicio Consulta',
             'servicio' => $servicio,
@@ -161,7 +183,7 @@ class ServicioConsultasController extends Controller
             }
 
     }
-
+  
     /**
      * Remove the specified resource from storage.
      *

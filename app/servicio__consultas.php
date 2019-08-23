@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class servicio__consultas extends Model
 {
-     //
+
      public $table='servicio__consultas';
 
-     
-
+     protected $fillable = [
+        'precio','ubicacion', 'id_Doctor','id_Especialidad'];
 
     public function user()
      {
@@ -22,6 +22,6 @@ class servicio__consultas extends Model
      }
      public function horarios()
      {
-         return $this->hasMany('App\Horario','id','id_servicioConsulta');
+         return $this->belongsTo('App\Horario','id','id_servicioConsulta');
      }
 }

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Horario;
+use App\servicio__consultas;
 use Illuminate\Http\Request;
 use JWTAuth;
 use Illuminate\Support\Facades\Gate;
 use Carbon\Carbon;
-use App\servicio__consultas;
+use Tymon\JWTAuth\Exceptions\JWTException;
+
 
 
 class HorarioController extends Controller
@@ -19,7 +21,22 @@ class HorarioController extends Controller
      */
     public function index()
     {
-        //
+         //muestra los horarios por servicio
+    try {
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+         return response()->json(['msg'=>'Usuario no encontrado'], 404);
+     }
+
+    $horario= Horario::where('estado',1)->with('servicio__consultas')->get();
+    $response=[
+     'msg' => 'Lista de horarios',
+     'horarios' => $horario,
+    ];
+        return response()->json($response, 200);
+
+     } catch (\Throwable $th) {
+       return $this->responseErrors($e->errors(), 422);
+ }
     }
 
     /**
@@ -106,7 +123,7 @@ class HorarioController extends Controller
     $horario= Horario::where('id_servicioConsulta',$id)->get();
        $response=[
         'msg' => 'Lista de horarios',
-        'Horario' => $servicio,
+        'horarios' => $horario,
     ];
    return response()->json($response, 200);
 
@@ -144,9 +161,25 @@ class HorarioController extends Controller
      * @param  \App\Horario  $horario
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Horario $horario)
+    public function destroy($id)
     {
-        //
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(['msg'=>'Usuario no encontrado'], 404);
+        }
+        if (Gate::allows('solo_medico',$user )) {
+
+
+        if( $horario = Horario::find($id)){
+            $horario->delete();
+            $response = ['Msg'=>'Horario eliminado con exito!'];
+        }else{
+            $response=['Msg' => 'Horario no existe!'];
+        }
+        return response()->json($response,200);
+      }else {
+        $response = ['Msg'=>'No Autorizado'];
+        return response()->json($response,404);
+    }
     }
     private static function validarFecha($usuario, $fechaRequest, $horaRequest){
         $fecha = new Carbon($fechaRequest);
@@ -164,6 +197,7 @@ class HorarioController extends Controller
                 $fechaAsignada = $fechaAsignada->format('Y-m-d');
                 $horaAsignada = new Carbon($horario->hora_cita);
 
+                    if ($fecha===$fechaAsignada) {
 
                         $diferenciaMinutos = $hora->gt($horaAsignada)?
                         $horaAsignada->diffInMinutes($hora) : $hora->diffInMinutes($horaAsignada);
@@ -172,6 +206,7 @@ class HorarioController extends Controller
                             return false;
 
                         }
+                    }
 
 
             }
@@ -193,4 +228,58 @@ class HorarioController extends Controller
             'errors' => $transformed
         ], $statusHTML);
     }
+    public function HorariosMedico($id)
+    {
+        try {
+            if (!$usuario = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['msg' => 'Usuario no encontrado'], 404);
+            }
+
+            $serv_consulta = servicio__consultas::where('id_doctor', $id)->get();
+            $horarios = collect();
+            foreach ($serv_consulta as $serv) {
+                foreach ($serv->horarios()->withoutTrashed()->with('servicio__consultas.especialidad','Agenda.perfil')
+             ->get() as $hora) {
+                    $horarios->push($hora);
+                }
+            }
+            $response = [
+                'msg' => 'Lista de horarios',
+                'horarios' => $horarios
+            ];
+            return response()->json($response, 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->responseErrors($e->errors(), 422);
+        }
+    }
+    public function HorarioMedico($id)
+    {
+        try {
+            if (!$usuario = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['msg' => 'Usuario no encontrado'], 404);
+            }
+            $primerDia = now();
+            $ultimoDia = now()->endOfWeek();
+            $uno = new Carbon($primerDia);
+            $dos = new Carbon($ultimoDia);
+            $uno = $uno->format('Y-m-d');
+            $dos = $dos->format('Y-m-d');
+
+                $horario = Horario::where('id_servicioConsulta', $id)
+                ->where('estado', 1)->whereBetween('Fecha_cita', [$uno, $dos])
+                ->with('servicio__consultas.especialidad','servicio__consultas.user')
+                ->get();
+
+
+
+            $response = [
+                'msg' => 'Lista de horarios',
+                'horarios' => $horario
+            ];
+            return response()->json($response, 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->responseErrors($e->errors(), 422);
+        }
+    }
+
 }

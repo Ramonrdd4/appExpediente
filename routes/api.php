@@ -113,6 +113,10 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('agregarServicio', 'ServicioConsultasController@store');
             Route::patch('actualizaServicio/{id}', 'ServicioConsultasController@update');
             Route::post('agregaHorario', 'HorarioController@store');
+            Route::get('detalleAgendaMedico/{id}', 'AgendaController@detalleAgendaMedico');
+            Route::get('listaHorariosSinasignar', 'HorarioController@index');
+            Route::delete('horario/{id}', 'HorarioController@destroy');
+            Route::get('horario_medico/{id}', 'HorarioController@HorariosMedico');
             Route::get('especialidades', 'EspecialidadController@index');
             Route::get('Listamedicos', 'MedicoController@index');
 
@@ -124,6 +128,8 @@ Route::group(['prefix' => 'v1'], function () {
         Route::group(['prefix' => 'cita'], function ($router){
             Route::post('ListaHorario/{id}', 'HorarioController@show');
             Route::get('ListaServicio/{id}', 'ServicioConsultasController@show');
+            Route::get('ListaServicios', 'ServicioConsultasController@index');
+            Route::get('HorarioMedico/{id}', 'HorarioController@HorarioMedico');
             Route::get('Servicio/{id}', 'ServicioConsultasController@showServicio');
         });
 
