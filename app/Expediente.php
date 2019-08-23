@@ -55,6 +55,9 @@ class Expediente extends Model
     {
         return $this->belongsToMany('App\Desease', 'expediente_desease', 'expediente_id', 'desease_id')->withTimestamps();
     }
-
+    public function compartirs()
+    {
+        return $this->hasMany('App\Compartir');
+    }
 
 }

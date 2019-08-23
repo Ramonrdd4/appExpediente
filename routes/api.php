@@ -126,7 +126,23 @@ Route::group(['prefix' => 'v1'], function () {
 
         });
 
-
+        Route::group(['prefix' => 'compartir'], function ($router){
+            Route::post(
+                'compartirE','CompartirController@compartir_expediente'
+            );
+            Route::get(
+                'expedientescompartidos',
+                'CompartirController@expedientesCompartidosUuario'
+            );
+            Route::get(
+                'usuariosCompartidos/{id}',
+                'CompartirController@usuariosCompartidoExpediente'
+            );
+            Route::get(
+                'UsuariosCompartir',
+                'AuthController@showUusarios'
+            );
+        });
 
         //Cita
         Route::group(['prefix' => 'cita'], function ($router){
