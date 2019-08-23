@@ -119,6 +119,8 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('horario_medico/{id}', 'HorarioController@HorariosMedico');
             //
             Route::get('horariopaciente/{id}', 'AgendaController@AgendaPaciente');
+            //show
+            Route::get('AgendaPaciente/{id}', 'AgendaController@show');
             Route::get('especialidades', 'EspecialidadController@index');
             Route::get('Listamedicos', 'MedicoController@index');
 

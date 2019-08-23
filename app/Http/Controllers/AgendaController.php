@@ -85,9 +85,24 @@ class AgendaController extends Controller
      * @param  \App\Agenda  $agenda
      * @return \Illuminate\Http\Response
      */
-    public function show(Agenda $agenda)
+    public function show($id)
     {
-        //
+        try {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['msg'=>'Usuario no encontrado'], 404);
+            }
+
+            $agenda = Agenda::where('id', $id)->with('Horario','Profile','Horario.servicio__consultas','Horario.servicio__consultas.especialidad')->get();
+
+
+            $response = [
+                'msg' => 'Agenda',
+                'citas' => $agenda
+            ];
+            return response()->json($response, 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->responseErrors($e->errors(), 422);
+        }
     }
     public function detalleAgendaMedico($id)
     {
@@ -167,8 +182,10 @@ class AgendaController extends Controller
             $perfil = Profile::where('idUsuario', $user->id)->get();
             $agendas = collect();
             foreach ($perfil as $per) {
-                $agenda = Agenda::where('id_perfil', $per->id)->with('Horario','Profile','Horario.servicio__consultas')->get();
-                $agendas->push($agenda);
+                foreach ($agenda = Agenda::where('id_perfil', $per->id)->with('Horario','Profile','Horario.servicio__consultas','Horario.servicio__consultas.especialidad')->get() as $agendita){
+                    $agendas->push($agendita);
+                }
+
             }
 
 
