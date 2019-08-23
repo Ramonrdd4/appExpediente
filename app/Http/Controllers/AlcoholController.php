@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Alcohol;
 use App\Profile;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\JWTAuth;
+use JWTAuth;
+use Illuminate\Support\Facades\Gate;
 
 class AlcoholController extends Controller
 {
@@ -90,7 +91,7 @@ class AlcoholController extends Controller
                 'frecuencia'=> 'required',
                 'tipoLicor'=> 'required',
                 'cantidad' => 'required',
-                'observaciones'=>'required'
+                'Observaciones'=>'required'
             ]);
             if(!$user = JWTAuth::parseToken()->authenticate()){
                 return response()->json(['msg'=>'Usuario no encontrado'], 404);
@@ -105,7 +106,7 @@ class AlcoholController extends Controller
             $alcohol->frecuencia = (int)$request->input('frecuencia');
             $alcohol->tipoLicor = $request->input('tipoLicor');
             $alcohol->cantidad = (int)$request->input('cantidad');
-            $alcohol->observaciones = $request->input('observaciones');
+            $alcohol->observaciones = $request->input('Observaciones');
 
             if($alcohol->save()){
                 $response=[
