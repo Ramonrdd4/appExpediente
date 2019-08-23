@@ -85,39 +85,47 @@ class AlcoholController extends Controller
         try
         {
             $this -> validate($request, [
-                'estadoAlcohol'=> 'required|numeric:1',
+                'estadoAlcohol'=> 'required',
                 'tiempoInicio'=>'required',
-                'frecuencia'=> 'required|numeric',
+                'frecuencia'=> 'required',
                 'tipoLicor'=> 'required',
-                'cantidad' => 'required|numeric',
+                'cantidad' => 'required',
                 'observaciones'=>'required'
             ]);
-            /*if(!$user = JWTAuth::parseToken()->authenticate()){
+            if(!$user = JWTAuth::parseToken()->authenticate()){
                 return response()->json(['msg'=>'Usuario no encontrado'], 404);
-            }*/
+            }
         }catch (\Illuminate\Validation\ValidationException $e) {
             return \response($e->errors(),422);
         }
-        $alcohol = Alcohol::find($id);
-        $alcohol->estadoAlcohol = $request->input('estadoAlcohol');
-        $alcohol->tiempoInicio = $request->input('tiempoInicio');
-        $alcohol->tipoLicor = $request->input('tipoLicor');
-        $alcohol->cantidad = $request->input('cantidad');
-        $alcohol->observaciones = $request->input('observaciones');
+        if (Gate::allows('solo_pacientedueno',$user )){
+            $alcohol = Alcohol::find($id);
+            $alcohol->estadoAlcohol =  $request->input('estadoAlcohol');
+            $alcohol->tiempoInicio = $request->input('tiempoInicio');
+            $alcohol->frecuencia = (int)$request->input('frecuencia');
+            $alcohol->tipoLicor = $request->input('tipoLicor');
+            $alcohol->cantidad = (int)$request->input('cantidad');
+            $alcohol->observaciones = $request->input('observaciones');
 
-        if($alcohol->save()){
+            if($alcohol->save()){
+                $response=[
+                    'msg' => 'Registro de Alcoholismo actualizado',
+                    'Registro' => $alcohol
+                ];
+                return response()->json($response, 201);
+            }
             $response=[
-                'msg' => 'Registro de Alcoholismo actualizado',
-                'Registro' => $alcohol
+                'msg'=>'Error durante la actualización'
             ];
-            return response()->json($response, 201);
+            return response()->json($response, 404);
+            }else{
+                $response = ['Msg'=>'No Autorizado'];
+                return response()->json($response,404);
+            }
         }
-        $response=[
-            'msg'=>'Error durante la actualización'
-        ];
-        return response()->json($response, 404);
 
-    }
+
+
     public function responseErrors($errors, $statusHTML)
     {
         $transformed = [];
