@@ -91,10 +91,10 @@ class ActivityController extends Controller
         if (!$user = JWTAuth::parseToken()->authenticate()) {
             return response()->json(['msg'=>'Usuario no encontrado'], 404);
         }
-        if (Gate::allows('solo_adm',$user )) {
+        if (Gate::allows('solo_adm',$user )||Gate::allows('solo_pacientedueno',$user )) {
     $actividad = Activity::where('id', $id)->get();
     $response=[
-
+          'msg' => 'Registro de Actividad',
           'Actividad' => $actividad,
     ];
     return response()->json($response, 200);
@@ -122,6 +122,8 @@ class ActivityController extends Controller
     public function update(Request $request, $id)
     {
         //actualiza actividad
+        $cantidad = $request->input('pivot.cantidad');
+        $minutos = $request->input('pivot.minutos');
         try{
             $this -> validate($request, [
                 'nombre'=>'required|min:5',
@@ -137,14 +139,18 @@ class ActivityController extends Controller
         catch (\Illuminate\Validation\ValidationException $e) {
             return \response($e->errors(),422);
         }
-        if (Gate::allows('solo_adm',$user )) {
-        $actividad  = Activity::find($id);
-        $actividad->nombre= $request->nombre;
+        if (Gate::allows('solo_adm',$user )||Gate::allows('solo_pacientedueno',$user )) {
+        $actividad  = Activity::find($request->input('id'));
+        $actividad_id = $actividad->id;
+        $exp = Expediente::find($id);
+        $exp->activities()->updateExistingPivot($actividad_id, ['cantidad'=>$request->input('cantidad'), 'minutos'=>$request->input('minutos')]);
 
-        if($actividad->save()){
+
+        if($exp->save()){
+            $exp = Expediente::where('id', 116850044)->with('activities')->get();
             $response=[
                 'msg'=> 'Actividad actualizada con exito!',
-                'actividad'=> $actividad
+                'actividad'=> $exp
             ];
             return response()->json($response, 201);
 
@@ -156,7 +162,7 @@ class ActivityController extends Controller
         }else{
         $response = ['Msg'=>'No Autorizado'];
         return response()->json($response,404);
-         }
+        }
     }
 
     /**

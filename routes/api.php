@@ -42,6 +42,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('listaDeseasesExpediente/{id}', 'ExpedienteController@listarEnfermedadesXPaciente');
         Route::get('listaMedicamentosExpediente/{id}', 'ExpedienteController@listarMedicamentosXPaciente');
         Route::get('listaActividadesExpediente/{id}', 'ExpedienteController@listarActividadesXPaciente');
+        Route::put('actualizarExpediente/{id}', 'ExpedienteController@update');
 
         //Fumado
         Route::group(['prefix' => 'fumado'], function () {

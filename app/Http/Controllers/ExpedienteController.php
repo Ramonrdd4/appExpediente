@@ -139,7 +139,39 @@ class ExpedienteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $this -> validate($request, [
+                'tieneAlergia' => 'required|boolean',
+                'tieneEnfermedadF' => 'required|boolean',
+                'tieneActividad' => 'required|boolean',
+            ]);
+            if(!$user = JWTAuth::parseToken()->authenticate()){
+                return response()->json(['msg'=>'Usuario no encontrado'],404);
+            }
+        }catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->responseErrors($e->errors(), 422);
+        }
+        if(Gate::allows('solo_pacientedueno',$user )){
+            $exp = Expediente::find($id);
+            $exp->tieneAlergia = $request->input('tieneAlergia');
+            $exp->tieneEnfermedadF = $request->input('tieneEnfermedadF');
+            $exp->tieneActividad = $request->input('tieneActividad');
+
+            if($exp->save()){
+                $response=[
+                    'msg' => 'Expediente Actualizado',
+                    'Expediente' => $exp
+                ];
+                return response()->json($response, 201);
+            }
+            $response=[
+                'msg'=>'Error durante la actualización'
+            ];
+        }else{
+            $response = ['Msg'=>'No Autorizado'];
+        return response()->json($response,403);
+        }
+
     }
 
     /**
