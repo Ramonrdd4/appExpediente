@@ -277,7 +277,7 @@ class ActivityController extends Controller
             return \response($e->errors(),422);
         }
         if (Gate::allows('solo_pacientedueno',$user )) {
-            $expediente = Expediente::where('idperfil', $request->input('expediente_id'))->first();
+            $expediente = Expediente::where('id', $request->input('expediente_id'))->first();
             $actividad = Activity::where('id', $request->input('actividad_id'))->first();
             $minutos=$request->input('minutos');
             $cantidad=$request->input('cantidad');
