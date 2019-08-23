@@ -84,7 +84,7 @@ class ActivityController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function showActividad($id, $idexp)
     {
          //Muestra la actividad especifica
     try {
@@ -92,10 +92,11 @@ class ActivityController extends Controller
             return response()->json(['msg'=>'Usuario no encontrado'], 404);
         }
         if (Gate::allows('solo_adm',$user )||Gate::allows('solo_pacientedueno',$user )) {
-    $actividad = Activity::where('id', $id)->get();
+    $expediente = Expediente::find($idexp);
+    $actividad = $expediente->activities()->where('activity_id', $id)->first();
     $response=[
           'msg' => 'Registro de Actividad',
-          'Actividad' => $actividad,
+          'Actividad' => [$actividad]
     ];
     return response()->json($response, 200);
     }else{
@@ -122,11 +123,9 @@ class ActivityController extends Controller
     public function update(Request $request, $id)
     {
         //actualiza actividad
-        $cantidad = $request->input('pivot.cantidad');
-        $minutos = $request->input('pivot.minutos');
         try{
             $this -> validate($request, [
-                'nombre'=>'required|min:5',
+                'activity_id'=>'required|numeric',
                 'minutos'=>'required|numeric',
                 'cantidad'=>'required|numeric',
             ]);
@@ -140,8 +139,7 @@ class ActivityController extends Controller
             return \response($e->errors(),422);
         }
         if (Gate::allows('solo_adm',$user )||Gate::allows('solo_pacientedueno',$user )) {
-        $actividad  = Activity::find($request->input('id'));
-        $actividad_id = $actividad->id;
+        $actividad_id  = $request->input('activity_id');
         $exp = Expediente::find($id);
         $exp->activities()->updateExistingPivot($actividad_id, ['cantidad'=>$request->input('cantidad'), 'minutos'=>$request->input('minutos')]);
 
@@ -210,15 +208,12 @@ class ActivityController extends Controller
     }
     }
 
-    //Metodo del usuario (Ramon)
-    /*public function storeActivityxUsuario(Request $request)
+
+    public function storeActivityxUsuario(Request $request, $id)
     {
         try{
             $this -> validate($request, [
                 'nombre'=>'required|min:5',
-                'minutos'=>'required|numeric',
-                'cantidad'=>'required|numeric',
-                'expediente'=>'required|numeric:9'
             ]);
             //Obtener el usuario autentificado actual
             if(!$user = JWTAuth::parseToken()->authenticate()){
@@ -230,17 +225,17 @@ class ActivityController extends Controller
         }
         $actividad = new Activity([
             'nombre'=>$request->input('nombre'),
-            'observaciones'=>$request->input('observaciones')
         ]);
         if($actividad->save()){
             //Asociar con expediente
-            $actividad->expedientes()->attach($request->input('expediente')=== null ? [] :
-            $request->input('expediente'), ['minutos'=> $request->input('minutos'),
-            'cantidad'=> $request->input('cantidad')]);
+            $idactividad = $actividad->id;
+            $expediente = Expediente::find($id);
+            $expediente->activities()->attach($idactividad, ['minutos' => 15, 'cantidad' => 1]);
+            $expediente = Expediente::where('id', $id)->with('alergias')->get();
 
             $response=[
                 'msg'=> 'Actividad registrada',
-                'actividad'=> $actividad
+                'Actividad'=> $actividad
             ];
             return response()->json($response, 201);
         }
@@ -248,7 +243,7 @@ class ActivityController extends Controller
             'msg'=>'Error durante el registro'
         ];
         return response()->json($response, 404);
-    } */
+    }
     public function showEliminadas()
     {
         //Muestra todas las Actividades eliminadas
