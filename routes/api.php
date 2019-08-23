@@ -118,6 +118,10 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('listaHorariosSinasignar', 'HorarioController@index');
             Route::delete('horario/{id}', 'HorarioController@destroy');
             Route::get('horario_medico/{id}', 'HorarioController@HorariosMedico');
+            //
+            Route::get('horariopaciente/{id}', 'AgendaController@AgendaPaciente');
+            //show
+            Route::get('AgendaPaciente/{id}', 'AgendaController@show');
             Route::get('especialidades', 'EspecialidadController@index');
             Route::get('Listamedicos', 'MedicoController@index');
 
@@ -128,6 +132,7 @@ Route::group(['prefix' => 'v1'], function () {
         //Cita
         Route::group(['prefix' => 'cita'], function ($router){
             Route::post('ListaHorario/{id}', 'HorarioController@show');
+            Route::post('agregaAgenda', 'AgendaController@store');
             Route::get('ListaServicio/{id}', 'ServicioConsultasController@show');
             Route::get('ListaServicios', 'ServicioConsultasController@index');
             Route::get('HorarioMedico/{id}', 'HorarioController@HorarioMedico');

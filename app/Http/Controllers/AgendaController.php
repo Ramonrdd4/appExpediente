@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use JWTAuth;
 use Illuminate\Support\Facades\Gate;
 use App\Horario;
+use App\Profile;
 
 class AgendaController extends Controller
 {
@@ -44,7 +45,7 @@ class AgendaController extends Controller
                 return response()->json(['msg'=>'Usuario no encontrado'], 404);
             }
             $this->validate($request, [
-                    'id_Horario' => 'required|min:1',
+                    'id_Horario' => 'required',
                     'id_perfil' => 'required|min:9',
             ]);
 
@@ -58,14 +59,20 @@ class AgendaController extends Controller
 
             $Agenda = new Agenda();
             $Agenda->estado_cita = true;
+            $horario = Horario::where('id', $request->id_Horario)->first();
+            $horario->estado = false;
             $Agenda->Horario()->associate($request->id_Horario);
             $Agenda->Profile()->associate($request->id_perfil);
+
             $Agenda->save();
+            $horario->update();
 
-            $AgendaSave=$Agenda->with('servicio__consultas')->get();
-
-            return response()->json(['servicio__consultas' => $AgendaSave]);
-
+            $AgendaSave= $Agenda->get();
+            $response = [
+                'msg' => 'Cita registrada',
+                'citas' => $AgendaSave
+            ];
+            return response()->json($response, 200);
     }else {
         $response = ['Msg'=>'No Autorizado'];
         return response()->json($response,404);
@@ -78,9 +85,24 @@ class AgendaController extends Controller
      * @param  \App\Agenda  $agenda
      * @return \Illuminate\Http\Response
      */
-    public function show(Agenda $agenda)
+    public function show($id)
     {
-        //
+        try {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['msg'=>'Usuario no encontrado'], 404);
+            }
+
+            $agenda = Agenda::where('id', $id)->with('Horario','Profile','Horario.servicio__consultas','Horario.servicio__consultas.especialidad')->get();
+
+
+            $response = [
+                'msg' => 'Agenda',
+                'citas' => $agenda
+            ];
+            return response()->json($response, 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->responseErrors($e->errors(), 422);
+        }
     }
     public function detalleAgendaMedico($id)
     {
@@ -146,6 +168,35 @@ class AgendaController extends Controller
     public function destroy(Agenda $agenda)
     {
         //
+    }
+
+
+
+    public function AgendaPaciente($id)
+    {
+        try {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['msg'=>'Usuario no encontrado'], 404);
+            }
+
+            $perfil = Profile::where('idUsuario', $user->id)->get();
+            $agendas = collect();
+            foreach ($perfil as $per) {
+                foreach ($agenda = Agenda::where('id_perfil', $per->id)->with('Horario','Profile','Horario.servicio__consultas','Horario.servicio__consultas.especialidad')->get() as $agendita){
+                    $agendas->push($agendita);
+                }
+
+            }
+
+
+            $response = [
+                'msg' => 'Lista de horarios',
+                'citas' => $agendas
+            ];
+            return response()->json($response, 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->responseErrors($e->errors(), 422);
+        }
     }
     public function responseErrors($errors, $statusHTML)
     {
