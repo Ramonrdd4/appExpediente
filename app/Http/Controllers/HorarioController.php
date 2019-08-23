@@ -238,7 +238,7 @@ class HorarioController extends Controller
             $serv_consulta = servicio__consultas::where('id_doctor', $id)->get();
             $horarios = collect();
             foreach ($serv_consulta as $serv) {
-                foreach ($serv->horarios()->withoutTrashed()->with('servicio__consultas.especialidad','Agenda.perfil')
+                foreach ($serv->horarios()->withoutTrashed()->with('servicio__consultas.especialidad','Agenda.Profile')
              ->get() as $hora) {
                     $horarios->push($hora);
                 }

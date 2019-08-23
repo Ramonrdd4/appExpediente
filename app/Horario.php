@@ -12,7 +12,7 @@ class Horario extends Model
         'Fecha_cita','hora_cita', 'id_servicioConsulta'];
     public function Agenda()
     {
-        return $this->hasOne('App\Agenda','id','id_Horario');
+        return $this->belongsTo('App\Agenda','id','id_Horario');
     }
     public function servicio__consultas()
     {

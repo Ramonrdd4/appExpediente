@@ -44,7 +44,7 @@ class AgendaController extends Controller
                 return response()->json(['msg'=>'Usuario no encontrado'], 404);
             }
             $this->validate($request, [
-                    'id_Horario' => 'required|min:1',
+                    'id_Horario' => 'required',
                     'id_perfil' => 'required|min:9',
             ]);
 
@@ -58,14 +58,20 @@ class AgendaController extends Controller
 
             $Agenda = new Agenda();
             $Agenda->estado_cita = true;
+            $horario = Horario::where('id', $request->id_Horario)->first();
+            $horario->estado = false;
             $Agenda->Horario()->associate($request->id_Horario);
             $Agenda->Profile()->associate($request->id_perfil);
+
             $Agenda->save();
+            $horario->update();
 
-            $AgendaSave=$Agenda->with('servicio__consultas')->get();
-
-            return response()->json(['servicio__consultas' => $AgendaSave]);
-
+            $AgendaSave= $Agenda->get();
+            $response = [
+                'msg' => 'Cita registrada',
+                'citas' => $AgendaSave
+            ];
+            return response()->json($response, 200);
     }else {
         $response = ['Msg'=>'No Autorizado'];
         return response()->json($response,404);

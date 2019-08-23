@@ -130,6 +130,7 @@ Route::group(['prefix' => 'v1'], function () {
         //Cita
         Route::group(['prefix' => 'cita'], function ($router){
             Route::post('ListaHorario/{id}', 'HorarioController@show');
+            Route::post('agregaAgenda', 'AgendaController@store');
             Route::get('ListaServicio/{id}', 'ServicioConsultasController@show');
             Route::get('ListaServicios', 'ServicioConsultasController@index');
             Route::get('HorarioMedico/{id}', 'HorarioController@HorarioMedico');

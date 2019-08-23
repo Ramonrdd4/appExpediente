@@ -13,7 +13,7 @@ class Agenda extends Model
 
     public function Profile()
     {
-        return $this->belongsTo('App\Profile');
+        return $this->belongsTo('App\Profile','id_perfil','id');
     }
 
 }
