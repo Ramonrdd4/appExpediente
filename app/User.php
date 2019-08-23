@@ -45,6 +45,11 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany('App\Profile');
     }
+    public function compartirs()
+    {
+        return $this->hasMany('App\CompartirExpediente');
+    }
+
 
 
 

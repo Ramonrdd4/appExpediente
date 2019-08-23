@@ -201,6 +201,20 @@ public function responseErrors($errors, $statusHTML)
         'errors' => $transformed
     ], $statusHTML);
 }
+public function showUusarios()
+{
+    //Muestra la alergia especifica
+    try {
 
+        $Usuarios = User::where('rol_id','!=',1)->get();
+        $response = [
+            'msg' => 'Información',
+            'Medicos' => $Usuarios
+        ];
+        return response()->json($response, 200);
+    } catch (\Throwable $th) {
+        return \response($th->getMessage(), 422);
+    }
+}
 
 }
