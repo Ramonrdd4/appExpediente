@@ -139,10 +139,11 @@ class ExpedienteController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $tieneAlergia = $request->input('tieneAlergia');
+        $tieneActividad = $request->input('tieneActividad');
         try{
             $this -> validate($request, [
                 'tieneAlergia' => 'required|boolean',
-                'tieneEnfermedadF' => 'required|boolean',
                 'tieneActividad' => 'required|boolean',
             ]);
             if(!$user = JWTAuth::parseToken()->authenticate()){
@@ -154,7 +155,6 @@ class ExpedienteController extends Controller
         if(Gate::allows('solo_pacientedueno',$user )){
             $exp = Expediente::find($id);
             $exp->tieneAlergia = $request->input('tieneAlergia');
-            $exp->tieneEnfermedadF = $request->input('tieneEnfermedadF');
             $exp->tieneActividad = $request->input('tieneActividad');
 
             if($exp->save()){

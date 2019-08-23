@@ -67,9 +67,9 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('enfermedadEliminada', 'DeseaseController@showEliminadas');
         Route::get('restaurarEnfermedad/{id}', 'DeseaseController@restaurar');
         //agregar alergia,enfermedad y actividad a expediente
-        Route::post('agregaActividad', 'ActivityController@storeActividadxUsuario');
+        Route::post('agregaActividad/{id}', 'ActivityController@storeActivityxUsuario');
         Route::post('agregaEnfermedad', 'DeseaseController@storeEnfermedadesxUsuario');
-        Route::post('agregaAlergia', 'AlergiaController@storeAlergiasxUsuario');
+        Route::post('agregaAlergia/{id}', 'AlergiaController@storeAlergiaxUsuario');
         Route::post('agregaimagenAlergia/{id}', 'AlergiaController@storeImagen');
         Route::post('agregaimagenEnfermedad/{id}', 'DeseaseController@storeImagen');
         Route::post('agregaimagenActividad/{id}', 'ActivityController@storeImagen');
@@ -86,6 +86,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::resource('actividad', 'ActivityController');
         Route::get('actividadEliminada', 'ActivityController@showEliminadas');
         Route::get('restaurarActividad/{id}', 'ActivityController@restaurar');
+        Route::get('showActividad/{id}/{idexp}', 'ActivityController@showActividad');
 
         //Rutas de medicamentos
         Route::group(['prefix' => 'medicamentos'], function ($router){

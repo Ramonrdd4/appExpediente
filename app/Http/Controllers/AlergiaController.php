@@ -273,34 +273,41 @@ class AlergiaController extends Controller
     }
 
     //Metodo del usuario (Ramon)
-    public function storeAlergiaxUsuario(Request $request)
+    public function storeAlergiaxUsuario(Request $request, $id)
     {
         try{
             $this -> validate($request, [
-                'alergia_id'=>'required|numeric|min:1',
-                'expediente_id'=>'required|numeric'
+                'nombre'=>'required|min:5',
+                'categoria'=>'required',
+                'reaccion'=>'required',
+                'observaciones'=>'required',
             ]);
             //Obtener el usuario autentificado actual
-           /* if(!$user = JWTAuth::parseToken()->authenticate()){
+            if(!$user = JWTAuth::parseToken()->authenticate()){
                 return response()->json(['msg'=>'Usuario no encontrado'],404);
-            } */
+            }
 
         }
         catch (\Illuminate\Validation\ValidationException $e) {
            return $this->responseErrors($e->errors(), 422);
         }
 
-        $alergia = Alergia::find($request->input('alergia_id'));
-        $expediente = Expediente::find($request->input('expediente_id'));
+        $alergia = new Alergia([
+            'nombre'=>$request->input('nombre'),
+            'categoria'=>$request->input('categoria'),
+            'reaccion'=>$request->input('reaccion'),
+            'observaciones'=>$request->input('observaciones')
+        ]);
+        $expediente = Expediente::find($id);
 
 
-        if($alergia != null and $expediente != null){
+        if($alergia != null and $expediente != null and $alergia->save()){
             //Asociar con expediente
-            $alergia->expedientes()->attach($request->input('expediente_id')=== null ? [] : $request->input('expediente_id'));
-            $expediente = Expediente::find($request->input('expediente_id'))->with('alergias')->first();
+            $alergia->expedientes()->attach($expediente=== null ? [] : $expediente);
+            $expediente = Expediente::find($id)->with('alergias')->first();
             $response=[
                 'msg'=> 'Alergia registrada al expediente',
-                'Expediente'=> $expediente
+                'Alergia'=> $alergia
             ];
             return response()->json($response, 201);
         }
