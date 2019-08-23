@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use JWTAuth;
 use Illuminate\Support\Facades\Gate;
 use App\Horario;
+use App\Profile;
 
 class AgendaController extends Controller
 {
@@ -152,6 +153,33 @@ class AgendaController extends Controller
     public function destroy(Agenda $agenda)
     {
         //
+    }
+
+
+
+    public function AgendaPaciente($id)
+    {
+        try {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['msg'=>'Usuario no encontrado'], 404);
+            }
+
+            $perfil = Profile::where('idUsuario', $user->id)->get();
+            $agendas = collect();
+            foreach ($perfil as $per) {
+                $agenda = Agenda::where('id_perfil', $per->id)->with('Horario','Profile','Horario.servicio__consultas')->get();
+                $agendas->push($agenda);
+            }
+
+
+            $response = [
+                'msg' => 'Lista de horarios',
+                'citas' => $agendas
+            ];
+            return response()->json($response, 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return $this->responseErrors($e->errors(), 422);
+        }
     }
     public function responseErrors($errors, $statusHTML)
     {

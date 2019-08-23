@@ -22,6 +22,6 @@ class Profile extends Model
 
     public function Agenda()
     {
-        return $this->hasmany('App\Agenda','id','id_perfil');
+        return $this->belongsTo('App\Agenda','id','id_perfil');
     }
 }

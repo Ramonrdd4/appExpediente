@@ -117,6 +117,8 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('listaHorariosSinasignar', 'HorarioController@index');
             Route::delete('horario/{id}', 'HorarioController@destroy');
             Route::get('horario_medico/{id}', 'HorarioController@HorariosMedico');
+            //
+            Route::get('horariopaciente/{id}', 'AgendaController@AgendaPaciente');
             Route::get('especialidades', 'EspecialidadController@index');
             Route::get('Listamedicos', 'MedicoController@index');
 
