@@ -41,6 +41,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('listaAlergiasExpediente/{id}', 'ExpedienteController@listarAlergiasXPaciente');
         Route::get('listaDeseasesExpediente/{id}', 'ExpedienteController@listarEnfermedadesXPaciente');
         Route::get('listaMedicamentosExpediente/{id}', 'ExpedienteController@listarMedicamentosXPaciente');
+        Route::get('listaActividadesExpediente/{id}', 'ExpedienteController@listarActividadesXPaciente');
 
         //Fumado
         Route::group(['prefix' => 'fumado'], function () {
@@ -50,11 +51,7 @@ Route::group(['prefix' => 'v1'], function () {
         });
 
         //Alcohol
-        Route::group(['prefix' => 'alcohol'], function () {
-            Route::get('show/{id}', 'AlcoholController@show');
-            Route::post('store', 'AlcoholController@store');
-            Route::patch('update/{id}', 'AlcoholController@update');
-        });
+        Route::resource('alcohol', 'AlcoholController');
 
         //Cirugia
         Route::group(['prefix' => 'cirugias'], function () {

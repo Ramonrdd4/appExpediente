@@ -148,7 +148,7 @@ class AlergiaController extends Controller
             $alergia = Alergia::where('id', $id)->get();
             $response = [
                 'msg' => 'Información sobre la alergia',
-                'Alergia' => $alergia
+                'alergia' => $alergia
             ];
             return response()->json($response, 200);
         } catch (\Throwable $th) {
@@ -200,7 +200,7 @@ class AlergiaController extends Controller
         catch (\Illuminate\Validation\ValidationException $e) {
            return $this->responseErrors($e->errors(), 422);
         }
-        if (Gate::allows('solo_adm',$user )) {
+        if (Gate::allows('solo_adm',$user )||Gate::allows('solo_pacientedueno',$user )) {
         $alergia = Alergia::find($id);
             $alergia->nombre = $request->input('nombre');
             $alergia->categoria = $request->input('categorias');
@@ -377,8 +377,7 @@ class AlergiaController extends Controller
                   'nombre'=>'required|min:5',
                   'categoria'=>'required',
                   'reaccion'=>'required',
-                  'observaciones'=>'required',
-                  'expediente_id' => 'required|numeric|min:16'
+                  'observaciones'=>'required'
               ]);
               //Obtener el usuario autentificado actual
               if(!$user = JWTAuth::parseToken()->authenticate()){
