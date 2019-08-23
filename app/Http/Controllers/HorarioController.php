@@ -93,12 +93,12 @@ class HorarioController extends Controller
                 return response()->json(['servicio__consultas' => $HorarioSave]);
             }else{
                 $response = ['Msg'=>'Tiene que haber 30 minutos entre consultas como minimo.'];
-                return response()->json($response,404);
+                return  $this->responseErrors()->json($response,404);
             }
 
         }else{
             $response = ['Msg'=>'La fecha es menor o igual que la actual'];
-            return response()->json($response,404);
+               return $this->responseErrors()->json($response,404);
         }
     }else {
         $response = ['Msg'=>'No Autorizado'];
